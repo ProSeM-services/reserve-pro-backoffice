@@ -9,15 +9,16 @@ import {
 import { CompanyPage } from "@/pages/company/page/company-page";
 import Hero from "@/pages/dashboard/components/hero";
 import { DashboardPage } from "@/pages/dashboard/page";
+import { MembersPage } from "@/pages/members/page/members-page";
 import { Route, Routes } from "react-router";
 export default function MainPage() {
   return (
     <div className="h-full w-full  flex flex-col     text-xs ">
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset className=" overflow-hidden ">
+        <SidebarInset>
           <DataProvider>
-            <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+            <header className="flex h-16  shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
@@ -26,11 +27,11 @@ export default function MainPage() {
                 </section>
               </div>
             </header>
-            <div className="p-4 h-full flex-1 ">
+            <div className="p-4 flex-1   ">
               <Routes>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/company/*" element={<CompanyPage />} />
-                <Route path="/members" element={<h2> Miembros </h2>} />
+                <Route path="/members/*" element={<MembersPage />} />
                 <Route path="/services" element={<h2> Servicios </h2>} />
                 <Route path="/appointment" element={<h2> appointment</h2>} />
                 <Route path="/customers" element={<h2> Clientes</h2>} />

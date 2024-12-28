@@ -53,9 +53,9 @@ export default function LoaderWrapper({
   const { text, icon: Icon } = Config[type];
   if (loading)
     return (
-      <div className="relative h-full">
+      <div className="relative h-full ">
         <BarLoader />
-        <div className=" p-10 h-full w-full flex flex-col gap-4 justify-center items-center">
+        <div className=" p-10 h-full w-full flex flex-col gap-4 justify-center items-center ">
           <Icon className="size-10" />
           Cargando {text} ...
         </div>

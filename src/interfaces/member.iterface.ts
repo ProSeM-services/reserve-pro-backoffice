@@ -38,6 +38,7 @@ export const MemberZodSchema = ZodTenantSchema.omit({
   phone: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
   CompanyId: z.string().optional(),
+  createdAt: z.string().optional(),
 });
 export const CreateMemberZodSchema = ZodTenantSchema.omit({
   tenantName: true,
@@ -46,7 +47,7 @@ export const CreateMemberZodSchema = ZodTenantSchema.omit({
   phone: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
 });
-export const UpdateMemberZodSchema = ZodTenantSchema.omit({
+export const EditMemberZodSchema = ZodTenantSchema.omit({
   tenantName: true,
   password: true,
 })
@@ -58,4 +59,4 @@ export const UpdateMemberZodSchema = ZodTenantSchema.omit({
 
 export type IMember = z.infer<typeof MemberZodSchema>;
 export type ICreateMember = z.infer<typeof CreateMemberZodSchema>;
-export type IUpdateMember = z.infer<typeof UpdateMemberZodSchema>;
+export type IEditMember = z.infer<typeof EditMemberZodSchema>;
