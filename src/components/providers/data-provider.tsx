@@ -1,5 +1,5 @@
 import { setAuthInterceptor } from "@/config/axios.config";
-import { PropsWithChildren, useEffect } from "react";
+import { Fragment, PropsWithChildren, useEffect } from "react";
 import { useAppSelector } from "@/store/hooks";
 import { BarLoader } from "@/components/common/bar-loader";
 import useFetchData from "@/hooks/useFetchData";
@@ -26,8 +26,8 @@ export default function DataProvider({ children }: PropsWithChildren) {
     (s) => s.appointments
   );
 
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) return;
     const fetchData = async () => {
       try {
@@ -46,7 +46,7 @@ export default function DataProvider({ children }: PropsWithChildren) {
       }
     };
     fetchData();
-  }, []);
+  }, [accessToken]);
   if (!mainFetched)
     return (
       <div className=" size-full overflow-hidden">
@@ -63,5 +63,5 @@ export default function DataProvider({ children }: PropsWithChildren) {
         </div>
       </div>
     );
-  return <div className=" size-full">{children}</div>;
+  return <Fragment>{children}</Fragment>;
 }

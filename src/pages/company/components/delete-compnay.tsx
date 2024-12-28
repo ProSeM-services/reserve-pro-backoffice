@@ -11,12 +11,12 @@ import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
 import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { useNavigate } from "react-router";
 export function DeleteCompany({ company }: { company: ICompany }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
-  const router = useRouter();
+  const router = useNavigate();
   const { deleteCompany } = useCreatingFetch();
   const handleDelete = async () => {
     setDeleting(true);
@@ -33,7 +33,7 @@ export function DeleteCompany({ company }: { company: ICompany }) {
       toast({
         title: "Sucursal elimnada!",
       });
-      router.push("/dashboard/company");
+      router("/company");
     } catch (error) {
       console.log("errrer", error);
       toast({

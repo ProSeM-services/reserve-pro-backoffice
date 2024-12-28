@@ -16,6 +16,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import useSession from "@/hooks/useSession";
 
 export function TeamSwitcher({
   teams,
@@ -28,6 +29,7 @@ export function TeamSwitcher({
 }) {
   const { isMobile } = useSidebar();
   const [activeTeam, setActiveTeam] = React.useState(teams[0]);
+  const session = useSession();
 
   return (
     <SidebarMenu>
@@ -43,7 +45,7 @@ export function TeamSwitcher({
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {activeTeam.name}
+                  {session.session?.companyName}
                 </span>
                 <span className="truncate text-xs">{activeTeam.plan}</span>
               </div>

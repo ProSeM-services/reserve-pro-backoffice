@@ -11,10 +11,14 @@ import { MemberForm } from "./forms/crate-member-form";
 import { CompanyForm } from "./forms/create-company-form";
 import { Button } from "@/components/ui/button";
 import { CreateServicesForm } from "./forms/create-service-form";
+import { Label } from "../ui/label";
 
 export type ICreateType = "member" | "company" | "services";
+export type Size = "lg" | "sm";
+
 interface AddButtonProps {
   type: ICreateType;
+  size?: Size;
 }
 const config: Record<
   ICreateType,
@@ -36,16 +40,19 @@ const config: Record<
     Content: CreateServicesForm,
   },
 };
-export function AddButton({ type }: AddButtonProps) {
-  const { title, Content } = config[type];
+export function AddButton({ type, size = "lg" }: AddButtonProps) {
+  const { title, Content, btnText } = config[type];
   return (
     <Sheet>
       <SheetTrigger>
         <Button
-          size={"icon"}
+          size={size === "lg" ? "default" : "icon"}
           variant={"secondary"}
-          className=" rounded-full size-8 "
+          className={` ${
+            size === "lg" ? " w-full px-4" : "size-8 rounded-full"
+          }`}
         >
+          {size === "lg" && <Label className="max-md:hidden">{btnText}</Label>}
           <PlusIcon className="size-4 " />
         </Button>
       </SheetTrigger>
