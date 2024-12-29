@@ -13,12 +13,12 @@ import { MembersPage } from "@/pages/members/page/members-page";
 import { Route, Routes } from "react-router";
 export default function MainPage() {
   return (
-    <div className="h-full w-full  flex flex-col     text-xs ">
+    <div className="h-full w-full  flex flex-col  overflow-hidden    text-xs ">
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
           <DataProvider>
-            <header className="flex h-16  shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+            <header className="flex h-[6vh]   shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
@@ -27,7 +27,7 @@ export default function MainPage() {
                 </section>
               </div>
             </header>
-            <div className="p-4 flex-1   ">
+            <div className="p-4 flex-1   max-h-[93vh] overflow-auto">
               <Routes>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/company/*" element={<CompanyPage />} />

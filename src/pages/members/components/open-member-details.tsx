@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { IMember } from "@/interfaces/member.iterface";
-import { FolderOpenIcon } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 import { MemberAsideDetails } from "./aside/member-aside-details";
 
 interface OpenMemberDetailsProps {
@@ -19,7 +19,7 @@ export function OpenMemberDetails({ member }: OpenMemberDetailsProps) {
     <Sheet>
       <SheetTrigger>
         <Button size={"icon"} variant={"ghost"}>
-          <FolderOpenIcon className="size-4" />
+          <SlidersHorizontal className="size-4" />
         </Button>
       </SheetTrigger>
       <SheetContent>

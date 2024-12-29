@@ -8,6 +8,8 @@ export const setAuthInterceptor = async (token: string | null) => {
     (config) => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        config.headers.Authorization = undefined;
       }
       return config;
     },

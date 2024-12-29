@@ -16,15 +16,15 @@ const Config: Record<PageType, IConfigBody> = {
   login: {
     title: "Log In",
     description: "Enter your email below to login to your account",
-    footerMessage: " Don't have an account?",
-    oppositeLink: "  Sign up",
+    footerMessage: " No tenés cuenta?",
+    oppositeLink: "  Registrate",
     oppositeRoute: "/register",
   },
   register: {
-    title: "Register",
-    description: "Enter your email below to create your account",
-    footerMessage: "Do you have an account?",
-    oppositeLink: "Sign in",
+    title: "Registrarse",
+    description: "Ingresar tu inforamción para crear una cuenta en ReservePro",
+    footerMessage: "Ya tenés cuenta?",
+    oppositeLink: "Iniciar Sesión",
     oppositeRoute: "/login",
   },
 };

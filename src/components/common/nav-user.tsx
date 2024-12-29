@@ -54,6 +54,7 @@ export function NavUser({
                 <AvatarImage
                   src={image ? image : user.avatar}
                   alt={`image ${name}'s profile`}
+                  className="aspect-square object-cover"
                 />
                 <AvatarFallback className="rounded-lg uppercase">
                   {name && name[0]}
@@ -79,6 +80,7 @@ export function NavUser({
                   <AvatarImage
                     src={image ? image : user.avatar}
                     alt={`image ${name}'s profile`}
+                    className="aspect-square object-cover"
                   />
                   <AvatarFallback className="rounded-lg uppercase">
                     {name && name[0]}

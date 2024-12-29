@@ -2,8 +2,13 @@ import { Card } from "@/components/ui/card";
 import { IMember } from "@/interfaces/member.iterface";
 import { OpenMemberDetails } from "./open-member-details";
 import { MemberAvatar } from "@/components/common/members/member-avatar";
+import { SendInviteUser } from "./send-invite-user";
 
-export function MemberCard({ member }: { member: IMember }) {
+interface MemberCardProps {
+  member: IMember;
+  type?: "details" | "invite";
+}
+export function MemberCard({ member, type = "details" }: MemberCardProps) {
   return (
     <Card
       className={`flex flex-col gap-4 p-2  hover:shadow-md transition-all duration-200 `}
@@ -15,7 +20,8 @@ export function MemberCard({ member }: { member: IMember }) {
         <div className="flex flex-col w-full justify-start text-md ">
           <div className="flex w-full justify-between items-center">
             <div className="flex items-center gap-1">{member.role}</div>
-            <OpenMemberDetails member={member} />
+            {type === "details" && <OpenMemberDetails member={member} />}
+            {type === "invite" && <SendInviteUser userId={member.id} />}
           </div>
           <div className="flex w-full justify-between items-center">
             <div className="flex items-center gap-1 text-lg">

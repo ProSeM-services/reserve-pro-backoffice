@@ -91,7 +91,7 @@ export function RegisterForm() {
                   name="name"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <Label htmlFor="email">Name</Label>
+                      <Label htmlFor="email">Nombre</Label>
                       <div className="relative ">
                         <Input
                           className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 "
@@ -108,7 +108,7 @@ export function RegisterForm() {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <Label htmlFor="email">Last Name</Label>
+                      <Label htmlFor="email">Apellido</Label>
                       <div className="relative">
                         <Input
                           className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -143,12 +143,12 @@ export function RegisterForm() {
                 name="companyName"
                 render={({ field }) => (
                   <FormItem>
-                    <Label htmlFor="email">Company Name</Label>
+                    <Label htmlFor="email">Nombre de tu Negocio</Label>
                     <div className="relative">
                       <Input
                         className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                         {...field}
-                        placeholder="Name of your company"
+                        placeholder="Nombre de tu negocio"
                       />
                       <HouseIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                     </div>
@@ -160,12 +160,12 @@ export function RegisterForm() {
                 name="userName"
                 render={({ field }) => (
                   <FormItem>
-                    <Label htmlFor="password">User Name</Label>
+                    <Label htmlFor="password">Nombre de Usuario</Label>
                     <div className="relative">
                       <Input
                         className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                         {...field}
-                        placeholder="user name"
+                        placeholder="Nombre de Usuario"
                       />
                       <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                     </div>
@@ -178,7 +178,7 @@ export function RegisterForm() {
                   name="password"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <Label htmlFor="password">Password</Label>
+                      <Label htmlFor="password">Contraseña</Label>
                       <div className="relative">
                         <Input
                           className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
@@ -196,7 +196,7 @@ export function RegisterForm() {
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <Label htmlFor="password">Confirm Passwod</Label>
+                      <Label htmlFor="password">Confirmar Contraseña</Label>
                       <div className="relative">
                         <FormControl>
                           <Input
@@ -220,7 +220,7 @@ export function RegisterForm() {
               disabled={loading}
               isLoading={loading}
             >
-              Create account
+              Crear Cuenta
             </Button>
             <Button variant="outline" className="w-full" disabled>
               Sign Up with Google

@@ -9,15 +9,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/components/ui/use-toast";
 import { AuthServices } from "@/services/auth.services";
-import { useNavigate } from "react-router";
 import { useAppDispatch } from "@/store/hooks";
 import {
   setAccesToken,
   setSession,
 } from "@/store/feature/session/sessionSlice";
+import { setAuthInterceptor } from "@/config/axios.config";
 export function LoginForm() {
   const [loading, setLoading] = useState(false);
-  const nav = useNavigate();
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -28,13 +27,15 @@ export function LoginForm() {
         password: values.password,
       });
 
+      await setAuthInterceptor(res.backendTokens.accessToken);
+
       dispatch(setSession(res.user));
       dispatch(setAccesToken(res.backendTokens.accessToken));
 
       localStorage.setItem("accessToken", res.backendTokens.accessToken);
       localStorage.setItem("userLogged", JSON.stringify(res.user));
 
-      nav("/dashboard");
+      location.replace("/dashboard"); // This is forcing a reload at the navigatin page!
     } catch (error) {
       return toast({
         title: "Invalid credentials",

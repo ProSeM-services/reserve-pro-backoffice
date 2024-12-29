@@ -52,7 +52,9 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
             size === "lg" ? " w-full px-4" : "size-8 rounded-full"
           }`}
         >
-          {size === "lg" && <Label className="max-md:hidden">{btnText}</Label>}
+          {size === "lg" && (
+            <Label className="max-md:hidden cursor-pointer">{btnText}</Label>
+          )}
           <PlusIcon className="size-4 " />
         </Button>
       </SheetTrigger>
