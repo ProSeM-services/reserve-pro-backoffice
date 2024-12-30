@@ -13,6 +13,18 @@ export class MemberServices {
 
     return res.data;
   }
+  static async searchMembers(value: string): Promise<IMember[]> {
+    const res = await axiosInstance.get(
+      `${BASE_URL}/user/search?value=${value}`
+    );
+
+    return res.data;
+  }
+  static async sendInvite(id: string): Promise<IMember> {
+    const res = await axiosInstance.post(`${BASE_URL}/user/invite/${id}`);
+
+    return res.data;
+  }
   static async getById(id: string): Promise<IMember> {
     const res = await axiosInstance.get(`${BASE_URL}/user/details/${id}`);
 
