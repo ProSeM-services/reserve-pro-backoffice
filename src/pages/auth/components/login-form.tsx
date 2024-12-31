@@ -66,7 +66,7 @@ export function LoginForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="rounded-lg flex flex-col gap-8 ">
+        <div className="rounded-lg flex flex-col gap-8  ">
           <div className="w-full">
             <FormField
               control={form.control}
