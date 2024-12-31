@@ -25,7 +25,7 @@ export function SearchMembers() {
     debounceSearch(value);
   };
   return (
-    <section className="size-full p-4 border border-border rounded-sm flex flex-col max-h-full">
+    <section className="size-full   flex flex-col max-h-full">
       <div>
         <Input
           placeholder="Buscar miembros en Reserve Pro"

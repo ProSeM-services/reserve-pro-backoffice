@@ -18,8 +18,8 @@ export function OpenMemberDetails({ member }: OpenMemberDetailsProps) {
   return (
     <Sheet>
       <SheetTrigger>
-        <Button size={"icon"} variant={"ghost"}>
-          <SlidersHorizontal className="size-4" />
+        <Button variant={"ghost"} className="size-6 p-0">
+          <SlidersHorizontal className="size-4 " />
         </Button>
       </SheetTrigger>
       <SheetContent>

@@ -11,23 +11,26 @@ interface MemberCardProps {
 export function MemberCard({ member, type = "details" }: MemberCardProps) {
   return (
     <Card
-      className={`flex flex-col gap-4 p-2  hover:shadow-md transition-all duration-200 `}
+      className={`flex flex-col gap-4 p-2  min-w-[300px]   hover:shadow-md transition-all duration-200 `}
     >
       <div className="flex gap-4 ">
         <div className=" flex justify-center items-center  ">
           <MemberAvatar member={member} />
         </div>
         <div className="flex flex-col w-full justify-start text-md ">
-          <div className="flex w-full justify-between items-center">
-            <div className="flex items-center gap-1">{member.role}</div>
-            {type === "details" && <OpenMemberDetails member={member} />}
-            {type === "invite" && <SendInviteUser userId={member.id} />}
-          </div>
-          <div className="flex w-full justify-between items-center">
-            <div className="flex items-center gap-1 text-lg">
-              {member.name}, {member.lastName}
+          <header className="flex w-full  justify-between items-center  ">
+            <div className="flex gap-2 items-center">
+              <div className="flex items-center gap-1 text-lg max-md:text-[15px] font-semibold ">
+                {member.name}, {member.lastName}
+              </div>
+              <div className="flex items-center gap-1 text-[10px]  text-gray-500">
+                {member.role}
+              </div>
             </div>
-          </div>
+            {type === "details" && <OpenMemberDetails member={member} />}
+            {type === "invite" && <SendInviteUser member={member} />}
+          </header>
+
           <span className="font-normal">{member.email || ""}</span>
 
           {member.createdAt && (

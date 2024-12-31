@@ -3,7 +3,7 @@ import { IMember } from "@/interfaces/member.iterface";
 
 export function MemberAvatar({ member }: { member: IMember }) {
   return (
-    <Avatar className="size-20 rounded-lg">
+    <Avatar className="size-20 max-md:size-16 rounded-lg">
       <AvatarImage
         src={member.image ? member.image : ""}
         alt={`image ${member.name}'s profile`}
