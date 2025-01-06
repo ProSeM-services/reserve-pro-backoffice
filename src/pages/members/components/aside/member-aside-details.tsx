@@ -33,9 +33,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { AddPermissions } from "./add-permissions";
+import { Permission } from "@/lib/constants/permissions";
 export function MemberAsideDetails({ member }: { member: IMember }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
+  const [selectedPermissions, setSelectedPermissions] = useState<Permission[]>(
+    member.permissions || []
+  );
   const { toast } = useToast();
   const { editMember } = useCreatingFetch();
   const { fetchMembers } = useFetchData();
@@ -45,7 +50,11 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
   );
   const form = useForm<IEditMember>({
     resolver: zodResolver(EditMemberZodSchema),
-    defaultValues: { ...member },
+    defaultValues: {
+      ...member,
+      companyName: member.companyName || "",
+      image: member.image || "",
+    },
   });
 
   const onSubmit = async (values: IEditMember) => {
@@ -57,7 +66,10 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
         const imageData = await FilesServices.upload(file);
         data = { ...values, image: imageData.url };
       }
-      await editMember(member.id, data);
+      await editMember(member.id, {
+        ...data,
+        permissions: selectedPermissions,
+      });
       await fetchMembers();
       toast({
         title: "Miembro actualizado!",
@@ -74,6 +86,22 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
     } finally {
       setLoading(false);
     }
+  };
+  const handleAddPermission = (permission: Permission) => {
+    if (permission)
+      if (!selectedPermissions.includes(permission)) {
+        const newPermissionValue = [...selectedPermissions, permission];
+        setSelectedPermissions(newPermissionValue);
+        form.setValue("permissions", newPermissionValue);
+      }
+  };
+
+  const handleRemovePermission = (permission: string) => {
+    const newPermissionValue = selectedPermissions.filter(
+      (perm) => perm !== permission
+    );
+    setSelectedPermissions(newPermissionValue);
+    form.setValue("permissions", newPermissionValue);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +126,8 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
     }
   };
 
-  console.log(form.formState.isDirty);
+  console.log("errors : ", form.formState.errors);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-4">
@@ -247,6 +276,11 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
 
         <Separator />
 
+        <AddPermissions
+          handleAddPermission={handleAddPermission}
+          handleRemovePermission={handleRemovePermission}
+          selectedPermissions={selectedPermissions}
+        />
         <section className="absolute bottom-0 right-0 p-2 w-full">
           <div className="flex gap-2 ">
             <Button type="button" variant={"outline"} className="w-1/4">
@@ -256,7 +290,7 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
               type="submit"
               className="flex-grow text-white"
               isLoading={loading}
-              disabled={!form.formState.isDirty || loading}
+              disabled={loading}
             >
               Actualizar
             </Button>

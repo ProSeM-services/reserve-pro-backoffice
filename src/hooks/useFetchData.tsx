@@ -39,7 +39,6 @@ export default function useFetchData() {
     try {
       dispatch(toggleCompanyLoading(true));
       const companies = await CompanyServices.getCompanies();
-      console.log("COMPANY RES : ", companies);
       dispatch(setCompanies(companies));
     } catch (error) {
       console.log("Error fetching Companies", error);
@@ -51,7 +50,6 @@ export default function useFetchData() {
     try {
       dispatch(toggleMembersLoading(true));
       const members = await MemberServices.getMembers();
-      console.log("MEMBERS RES : ", members);
       dispatch(setMembers(members));
     } catch (error) {
       console.log("Error fetching Companies", error);
