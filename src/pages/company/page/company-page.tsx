@@ -2,6 +2,8 @@ import { Route, Routes } from "react-router";
 import { CompanyLinks } from "../components";
 import { AddButton } from "@/components/common/add-button";
 import { CompanyDetailPage } from "./company-detail-page";
+import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
+import { Permission } from "@/lib/constants/permissions";
 
 export function CompanyPage() {
   return (
@@ -9,7 +11,9 @@ export function CompanyPage() {
       <div className=" space-y-2  w-1/4 max-lg:w-full  h-full">
         <div className="flex items-center justify-between">
           <p className="font-semibold text-lg">Sucursales</p>
-          <AddButton type="company" />
+          <AuthorizationWrapper permission={Permission.CREATE_COMPANY}>
+            <AddButton type="company" />
+          </AuthorizationWrapper>
         </div>
         <CompanyLinks />
       </div>

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { WorkhourZodSchema } from "./workhour.interface";
+import { Permission } from "@/lib/constants/permissions";
 
 export const ROLES_VALUES = ["BASIC", "ADMIN", "OWNER"] as const;
 
@@ -39,6 +40,9 @@ export const MemberZodSchema = ZodTenantSchema.omit({
   workhours: z.array(WorkhourZodSchema).optional(),
   CompanyId: z.string().optional(),
   createdAt: z.string().optional(),
+  permissions: z
+    .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })
+    .optional(),
 });
 export const CreateMemberZodSchema = ZodTenantSchema.omit({
   tenantName: true,
@@ -46,15 +50,20 @@ export const CreateMemberZodSchema = ZodTenantSchema.omit({
 }).extend({
   phone: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
+  permissions: z
+    .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })
+    .optional(),
 });
-export const EditMemberZodSchema = ZodTenantSchema.omit({
-  tenantName: true,
+export const EditMemberZodSchema = MemberZodSchema.omit({
   password: true,
 })
   .partial()
   .extend({
     phone: z.string().optional(),
     workhours: z.array(WorkhourZodSchema).optional(),
+    permissions: z
+      .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })
+      .optional(),
   });
 
 export type IMember = z.infer<typeof MemberZodSchema>;
