@@ -12,7 +12,7 @@ export function CompanyPage() {
         <div className="flex items-center justify-between">
           <p className="font-semibold text-lg">Sucursales</p>
           <AuthorizationWrapper permission={Permission.CREATE_COMPANY}>
-            <AddButton type="company" />
+            <AddButton type="company" size="sm" />
           </AuthorizationWrapper>
         </div>
         <CompanyLinks />
