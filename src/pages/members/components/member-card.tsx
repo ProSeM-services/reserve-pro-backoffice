@@ -6,7 +6,7 @@ import { SendInviteUser } from "./send-invite-user";
 
 interface MemberCardProps {
   member: IMember;
-  type?: "details" | "invite";
+  type?: "details" | "invite" | "read";
 }
 export function MemberCard({ member, type = "details" }: MemberCardProps) {
   return (
@@ -27,8 +27,12 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
                 {member.role}
               </div>
             </div>
-            {type === "details" && <OpenMemberDetails member={member} />}
-            {type === "invite" && <SendInviteUser member={member} />}
+            {type === "read" ? null : (
+              <>
+                {type === "details" && <OpenMemberDetails member={member} />}
+                {type === "invite" && <SendInviteUser member={member} />}
+              </>
+            )}
           </header>
 
           <span className="font-normal">{member.email || ""}</span>

@@ -29,6 +29,7 @@ import { setMainFetched } from "@/store/feature/main/mainSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { setSession } from "@/store/feature/session/sessionSlice";
 import { AuthServices } from "@/services/auth.services";
+import { memberListAdpater } from "@/adapters/members.adapter";
 
 export default function useFetchData() {
   const dispatch = useAppDispatch();
@@ -50,7 +51,7 @@ export default function useFetchData() {
     try {
       dispatch(toggleMembersLoading(true));
       const members = await MemberServices.getMembers();
-      dispatch(setMembers(members));
+      dispatch(setMembers(memberListAdpater(members)));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {

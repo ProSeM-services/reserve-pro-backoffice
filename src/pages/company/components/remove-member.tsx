@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { ICompany } from "@/interfaces";
 import { IMember } from "@/interfaces/member.iterface";
-import { CompanyServices } from "@/services/company.services";
+import { MemberServices } from "@/services/member.services";
 import { TrashIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -19,7 +19,7 @@ export function RemoveMember({
   const handleDeleteFromCompany = async () => {
     setDeleting(true);
     try {
-      await CompanyServices.removeMember({
+      await MemberServices.removeFromCompany({
         companyId: company.id,
         userId: member.id,
       });

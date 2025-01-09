@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { CheckCircleIcon, UserCircle } from "lucide-react";
 import { IMember } from "@/interfaces/member.iterface";
 import { Button } from "@/components/ui/button";
 import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { BarLoader } from "@/components/common/bar-loader";
 import { MemberServices } from "@/services/member.services";
+import { MemberCard } from "@/pages/members/components/member-card";
 
 export function AddMemberAside({ company }: { company: ICompany }) {
   const [loading, setLoading] = useState(false);
@@ -73,27 +73,13 @@ export function AddMemberAside({ company }: { company: ICompany }) {
       ) : (
         members?.map((member) => (
           <div
-            className={`flex relative items-center gap-2 border rounded-md border-accent p-2 cursor-pointer hover:bg-secondary transition-all duration-150 ${
-              selecetedMembers.includes(member.id!)
-                ? "border border-sky-300 "
-                : ""
+            className={`cursor-pointer border border-transparent rounded-lg ${
+              selecetedMembers.includes(member.id!) ? " border-sky-400 " : ""
             }`}
             key={member.id}
             onClick={() => handleSelectMember(member.id!)}
           >
-            <UserCircle className="size-5" />
-            <div className="flex items-center gap-1 ">
-              <p>{member.name}</p>
-              <p>{member.lastName}</p>
-            </div>
-
-            <span className="text-accent-foreground/50 text-xs">
-              {member.email}
-            </span>
-
-            {selecetedMembers.includes(member.id!) && (
-              <CheckCircleIcon className="text-primary absolute right-2  size-4" />
-            )}
+            <MemberCard member={member} key={member.id} type="read" />
           </div>
         ))
       )}
