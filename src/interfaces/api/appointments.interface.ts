@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MemberZodSchema } from "./member.iterface";
+import { MemberZodSchema } from "../member.iterface";
 const isoStringRegex =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|([+-]\d{2}:\d{2}))$/;
 
@@ -68,10 +68,10 @@ export const CreateAppointmentZodSchema = z.object({
 });
 export type IClientData = z.infer<typeof ClientDataSchema>;
 export type ICreateAppointment = z.infer<typeof CreateAppointmentZodSchema>;
-export type IAppointment = z.infer<typeof AppointmentZodSchema>;
+export type IAPIAppointment = z.infer<typeof AppointmentZodSchema>;
 
 export type IAppointmentApiResponse = {
-  appointments: IAppointment[];
+  appointments: IAPIAppointment[];
   total: number;
   limit: number;
   offset: number;

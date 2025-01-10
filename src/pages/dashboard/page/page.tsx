@@ -6,6 +6,7 @@ export function DashboardPage() {
       <DashboardCard type="member" />
       <DashboardCard type="company" />
       <DashboardCard type="services" />
+      <DashboardCard type="appointments" />
     </div>
   );
 }
