@@ -25,6 +25,7 @@ export const AppointmentZodSchema = z.object({
   companyId: z.string().optional(),
   canceled: z.boolean().optional(),
   createdAt: z.string(),
+  fullName: z.string(),
   User: MemberZodSchema,
 });
 

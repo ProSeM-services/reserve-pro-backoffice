@@ -20,7 +20,6 @@ export function CompanyDetailPage() {
   const [loading, setLoading] = useState(false);
 
   const params = useParams();
-  console.log(typeof params.id);
 
   useEffect(() => {
     if (!params.id || typeof params.id !== "string") return;
