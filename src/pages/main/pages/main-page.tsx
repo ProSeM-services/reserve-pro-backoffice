@@ -31,6 +31,7 @@ export default function MainPage() {
             </header>
             <div className="p-4 flex-1   max-h-[93vh] overflow-auto">
               <Routes>
+                <Route path="/" element={<DashboardPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/company/*" element={<CompanyPage />} />
                 <Route path="/members/*" element={<MembersPage />} />

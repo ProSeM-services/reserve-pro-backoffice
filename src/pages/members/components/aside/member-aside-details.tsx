@@ -130,7 +130,10 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className=" space-y-4  overflow-auto max-h-[80vh]   "
+      >
         <header className="flex gap-4 items-start">
           <div className=" space-y-2">
             <div className="">
