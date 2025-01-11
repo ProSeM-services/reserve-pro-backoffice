@@ -7,6 +7,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { CompanyPage } from "@/pages/company/page/company-page";
+import { CustomersPage } from "@/pages/customers/page/customers-page";
 import Hero from "@/pages/dashboard/components/hero";
 import { DashboardPage } from "@/pages/dashboard/page";
 import { MembersPage } from "@/pages/members/page/members-page";
@@ -35,7 +36,7 @@ export default function MainPage() {
                 <Route path="/members/*" element={<MembersPage />} />
                 <Route path="/services" element={<h2> Servicios </h2>} />
                 <Route path="/appointment" element={<h2> appointment</h2>} />
-                <Route path="/customers" element={<h2> Clientes</h2>} />
+                <Route path="/customers" element={<CustomersPage />} />
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
