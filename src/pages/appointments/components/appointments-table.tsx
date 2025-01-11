@@ -2,7 +2,7 @@ import LoaderWrapper from "@/components/common/loader-wrapper";
 import { useAppSelector } from "@/store/hooks";
 
 
-export function AppointmentsList() {
+export function AppointmentsTable() {
     const { appointments, loading } = useAppSelector((a) => a.appointments)
 
     return (
@@ -10,12 +10,12 @@ export function AppointmentsList() {
             <table className="table-auto w-full border-collapse border border-gray-200">
                 <thead>
                     <tr className="bg-gray-100">
-                        <th>Employee</th>
-                        <th>Client Name</th>
-                        <th>Phone</th>
+                        <th>Empleado</th>
+                        <th>Cliente</th>
+                        <th>Numero de celular</th>
                         <th>Email</th>
-                        <th>Hour</th>
-                        <th>Date</th>
+                        <th>Hora</th>
+                        <th>Fecha</th>
                     </tr>
                 </thead>
                 <tbody className="">

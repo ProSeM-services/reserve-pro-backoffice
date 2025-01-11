@@ -1,5 +1,5 @@
 import { Separator } from "@/components/ui/separator";
-import { AppointmentsList } from "../components/appointments-list";
+import { AppointmentsTable } from "../components/appointments-table";
 
 
 export function AppointmentPage() {
@@ -14,7 +14,7 @@ export function AppointmentPage() {
             <Separator />
             <section className="flex flex-grow max-h-[90%]  overflow-auto gap-2">
                 <section className="h-full flex-grow ">
-                    <AppointmentsList />
+                    <AppointmentsTable />
                 </section>
             </section>
         </div >

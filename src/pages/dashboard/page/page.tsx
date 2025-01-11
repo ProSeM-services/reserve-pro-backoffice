@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { CompanyLinks } from "@/pages/company/components";
 import { MemberList } from "@/pages/members/components/member-list";
+import { ServicesList } from "@/pages/services/components/services-list";
 
 export function DashboardPage() {
   return (
@@ -12,6 +13,11 @@ export function DashboardPage() {
       <Label>Sucursales</Label>
 
       <CompanyLinks />
+
+      <hr />
+      <Label>Servicios</Label>
+
+      <ServicesList />
     </div>
   );
 }
