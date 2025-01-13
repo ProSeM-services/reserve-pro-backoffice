@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { AppointmentPage } from "@/pages/appointments/page/appointment-page";
 import { CompanyPage } from "@/pages/company/page/company-page";
+import { CustomersPage } from "@/pages/customers/page/customers-page";
 import Hero from "@/pages/dashboard/components/hero";
 import { DashboardPage } from "@/pages/dashboard/page";
 import { MembersPage } from "@/pages/members/page/members-page";
@@ -37,7 +38,7 @@ export default function MainPage() {
                 <Route path="/members/*" element={<MembersPage />} />
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/appointment" element={<AppointmentPage />} />
-                <Route path="/customers" element={<h2> Clientes</h2>} />
+                <Route path="/customers" element={<CustomersPage />} />
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
