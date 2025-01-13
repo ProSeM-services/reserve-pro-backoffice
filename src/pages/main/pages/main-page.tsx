@@ -38,7 +38,7 @@ export default function MainPage() {
                 <Route path="/members/*" element={<MembersPage />} />
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/appointment" element={<AppointmentPage />} />
-                <Route path="/customers" element={<CompanyPage />} />
+                <Route path="/customers" element={<CustomersPage />} />
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
