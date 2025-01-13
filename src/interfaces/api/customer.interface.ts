@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AppointmentZodSchema } from "./appointments.interface";
+import { AppointmentZodSchema } from "../appointments.interface";
 
 export const CustomerZodSchema = z.object({
   id: z.string(),
@@ -9,19 +9,19 @@ export const CustomerZodSchema = z.object({
   email: z.string(),
   createdAt: z.string(),
   phone: z.string(),
-  apointments: z.array(AppointmentZodSchema),
+  Appointments: z.array(AppointmentZodSchema),
 });
 export const CreateCustomerZodSchema = CustomerZodSchema.omit({
   id: true,
-  apointments: true,
+  Appointments: true,
   createdAt: true,
 });
 export const UpdateCustomerZodSchema = CustomerZodSchema.omit({
   id: true,
-  apointments: true,
+  Appointments: true,
   createdAt: true,
 }).optional();
 
-export type ICustomer = z.infer<typeof CustomerZodSchema>;
+export type IAPICustomer = z.infer<typeof CustomerZodSchema>;
 export type ICreateCustomer = z.infer<typeof CreateCustomerZodSchema>;
 export type IUpdateCustomer = z.infer<typeof UpdateCustomerZodSchema>;

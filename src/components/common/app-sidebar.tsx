@@ -1,17 +1,9 @@
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  GalleryVerticalEnd,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
 
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
-import { TeamSwitcher } from "./team-switcher";
+import { CompanySwitcher } from "./company-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -27,23 +19,6 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
       title: "Playground",
@@ -121,7 +96,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <CompanySwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

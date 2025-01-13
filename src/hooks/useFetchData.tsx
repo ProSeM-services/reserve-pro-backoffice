@@ -31,6 +31,7 @@ import { setSession } from "@/store/feature/session/sessionSlice";
 import { AuthServices } from "@/services/auth.services";
 import { memberListAdpater } from "@/adapters/members.adapter";
 import { appointmentListAdpater } from "@/adapters/appointments.adpater";
+import { customersListAdpater } from "@/adapters/customers.adapter";
 
 export default function useFetchData() {
   const dispatch = useAppDispatch();
@@ -74,7 +75,7 @@ export default function useFetchData() {
     try {
       dispatch(toggleCustomersLoading(true));
       const customers = await CustomerServices.getAll();
-      dispatch(setCustomers(customers));
+      dispatch(setCustomers(customersListAdpater(customers)));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {

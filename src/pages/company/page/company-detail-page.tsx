@@ -37,7 +37,7 @@ export function CompanyDetailPage() {
   return (
     <LoaderWrapper loading={loading} type="company">
       {!company ? null : (
-        <div className="flex flex-col gap-4 flex-grow relative ">
+        <div className="flex flex-col gap-4 flex-grow relative p-4 ">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <HomeIcon className="size-5" />
