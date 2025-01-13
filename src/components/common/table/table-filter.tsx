@@ -7,9 +7,9 @@ interface TableFilterProps<TData> {
   tableType?: TableType;
   table: Table<TData>;
 }
-interface IHeaderFilter<TData> {
+interface TableFilterProps<TData> {
   column: Column<any, unknown>;
-  tableType: TableType;
+  tableType?: TableType;
   table: Table<TData>;
 }
 

@@ -17,7 +17,7 @@ interface ISelectFilter {
   value?: string;
   filterType?: TableColumnFilterType;
 }
-const SelctMembers = ({ filterType, onValueChange }: ISelectFilter) => {
+const SelctMembers = ({ onValueChange }: ISelectFilter) => {
   const { members: data, loading } = useAppSelector((s) => s.member);
 
   if (loading) {
@@ -52,7 +52,7 @@ const SelctMembers = ({ filterType, onValueChange }: ISelectFilter) => {
   }
 };
 
-const SelectCustomer = ({ filterType, onValueChange }: ISelectFilter) => {
+const SelectCustomer = ({ onValueChange }: ISelectFilter) => {
   const { customers: data, loading } = useAppSelector((s) => s.customers);
 
   if (loading) {
@@ -89,8 +89,6 @@ const SelectCustomer = ({ filterType, onValueChange }: ISelectFilter) => {
 
 export function SelectFilter({
   onValueChange,
-  tableType,
-  value,
   filterType = "members",
 }: ISelectFilter) {
   if (filterType === "members") {
