@@ -1,4 +1,5 @@
 import LoaderWrapper from "@/components/common/loader-wrapper"
+import { Card } from "@/components/ui/card"
 import { useAppSelector } from "@/store/hooks"
 
 
@@ -10,11 +11,11 @@ export function ServicesList() {
         <LoaderWrapper loading={loading} type="services">
             <div className="flex flex-row gap-4 h-24 ">
                 {services.map((service) => (
-                    <div key={service.id} className="flex flex-col justify-start border p-2 border-[#000] gap-3">
+                    <Card key={service.id}>
                         <h2 className="text-xl font-bold">{service.title}</h2>
                         <p>Precio: ${service.price}</p>
                         <p>Duracion: {service.duration}</p>
-                    </div>
+                    </Card>
                 ))}
             </div>
         </LoaderWrapper>
