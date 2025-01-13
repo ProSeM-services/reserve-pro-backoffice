@@ -6,11 +6,13 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { AppointmentPage } from "@/pages/appointments/page/appointment-page";
 import { CompanyPage } from "@/pages/company/page/company-page";
 import { CustomersPage } from "@/pages/customers/page/customers-page";
 import Hero from "@/pages/dashboard/components/hero";
 import { DashboardPage } from "@/pages/dashboard/page";
 import { MembersPage } from "@/pages/members/page/members-page";
+import { ServicesPage } from "@/pages/services/page/services-page";
 import { Route, Routes } from "react-router";
 export default function MainPage() {
   return (
@@ -34,9 +36,9 @@ export default function MainPage() {
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/company/*" element={<CompanyPage />} />
                 <Route path="/members/*" element={<MembersPage />} />
-                <Route path="/services" element={<h2> Servicios </h2>} />
-                <Route path="/appointment" element={<h2> appointment</h2>} />
-                <Route path="/customers" element={<CustomersPage />} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/appointment" element={<AppointmentPage />} />
+                <Route path="/customers" element={<CompanyPage />} />
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
