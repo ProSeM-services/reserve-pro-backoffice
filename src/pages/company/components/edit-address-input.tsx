@@ -49,7 +49,9 @@ export function EditAddressInput({
     const loadScript = () => {
       console.log(locationValues);
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_APIMAPS}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${
+        import.meta.env.VITE_NEXT_PUBLIC_APIMAPS
+      }&libraries=places`;
       script.async = true;
       document.head.appendChild(script);
       script.onload = () => {

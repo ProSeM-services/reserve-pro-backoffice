@@ -11,8 +11,6 @@ import { MemberForm } from "./forms/crate-member-form";
 import { CompanyForm } from "./forms/create-company-form";
 import { Button } from "@/components/ui/button";
 import { CreateServicesForm } from "./forms/create-service-form";
-import { Label } from "../ui/label";
-
 export type ICreateType = "member" | "company" | "services";
 export type Size = "lg" | "sm";
 
@@ -48,12 +46,12 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
         <Button
           size={size === "lg" ? "default" : "icon"}
           variant={"secondary"}
-          className={` ${
+          className={` flex items-center gap-2 ${
             size === "lg" ? " w-full px-4" : "size-8 rounded-full"
           }`}
         >
           {size === "lg" && (
-            <Label className="max-md:hidden cursor-pointer">{btnText}</Label>
+            <p className="max-md:hidden cursor-pointer">{btnText}</p>
           )}
           <PlusIcon className="size-4 " />
         </Button>

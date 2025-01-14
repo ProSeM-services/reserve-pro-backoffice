@@ -22,7 +22,7 @@ export function OpenMemberDetails({ member }: OpenMemberDetailsProps) {
           <SlidersHorizontal className="size-4 " />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="outline ">
         <SheetHeader>
           <SheetTitle>
             {member.name}, {member.lastName}

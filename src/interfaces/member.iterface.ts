@@ -40,6 +40,7 @@ export const MemberZodSchema = ZodTenantSchema.omit({
   workhours: z.array(WorkhourZodSchema).optional(),
   CompanyId: z.string().optional(),
   createdAt: z.string().optional(),
+  fullName: z.string(),
   permissions: z
     .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })
     .optional(),

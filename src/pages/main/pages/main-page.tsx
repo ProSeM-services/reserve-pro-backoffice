@@ -9,16 +9,19 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { API_BASE_URL } from "@/config/axios.config";
 import { IAppointment } from "@/interfaces/appointments.interface";
+import { AppointmentPage } from "@/pages/appointments/page/appointment-page";
 import { CompanyPage } from "@/pages/company/page/company-page";
+import { CustomersPage } from "@/pages/customers/page/customers-page";
 import Hero from "@/pages/dashboard/components/hero";
 import { DashboardPage } from "@/pages/dashboard/page";
 import { MembersPage } from "@/pages/members/page/members-page";
+import { ServicesPage } from "@/pages/services/page/services-page";
 import { useEffect } from "react";
 import { Route, Routes } from "react-router";
-
 import { io } from "socket.io-client";
 
 const socket = io(API_BASE_URL); // URL del backend
+
 export default function MainPage() {
   const { toast } = useToast();
   useEffect(() => {
@@ -51,12 +54,13 @@ export default function MainPage() {
             </header>
             <div className="p-4 flex-1   max-h-[93vh] overflow-auto">
               <Routes>
+                <Route path="/" element={<DashboardPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/company/*" element={<CompanyPage />} />
                 <Route path="/members/*" element={<MembersPage />} />
-                <Route path="/services" element={<h2> Servicios </h2>} />
-                <Route path="/appointment" element={<h2> appointment</h2>} />
-                <Route path="/customers" element={<h2> Clientes</h2>} />
+                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/appointment" element={<AppointmentPage />} />
+                <Route path="/customers" element={<CustomersPage />} />
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
