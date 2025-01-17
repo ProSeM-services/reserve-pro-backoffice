@@ -1,13 +1,19 @@
 import React from "react";
-import { Building, HousePlugIcon, LucideProps, Users2Icon } from "lucide-react";
+import {
+  Building,
+  HousePlugIcon,
+  LucideProps,
+  UserRoundX,
+  Users2Icon,
+} from "lucide-react";
 
 export function EmptyList({
   type,
 }: {
-  type: "member" | "company" | "service";
+  type: "member" | "company" | "service" | "no-members-to-add";
 }) {
   const Config: Record<
-    "member" | "company" | "service",
+    "member" | "company" | "service" | "no-members-to-add",
     {
       Icon: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
@@ -30,6 +36,11 @@ export function EmptyList({
       title: "Equipo vacío",
       description: "No hay miembros en tu equipo actualmente",
       Icon: Users2Icon,
+    },
+    "no-members-to-add": {
+      title: "Equipo vacío",
+      description: "No hay más miembros en tu equipo para que puedas agregar",
+      Icon: UserRoundX,
     },
   };
 

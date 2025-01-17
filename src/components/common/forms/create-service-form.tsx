@@ -145,7 +145,7 @@ export function CreateServicesForm() {
             render={() => (
               <FormItem>
                 <FormLabel>Tipo de prestación</FormLabel>
-                <div className="flex w-max space-x-4 py-3 flex-wrap max-w-full gap-2">
+                <div className="flex w-max   flex-wrap max-w-full gap-2">
                   {PROVISION_VALUES.map((provision) => (
                     <div
                       key={provision}
@@ -154,7 +154,7 @@ export function CreateServicesForm() {
                         selectedProvision === provision
                           ? "bg-primary text-white"
                           : " bg-accent text-foreground/50"
-                      }  p-2 rounded-md px-4 cursor-pointer select-none transition-all duration-200  `}
+                      }  p-2 rounded-md px-4  cursor-pointer select-none transition-all duration-200  `}
                     >
                       {provision}
                     </div>

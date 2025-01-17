@@ -2,17 +2,23 @@ import { IService } from "@/interfaces";
 import { IStoreState } from "@/store/interface/state.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
+type AsideType = "add-member" | "details";
 export interface ServiceState extends IStoreState {
   value: number;
   services: IService[];
   inmutableServices: IService[];
+  asideService?: IService;
+  asideOpen: boolean;
+  asideType: AsideType;
 }
 
 const initialState: ServiceState = {
   value: 0,
   services: [],
+  asideOpen: false,
   inmutableServices: [],
+  asideType: "details",
+  asideService: undefined,
   loading: true,
   fetched: false,
   updated: false,
@@ -37,6 +43,26 @@ export const serviceSlice = createSlice({
       state.services.push(action.payload);
       state.inmutableServices.push(action.payload);
     },
+    closeAside: (state) => {
+      state.asideOpen = false;
+      state.asideService = undefined;
+    },
+    setAside: (
+      state,
+      action: PayloadAction<{
+        open: boolean;
+        type: AsideType;
+        service: IService;
+      }>
+    ) => {
+      state.asideOpen = action.payload.open;
+      if (!action.payload.open) {
+        state.asideService = undefined;
+        return;
+      }
+      state.asideType = action.payload.type;
+      state.asideService = action.payload.service;
+    },
   },
 });
 
@@ -46,6 +72,8 @@ export const {
   setServices,
   toggleServiceLoading,
   setSerivicesUpdated,
+  setAside,
+  closeAside,
 } = serviceSlice.actions;
 
 export default serviceSlice.reducer;

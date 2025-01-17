@@ -21,7 +21,7 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
+      title: "General",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
@@ -33,7 +33,7 @@ const data = {
       ],
     },
     {
-      title: "Models",
+      title: "Nosotros",
       url: "#",
       icon: Bot,
       items: [
@@ -67,7 +67,7 @@ const data = {
       ],
     },
     {
-      title: "Settings",
+      title: "Configuraciones",
       url: "#",
       icon: Settings2,
       items: [
@@ -76,8 +76,8 @@ const data = {
           url: "#",
         },
         {
-          title: "Team",
-          url: "#",
+          title: "Horarios",
+          url: "/set-hours",
         },
         {
           title: "Billing",

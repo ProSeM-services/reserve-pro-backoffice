@@ -13,6 +13,7 @@ import Hero from "@/pages/dashboard/components/hero";
 import { DashboardPage } from "@/pages/dashboard/page";
 import { MembersPage } from "@/pages/members/page/members-page";
 import { ServicesPage } from "@/pages/services/page/services-page";
+import { SetHoursPage } from "@/pages/set-hours/pages/set-hours-page";
 import { Route, Routes } from "react-router";
 export default function MainPage() {
   return (
@@ -39,6 +40,7 @@ export default function MainPage() {
                 <Route path="/services" element={<ServicesPage />} />
                 <Route path="/appointment" element={<AppointmentPage />} />
                 <Route path="/customers" element={<CustomersPage />} />
+                <Route path="/set-hours" element={<SetHoursPage />} />
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
