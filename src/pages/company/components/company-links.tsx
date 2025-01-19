@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Link } from "react-router";
 import { CompanyCard } from "../components/company-card";
 import { EmptyList } from "@/components/common/emty-list";
@@ -11,10 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ICompany } from "@/interfaces";
+import { setSelectedCompany } from "@/store/feature/company/companySlice";
 
 export function CompanyLinks() {
   const { companies, loading } = useAppSelector((s) => s.company);
-
+  const dispatch = useAppDispatch();
+  const handleSelectCompany = (company: ICompany) => {
+    dispatch(setSelectedCompany(company));
+  };
   return (
     <>
       <section className="max-lg:hidden">
@@ -28,6 +33,7 @@ export function CompanyLinks() {
                   to={`/company/${company.id}`}
                   key={company.id}
                   className={`  transition-all duration-300 border rounded-md  flex items-center gap-2 bg-background `}
+                  onClick={() => handleSelectCompany(company)}
                 >
                   <CompanyCard company={company} readonly />
                 </Link>
@@ -51,6 +57,7 @@ export function CompanyLinks() {
                     <Link
                       to={`/company/${company.id}`}
                       key={company.id}
+                      onClick={() => handleSelectCompany(company)}
                       className={`cursor-pointer`}
                     >
                       <SelectItem value={company.name}>

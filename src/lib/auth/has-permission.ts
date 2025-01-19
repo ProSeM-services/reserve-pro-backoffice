@@ -2,7 +2,10 @@ import { UserZod } from "@/interfaces";
 import { Permission } from "@/lib/constants/permissions";
 import { ROLES } from "@/lib/constants/role";
 
-export function hasPermission(user: UserZod, requiredPermission: Permission) {
+export function hasPermission(
+  user: UserZod,
+  requiredPermission: Permission
+): boolean {
   const { role, permissions: userPermissions = [] } = user;
   const rolePermissions = ROLES[role]?.permissions || [];
 
