@@ -1,6 +1,5 @@
 import * as React from "react";
 import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
-
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import { CompanySwitcher } from "./company-switcher";
@@ -11,6 +10,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Permission } from "@/lib/constants/permissions";
 
 // This is sample data.
 const data = {
@@ -40,14 +40,17 @@ const data = {
         {
           title: "Sucursales",
           url: "/company",
+          permission: Permission.VIEW_COMPANY,
         },
         {
           title: "Miembros",
           url: "/members",
+          permission: Permission.VIEW_MEMBERS,
         },
         {
           title: "Servicios",
           url: "/services",
+          permission: Permission.VIEW_SERVICES,
         },
       ],
     },
@@ -59,10 +62,12 @@ const data = {
         {
           title: "Turnos",
           url: "/appointment",
+          permission: Permission.VIEW_APPOINTMENTS,
         },
         {
           title: "Clientes",
           url: "/customers",
+          permission: Permission.VIEW_CUSTOMERS,
         },
       ],
     },
@@ -78,6 +83,7 @@ const data = {
         {
           title: "Horarios",
           url: "/set-hours",
+          permission: Permission.UPDATE_WORKHOURS,
         },
         {
           title: "Billing",

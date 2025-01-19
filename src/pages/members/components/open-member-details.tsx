@@ -8,7 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { IMember } from "@/interfaces/member.iterface";
-import { SlidersHorizontal } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { MemberAsideDetails } from "./aside/member-aside-details";
 
 interface OpenMemberDetailsProps {
@@ -19,7 +19,7 @@ export function OpenMemberDetails({ member }: OpenMemberDetailsProps) {
     <Sheet>
       <SheetTrigger>
         <Button variant={"ghost"} className="size-6 p-0">
-          <SlidersHorizontal className="size-4 " />
+          <EllipsisVertical className="size-4 " />
         </Button>
       </SheetTrigger>
       <SheetContent className="outline ">

@@ -1,3 +1,4 @@
+import { RouteAuthorizationWrapper } from "@/components/auth/route-authoriaztion";
 import { AppSidebar } from "@/components/common/app-sidebar";
 import DataProvider from "@/components/providers/data-provider";
 import { Separator } from "@/components/ui/separator";
@@ -6,6 +7,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Permission } from "@/lib/constants/permissions";
 import { AppointmentPage } from "@/pages/appointments/page/appointment-page";
 import { CompanyPage } from "@/pages/company/page/company-page";
 import { CustomersPage } from "@/pages/customers/page/customers-page";
@@ -35,12 +37,66 @@ export default function MainPage() {
               <Routes>
                 <Route path="/" element={<DashboardPage />} />
                 <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/company/*" element={<CompanyPage />} />
-                <Route path="/members/*" element={<MembersPage />} />
-                <Route path="/services" element={<ServicesPage />} />
-                <Route path="/appointment" element={<AppointmentPage />} />
-                <Route path="/customers" element={<CustomersPage />} />
-                <Route path="/set-hours" element={<SetHoursPage />} />
+                <Route
+                  path="/company/*"
+                  element={
+                    <RouteAuthorizationWrapper
+                      permission={Permission.VIEW_COMPANY}
+                    >
+                      <CompanyPage />
+                    </RouteAuthorizationWrapper>
+                  }
+                />
+                <Route
+                  path="/members/*"
+                  element={
+                    <RouteAuthorizationWrapper
+                      permission={Permission.VIEW_COMPANY}
+                    >
+                      <MembersPage />
+                    </RouteAuthorizationWrapper>
+                  }
+                />
+                <Route
+                  path="/services"
+                  element={
+                    <RouteAuthorizationWrapper
+                      permission={Permission.VIEW_SERVICES}
+                    >
+                      <ServicesPage />
+                    </RouteAuthorizationWrapper>
+                  }
+                />
+                <Route
+                  path="/appointment"
+                  element={
+                    <RouteAuthorizationWrapper
+                      permission={Permission.VIEW_APPOINTMENTS}
+                    >
+                      <AppointmentPage />
+                    </RouteAuthorizationWrapper>
+                  }
+                />
+                <Route
+                  path="/customers"
+                  element={
+                    <RouteAuthorizationWrapper
+                      permission={Permission.VIEW_CUSTOMERS}
+                    >
+                      <CustomersPage />
+                    </RouteAuthorizationWrapper>
+                  }
+                />
+                <Route
+                  path="/set-hours"
+                  element={
+                    <RouteAuthorizationWrapper
+                      permission={Permission.UPDATE_WORKHOURS}
+                    >
+                      <SetHoursPage />
+                    </RouteAuthorizationWrapper>
+                  }
+                />
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
