@@ -83,7 +83,7 @@ const data = {
         {
           title: "Horarios",
           url: "/set-hours",
-          permission: Permission.UPDATE_WORKHOURS,
+          permission: Permission.VIEW_WORKHOURS,
         },
         {
           title: "Billing",

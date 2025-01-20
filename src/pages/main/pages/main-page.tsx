@@ -91,7 +91,7 @@ export default function MainPage() {
                   path="/set-hours"
                   element={
                     <RouteAuthorizationWrapper
-                      permission={Permission.UPDATE_WORKHOURS}
+                      permission={Permission.VIEW_WORKHOURS}
                     >
                       <SetHoursPage />
                     </RouteAuthorizationWrapper>

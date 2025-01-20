@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Segment } from "@/interfaces";
 import { IMember } from "@/interfaces/member.iterface";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
+import { Permission } from "@/lib/constants/permissions";
 
 const HOURS_VALUES = [
   "00:00",
@@ -77,6 +79,7 @@ const DAYS = [
 ];
 
 export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
+  // console.log("WorkhoursEditor", member.workhours);
   const { toast } = useToast();
   const [week, setWeek] = useState(
     DAYS.map((day, index) => ({
@@ -88,6 +91,18 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       selected: false, // Add selected property for each day
     }))
   );
+  useEffect(() => {
+    setWeek(
+      DAYS.map((day, index) => ({
+        ...day,
+        workhour: member.workhours?.find((e) => e.day === index) || {
+          day: index,
+          segments: [],
+        },
+        selected: false, // Add selected property for each day
+      }))
+    );
+  }, [member.id]);
 
   const [updating, setUpdating] = useState(false);
 
@@ -188,7 +203,7 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
     try {
       setUpdating(true);
       const updatedWorkhours = week.map((entry) => entry.workhour);
-      await editMember(member.id, { ...member, workhours: updatedWorkhours });
+      await editMember(member.id, { workhours: updatedWorkhours });
       toast({
         title: "Horarios actualizados",
         variant: "success",
@@ -206,14 +221,16 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       <section className="grid grid-cols-4 max-lg:grid-cols-2 max-md:flex  max-md:flex-col w-full gap-4 overflow-x-auto ">
         {week.map((entry) => (
           <Card className="flex flex-col w-full   flex-grow items-center justify-between  gap-1 p-2">
-            <div className="flex items-center  gap-2">
-              <input
-                type="checkbox"
-                checked={entry.selected}
-                onChange={() => handleDaySelection(entry.workhour.day)}
-              />
-              <label>seleccionar</label>
-            </div>
+            <AuthorizationWrapper permission={Permission.UPDATE_OWN_WORKHOURS}>
+              <div className="flex items-center  gap-2">
+                <input
+                  type="checkbox"
+                  checked={entry.selected}
+                  onChange={() => handleDaySelection(entry.workhour.day)}
+                />
+                <label>seleccionar</label>
+              </div>
+            </AuthorizationWrapper>
             <p className="font-medium uppercase">{entry.short}</p>
             <div key={entry.short} className=" w-full flex flex-col gap-2  ">
               <div className="flex flex-col items-start gap-4 w-full ">
@@ -288,32 +305,38 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
                 ))}
               </div>
 
-              <div className="flex justify-center gap-2">
-                <Button
-                  onClick={() => handleAddSegment(entry.workhour.day)}
-                  variant="secondary"
-                >
-                  <PlusIcon className="  size-4" />
-                </Button>
+              <AuthorizationWrapper
+                permission={Permission.UPDATE_OWN_WORKHOURS}
+              >
+                <div className="flex justify-center gap-2">
+                  <Button
+                    onClick={() => handleAddSegment(entry.workhour.day)}
+                    variant="secondary"
+                  >
+                    <PlusIcon className="  size-4" />
+                  </Button>
 
-                <Button onClick={() => handleReplicate(entry.workhour.day)}>
-                  Replicar
-                </Button>
-              </div>
+                  <Button onClick={() => handleReplicate(entry.workhour.day)}>
+                    Replicar
+                  </Button>
+                </div>
+              </AuthorizationWrapper>
             </div>
           </Card>
         ))}
       </section>
 
-      <div className="flex flex-col items-start gap-4">
-        <p>
-          <span>REPLICAR* </span>
-          Replica los horarios sobre los dias seleccionados
-        </p>
-        <Button variant={"outline"} onClick={handleSave} isLoading={updating}>
-          Actualizar Horarios
-        </Button>
-      </div>
+      <AuthorizationWrapper permission={Permission.UPDATE_OWN_WORKHOURS}>
+        <div className="flex flex-col items-start gap-4">
+          <p>
+            <span>REPLICAR* </span>
+            Replica los horarios sobre los dias seleccionados
+          </p>
+          <Button onClick={handleSave} isLoading={updating}>
+            Actualizar Horarios
+          </Button>
+        </div>
+      </AuthorizationWrapper>
     </div>
   );
 };
