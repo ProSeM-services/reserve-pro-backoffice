@@ -1,10 +1,8 @@
 import { z } from "zod";
 import { WorkhourZodSchema } from "./workhour.interface";
 import { Permission } from "@/lib/constants/permissions";
+import { ROLES_VALUES } from "@/lib/constants/role";
 
-export const ROLES_VALUES = ["BASIC", "ADMIN", "OWNER"] as const;
-
-export type Role = (typeof ROLES_VALUES)[number];
 export const ZodTenantSchema = z.object({
   id: z.string(),
   name: z.string(),

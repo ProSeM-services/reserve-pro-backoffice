@@ -11,8 +11,6 @@ import {
   EditMemberZodSchema,
   IEditMember,
   IMember,
-  Role,
-  ROLES_VALUES,
 } from "@/interfaces/member.iterface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -35,6 +33,7 @@ import {
 import { PhoneInput } from "@/components/ui/phone-input";
 import { AddPermissions } from "./add-permissions";
 import { Permission } from "@/lib/constants/permissions";
+import { Role, ROLES_VALUES } from "@/lib/constants/role";
 export function MemberAsideDetails({ member }: { member: IMember }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);

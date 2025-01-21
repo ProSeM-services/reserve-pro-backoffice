@@ -2,6 +2,7 @@ import useSession from "@/hooks/useSession";
 import { UserZod } from "@/interfaces";
 import { Permission } from "@/lib/constants/permissions";
 import { ROLES } from "@/lib/constants/role";
+import { useAppSelector } from "@/store/hooks";
 import { Fragment, PropsWithChildren } from "react";
 
 export function hasPermission(user: UserZod, requiredPermission: Permission) {
@@ -25,9 +26,12 @@ export default function AuthorizationWrapper({
   permission,
 }: AuthorizationWrapper) {
   const session = useSession();
+  const { members } = useAppSelector((s) => s.member);
 
   if (!session || !session.session) return null;
-  if (!hasPermission(session.session, permission)) {
+  const member = members.find((e) => e.id === session.session?.id);
+  if (!member) return null;
+  if (!hasPermission(member, permission)) {
     console.log(`User no tiene permiso para ${permission}`);
     return null;
   }

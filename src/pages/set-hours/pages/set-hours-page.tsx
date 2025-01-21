@@ -30,9 +30,10 @@ export function SetHoursPage() {
   console.log("selcet memvber", selectedMember);
   return (
     <div className="space-y-4 h-full  flex flex-col">
-      {/* <MemberCard member={selectedMember} /> */}
-      {!hasPermission(session, Permission.UPDATE_WORKHOURS) ? (
-        <MemberCard member={selectedMember} />
+      {!hasPermission(session, Permission.UPDATE_WORKHOURS) &&
+      session.role !== "OWNER" &&
+      session.role !== "ADMIN" ? (
+        <MemberCard member={selectedMember} type="read" />
       ) : (
         <Select
           value={selectedMember.id}

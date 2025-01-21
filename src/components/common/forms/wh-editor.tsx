@@ -91,6 +91,7 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       selected: false, // Add selected property for each day
     }))
   );
+  console.log("permisos", member.permissions);
   useEffect(() => {
     setWeek(
       DAYS.map((day, index) => ({
@@ -221,7 +222,7 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       <section className="grid grid-cols-4 max-lg:grid-cols-2 max-md:flex  max-md:flex-col w-full gap-4 overflow-x-auto ">
         {week.map((entry) => (
           <Card className="flex flex-col w-full   flex-grow items-center justify-between  gap-1 p-2">
-            <AuthorizationWrapper permission={Permission.UPDATE_OWN_WORKHOURS}>
+            <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
               <div className="flex items-center  gap-2">
                 <input
                   type="checkbox"
@@ -305,9 +306,7 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
                 ))}
               </div>
 
-              <AuthorizationWrapper
-                permission={Permission.UPDATE_OWN_WORKHOURS}
-              >
+              <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
                 <div className="flex justify-center gap-2">
                   <Button
                     onClick={() => handleAddSegment(entry.workhour.day)}
@@ -326,7 +325,7 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
         ))}
       </section>
 
-      <AuthorizationWrapper permission={Permission.UPDATE_OWN_WORKHOURS}>
+      <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
         <div className="flex flex-col items-start gap-4">
           <p>
             <span>REPLICAR* </span>
