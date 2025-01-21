@@ -12,7 +12,6 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import {
   CreateMemberZodSchema,
   ICreateMember,
-  ROLES_VALUES,
 } from "@/interfaces/member.iterface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -27,6 +26,7 @@ import {
 import { BaselineIcon, ShieldCheck } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { ROLES_VALUES } from "@/lib/constants/role";
 const INITIAL_MEMBER_DATA: ICreateMember = {
   email: "",
   lastName: "",

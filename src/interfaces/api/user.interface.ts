@@ -1,6 +1,6 @@
 import { Permission } from "@/lib/constants/permissions";
+import { ROLES_VALUES } from "@/lib/constants/role";
 import { z } from "zod";
-export const ROLES_VALUES = ["BASIC", "ADMIN", "OWNER"] as const;
 export const UserZodSchema = z.object({
   id: z.string(),
   name: z.string(),
