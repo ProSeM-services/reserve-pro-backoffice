@@ -20,10 +20,10 @@ import { Route, Routes } from "react-router";
 export default function MainPage() {
   return (
     <div className="h-full w-full  flex flex-col  overflow-hidden    text-xs ">
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <DataProvider>
+      <DataProvider>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
             <header className="flex h-[6vh]   shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
               <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
@@ -100,9 +100,9 @@ export default function MainPage() {
                 <Route path="*" element={<h2> NOT FOUND</h2>} />
               </Routes>
             </div>
-          </DataProvider>
-        </SidebarInset>
-      </SidebarProvider>
+          </SidebarInset>
+        </SidebarProvider>
+      </DataProvider>
     </div>
   );
 }

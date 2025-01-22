@@ -8,12 +8,10 @@ export function hasPermission(
 ): boolean {
   const { role, permissions: userPermissions = [] } = user;
   const rolePermissions = ROLES[role]?.permissions || [];
-  console.log({ user, requiredPermission });
   // Prioridad 1: Permisos individuales del usuario
   if (userPermissions.includes(requiredPermission)) {
     return true;
   }
-
   // Prioridad 2: Permisos del rol asignado
   return rolePermissions.includes(requiredPermission);
 }

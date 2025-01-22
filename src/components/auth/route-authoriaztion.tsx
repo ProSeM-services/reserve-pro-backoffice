@@ -13,8 +13,7 @@ export function RouteAuthorizationWrapper({
 }: AuthorizationWrapper) {
   const session = useSession();
 
-  if (!session || !session.session) return null;
-  if (!hasPermission(session.session, permission)) {
+  if (!hasPermission(session.member, permission)) {
     console.log(`User no tiene permiso para ${permission}`);
     return <Navigate to="/dashboard" replace />;
   }

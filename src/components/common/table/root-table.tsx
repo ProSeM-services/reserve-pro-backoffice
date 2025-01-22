@@ -76,10 +76,12 @@ export function RootTable<TData, TValue>({
 
   return (
     <div
-      className={' h-full flex-grow  flex flex-col  gap-1 relative bg-card  text-card-foreground '}
+      className={
+        " h-full flex-grow  flex flex-col  gap-1 relative bg-card  text-card-foreground "
+      }
     >
       <div
-        className={`rounded-md  border border-border    w-full  max-h-[85%] mx-auto   overflow-y-auto scrollbar-custom `}
+        className={`rounded-md  border border-border    w-full  max-h-[100%] mx-auto   overflow-y-auto scrollbar-custom `}
       >
         <Table className="table ">
           <TableHeader>
@@ -92,26 +94,28 @@ export function RootTable<TData, TValue>({
                   <TableHead
                     key={header.id}
                     style={{ width: `${header.getSize()}px` }}
-                    className={` py-3 px-4  border-l  border-border text-center text-card-foreground    font-semibold   `}
+                    className={`   border-l  border-border text-center text-card-foreground    font-semibold   `}
                   >
                     <div
-                      className={`flex w-full  ${!header.column.getCanFilter()
-                        ? "justify-between"
-                        : "justify-center"
-                        } items-center  text-center `}
+                      className={`flex w-full  ${
+                        !header.column.getCanFilter()
+                          ? "justify-between"
+                          : "justify-center"
+                      } items-center  text-center `}
                     >
                       <div>
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                       </div>
 
                       <div
-                        className={`${!header.column.getCanFilter() ? "" : "hidden"
-                          }`}
+                        className={`${
+                          !header.column.getCanFilter() ? "" : "hidden"
+                        }`}
                       >
                         {!header.column.getCanFilter() ? (
                           <TableFilter

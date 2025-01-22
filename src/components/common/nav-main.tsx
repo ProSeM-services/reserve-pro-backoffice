@@ -36,7 +36,7 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const { session } = useSession();
+  const { member } = useSession();
 
   const validatePermission = (subItem: {
     title: string;
@@ -49,11 +49,10 @@ export function NavMain({
       permission?: Permission;
     }[];
   }) => {
-    if (!session) return false;
     const filteredItems = subItem.items
       ? subItem.items.filter((item) => {
           if (!item.permission) return true;
-          return hasPermission(session, item.permission);
+          return hasPermission(member, item.permission);
         })
       : [];
 

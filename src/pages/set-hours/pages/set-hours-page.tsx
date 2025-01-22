@@ -16,23 +16,19 @@ import { useState } from "react";
 import { IMember } from "@/interfaces/member.iterface";
 export function SetHoursPage() {
   const { members } = useAppSelector((s) => s.member);
-  const { session } = useSession();
-  const [selectedMember, setSelectedMember] = useState<IMember>(
-    members.filter((e) => e.id === session?.id)[0]
-  );
-  if (!session) return;
+  const { member } = useSession();
+  const [selectedMember, setSelectedMember] = useState<IMember>(member);
+  if (!member) return;
   const handleSelectMember = (id: string) => {
     const selectedMember = members.filter((e) => e.id === id)[0];
 
     setSelectedMember(selectedMember);
   };
-
-  console.log("selcet memvber", selectedMember);
   return (
     <div className="space-y-4 h-full  flex flex-col">
-      {!hasPermission(session, Permission.UPDATE_WORKHOURS) &&
-      session.role !== "OWNER" &&
-      session.role !== "ADMIN" ? (
+      {!hasPermission(member, Permission.UPDATE_WORKHOURS) &&
+      member.role !== "OWNER" &&
+      member.role !== "ADMIN" ? (
         <MemberCard member={selectedMember} type="read" />
       ) : (
         <Select
