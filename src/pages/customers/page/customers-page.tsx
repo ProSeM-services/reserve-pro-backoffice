@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
-import { CustoemrsList } from "../components/customers-list";
+import { CustomerTable } from "../components/customers-table";
+import { CustomerAside } from "../components/customers-aside";
 
 export function CustomersPage() {
   return (
@@ -11,9 +12,10 @@ export function CustomersPage() {
       <Separator />
       <section className="flex flex-grow max-h-[90%]  overflow-auto gap-2">
         <section className="h-full flex-grow ">
-          <CustoemrsList />
+          <CustomerTable />
         </section>
       </section>
+      <CustomerAside />
     </div>
   );
 }
