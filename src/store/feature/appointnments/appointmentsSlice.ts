@@ -3,7 +3,7 @@ import { IAppointment } from "@/interfaces/appointments.interface";
 import { IStoreState } from "@/store/interface/state.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
+type IAppointmentsFilterDate = "today" | "all";
 export interface AppointmentState extends IStoreState {
   total: number;
   limit: number;
@@ -12,6 +12,7 @@ export interface AppointmentState extends IStoreState {
   appointments: IAppointment[];
   selectedAppointment?: IAppointment;
   inmutablesAppointments: IAppointment[];
+  appointmentsFilterDate: IAppointmentsFilterDate;
 }
 
 const initialState: AppointmentState = {
@@ -24,6 +25,7 @@ const initialState: AppointmentState = {
   selectedAppointment: undefined,
   loading: true,
   fetched: false,
+  appointmentsFilterDate: "all",
 };
 
 export const appointmentSlice = createSlice({
@@ -59,6 +61,12 @@ export const appointmentSlice = createSlice({
     setSelectedAppointment: (state, action: PayloadAction<IAppointment>) => {
       state.selectedAppointment = action.payload;
     },
+    setAppointmentsFilterDate: (
+      state,
+      action: PayloadAction<IAppointmentsFilterDate>
+    ) => {
+      state.appointmentsFilterDate = action.payload;
+    },
     cancleAppointment: (state, action: PayloadAction<string>) => {
       const id = action.payload;
       if (!state.appointments.find((e) => e.id === id)) return;
@@ -88,6 +96,7 @@ export const {
   setAppointmentsTableData,
   setSelectedAppointment,
   cancleAppointment,
+  setAppointmentsFilterDate,
 } = appointmentSlice.actions;
 
 export default appointmentSlice.reducer;
