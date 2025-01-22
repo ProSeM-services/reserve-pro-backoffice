@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Segment } from "@/interfaces";
 import { IMember } from "@/interfaces/member.iterface";
 import { Button } from "@/components/ui/button";
-import { Minus, PlusIcon } from "lucide-react";
+import { CircleCheck, CircleDot, Copy, Minus, PlusIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/select";
 import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
 import { Permission } from "@/lib/constants/permissions";
+import { Label } from "@/components/ui/label";
 
 const HOURS_VALUES = [
   "00:00",
@@ -91,7 +92,6 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       selected: false, // Add selected property for each day
     }))
   );
-  console.log("permisos", member.permissions);
   useEffect(() => {
     setWeek(
       DAYS.map((day, index) => ({
@@ -218,119 +218,136 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
   };
 
   return (
-    <div className="flex flex-col items-start gap-4 w-full h-full justify-between">
-      <section className="grid grid-cols-4 max-lg:grid-cols-2 max-md:flex  max-md:flex-col w-full gap-4 overflow-x-auto ">
-        {week.map((entry) => (
-          <Card className="flex flex-col w-full   flex-grow items-center justify-between  gap-1 p-2">
-            <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
-              <div className="flex items-center  gap-2">
-                <input
-                  type="checkbox"
-                  checked={entry.selected}
-                  onChange={() => handleDaySelection(entry.workhour.day)}
-                />
-                <label>seleccionar</label>
-              </div>
-            </AuthorizationWrapper>
-            <p className="font-medium uppercase">{entry.short}</p>
-            <div key={entry.short} className=" w-full flex flex-col gap-2  ">
-              <div className="flex flex-col items-start gap-4 w-full ">
-                {entry.workhour.segments.map((segment, segmentIndex) => (
-                  <div
-                    key={segmentIndex}
-                    className="flex items-center w-full gap-4"
-                  >
-                    <div className="flex  flex-col w-full gap-2">
-                      <Select
-                        value={segment.startime}
-                        onValueChange={(startime) =>
-                          handleSegmentChange(
-                            entry.workhour.day,
-                            segmentIndex,
-                            {
-                              startime,
-                            }
-                          )
-                        }
-                      >
-                        <SelectTrigger className="">
-                          <SelectValue placeholder="Inicio" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {HOURS_VALUES.map((hour) => (
-                            <SelectItem value={hour} key={hour}>
-                              <div className="flex gap-1 items-center">
-                                {hour} hs
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Select
-                        value={segment.endTime}
-                        onValueChange={(endTime) =>
-                          handleSegmentChange(
-                            entry.workhour.day,
-                            segmentIndex,
-                            {
-                              endTime,
-                            }
-                          )
-                        }
-                      >
-                        <SelectTrigger className="">
-                          <SelectValue placeholder="Fin" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {HOURS_VALUES.map((hour) => (
-                            <SelectItem value={hour} key={hour}>
-                              <div className="flex gap-1 items-center">
-                                {hour} hs
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+    <div className="flex flex-col items-start  w-full h-full justify-between">
+      <div className="flex flex-col gap-4 w-full">
+        <header className="text-[14px] flex justify-center bg-muted py-1 rounded max-md:flex-col max-md:text-xs gap-2 text-gray-700">
+          <div className="flex items-center gap-1 px-2 ">
+            <CircleDot className="  size-6 text-gray-950" />
+            <p> Selecciona los dias donde quieras replicar un mismo horario</p>
+          </div>
+          <div className="flex items-center gap-1 px-2 ">
+            <PlusIcon className="  size-6 text-gray-950" />
+            <p> Agrega un "slot" de horarios</p>
+          </div>
+          <div className="flex items-center gap-1 px-2 ">
+            <Copy className="  size-6 text-gray-950" />
+            <p> Replica los horarios sobre los dias seleccionados</p>
+          </div>
+        </header>
+        <section className="grid grid-cols-4 max-lg:grid-cols-2 max-md:flex  max-md:flex-col w-full gap-4 overflow-x-auto ">
+          {week.map((entry) => (
+            <Card className="flex flex-col w-full   flex-grow items-center   gap-4 p-2">
+              <div className="flex flex-col items-center gap-2">
+                <Label className="font-medium uppercase">{entry.long}</Label>
+
+                <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
+                  <div className="flex items-center  gap-2">
                     <Button
-                      onClick={() =>
-                        handleRemoveSegment(entry.workhour.day, segmentIndex)
-                      }
-                      variant="secondary"
-                      size="icon"
-                      className="size-6"
+                      variant={entry.selected ? "default" : "secondary"}
+                      onClick={() => handleDaySelection(entry.workhour.day)}
                     >
-                      <Minus className="  size-4" />
+                      {entry.selected ? (
+                        <CircleCheck className="  size-4" />
+                      ) : (
+                        <CircleDot className="  size-4" />
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => handleAddSegment(entry.workhour.day)}
+                      variant="secondary"
+                    >
+                      <PlusIcon className="  size-4" />
+                    </Button>
+
+                    <Button
+                      variant="secondary"
+                      onClick={() => handleReplicate(entry.workhour.day)}
+                    >
+                      <Copy className="  size-4" />
                     </Button>
                   </div>
-                ))}
+                </AuthorizationWrapper>
               </div>
-
-              <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
-                <div className="flex justify-center gap-2">
-                  <Button
-                    onClick={() => handleAddSegment(entry.workhour.day)}
-                    variant="secondary"
-                  >
-                    <PlusIcon className="  size-4" />
-                  </Button>
-
-                  <Button onClick={() => handleReplicate(entry.workhour.day)}>
-                    Replicar
-                  </Button>
+              <div key={entry.long} className=" w-full flex flex-col gap-2  ">
+                <div className="flex flex-col items-start gap-4 w-full ">
+                  {entry.workhour.segments.map((segment, segmentIndex) => (
+                    <div
+                      key={segmentIndex}
+                      className="flex items-center w-full gap-4"
+                    >
+                      <div className="flex  flex-col w-full gap-2">
+                        <Select
+                          value={segment.startime}
+                          onValueChange={(startime) =>
+                            handleSegmentChange(
+                              entry.workhour.day,
+                              segmentIndex,
+                              {
+                                startime,
+                              }
+                            )
+                          }
+                        >
+                          <SelectTrigger className="">
+                            <SelectValue placeholder="Inicio" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {HOURS_VALUES.map((hour) => (
+                              <SelectItem value={hour} key={hour}>
+                                <div className="flex gap-1 items-center">
+                                  {hour} hs
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Select
+                          value={segment.endTime}
+                          onValueChange={(endTime) =>
+                            handleSegmentChange(
+                              entry.workhour.day,
+                              segmentIndex,
+                              {
+                                endTime,
+                              }
+                            )
+                          }
+                        >
+                          <SelectTrigger className="">
+                            <SelectValue placeholder="Fin" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {HOURS_VALUES.map((hour) => (
+                              <SelectItem value={hour} key={hour}>
+                                <div className="flex gap-1 items-center">
+                                  {hour} hs
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <Button
+                        onClick={() =>
+                          handleRemoveSegment(entry.workhour.day, segmentIndex)
+                        }
+                        variant="secondary"
+                        size="icon"
+                        className="size-6"
+                      >
+                        <Minus className="  size-4" />
+                      </Button>
+                    </div>
+                  ))}
                 </div>
-              </AuthorizationWrapper>
-            </div>
-          </Card>
-        ))}
-      </section>
+              </div>
+            </Card>
+          ))}
+        </section>
+      </div>
 
       <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
         <div className="flex flex-col items-start gap-4">
-          <p>
-            <span>REPLICAR* </span>
-            Replica los horarios sobre los dias seleccionados
-          </p>
           <Button onClick={handleSave} isLoading={updating}>
             Actualizar Horarios
           </Button>
