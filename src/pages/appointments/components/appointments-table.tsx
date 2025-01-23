@@ -80,7 +80,7 @@ const columns: ColumnDef<IAppointment>[] = [
     size: 100,
     cell: ({ row }) => {
       const time = row.original.time;
-      const date = new Date(row.original.date).toLocaleDateString();
+      const date = row.original.date;
 
       return (
         <div>
