@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Building,
+  CalendarX,
   HousePlugIcon,
   LucideProps,
   UserRoundX,
@@ -10,10 +11,10 @@ import {
 export function EmptyList({
   type,
 }: {
-  type: "member" | "company" | "service" | "no-members-to-add";
+  type: "member" | "company" | "service" | "no-members-to-add" | "appointments";
 }) {
   const Config: Record<
-    "member" | "company" | "service" | "no-members-to-add",
+    "member" | "company" | "service" | "no-members-to-add" | "appointments",
     {
       Icon: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
@@ -36,6 +37,11 @@ export function EmptyList({
       title: "Equipo vacío",
       description: "No hay miembros en tu equipo actualmente",
       Icon: Users2Icon,
+    },
+    appointments: {
+      title: "Vacio",
+      description: "No hay turnos para mostrar.",
+      Icon: CalendarX,
     },
     "no-members-to-add": {
       title: "Equipo vacío",
