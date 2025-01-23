@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { FromatedDate } from "@/lib/format-date";
 import { IAppointment } from "@/interfaces/appointments.interface";
 import { ServiceCell } from "./service-cell";
+import { EmptyList } from "@/components/common/emty-list";
 const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "canceled",
@@ -94,22 +95,23 @@ const columns: ColumnDef<IAppointment>[] = [
   },
 ];
 export function AppointmentsTable() {
-  const { appointments, loading, fetched, appointmentsFilterDate } =
+  const { appointmentsTable, loading, fetched, appointmentsFilterDate } =
     useAppSelector((s) => s.appointments);
   const today = new Date().toDateString();
-  const todayAppointments = appointments.filter(
+  const todayAppointments = appointmentsTable.filter(
     (app) => new Date(app.date).toDateString() === today
   );
 
+  const data =
+    appointmentsFilterDate === "today" ? todayAppointments : appointmentsTable;
+
   return (
     <LoaderWrapper loading={loading && !fetched} type="appointments">
-      <RootTable
-        columns={columns}
-        data={
-          appointmentsFilterDate === "today" ? todayAppointments : appointments
-        }
-        tableType="appoitnemnts"
-      />
+      {data.length === 0 ? (
+        <EmptyList type="appointments" />
+      ) : (
+        <RootTable columns={columns} data={data} tableType="appoitnemnts" />
+      )}
     </LoaderWrapper>
   );
 }

@@ -5,29 +5,90 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 import useSession from "@/hooks/useSession";
+import { setSelectedMemberForAppointments } from "@/store/feature/appointnments/appointmentsSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { UsersRound } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export function MemberSelector() {
   const { member } = useSession();
+  const { members } = useAppSelector((s) => s.member);
+  const { selectedMemberForAppointments } = useAppSelector(
+    (s) => s.appointments
+  );
+  const [ableToSelect, setAbleToSelect] = useState(false);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (member.role === "ADMIN" || member.role === "OWNER") {
+      setAbleToSelect(true);
+
+      return;
+    }
+
+    dispatch(setSelectedMemberForAppointments(member));
+    setAbleToSelect(false);
+  }, []);
+
+  const handleSelectMember = (id: string) => {
+    if (id === "all") {
+      dispatch(setSelectedMemberForAppointments(id));
+      return;
+    }
+
+    const member = members.find((e) => e.id === id);
+    if (!member) return;
+    dispatch(setSelectedMemberForAppointments(member));
+  };
   return (
-    <Select>
-      <SelectTrigger className="p-4 h-12 border-none space-x-2">
-        <SelectValue>
-          <div className="flex gap-2 ">
-            <MemberAvatar member={member} size="xs" />
-            <div className="flex flex-col">
-              <Label>{member.fullName}</Label>
-              <span>{member.email}</span>
+    <Select
+      onValueChange={(value) => handleSelectMember(value)}
+      disabled={!ableToSelect}
+    >
+      <SelectTrigger className="h-12 px-4 space-x-4">
+        {selectedMemberForAppointments === "all" ? (
+          <div className="flex gap-2 cursor-pointer">
+            <UsersRound />
+            <div className="flex flex-col items-start">
+              <Label>Todos</Label>
+              <span>turnos de todos los miembros</span>
             </div>
           </div>
-        </SelectValue>
+        ) : (
+          selectedMemberForAppointments && (
+            <div className="flex gap-2 ">
+              <MemberAvatar member={selectedMemberForAppointments} size="xs" />
+              <div className="flex flex-col items-start">
+                <Label>{selectedMemberForAppointments.fullName}</Label>
+                <span>{selectedMemberForAppointments.email}</span>
+              </div>
+            </div>
+          )
+        )}
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
-        <SelectItem value="system">System</SelectItem>
+        <SelectItem value={"all"}>
+          <div className="flex gap-2 cursor-pointer">
+            <UsersRound />
+            <div className="flex flex-col">
+              <Label>Todos</Label>
+              <span>turnos de todos los miembros</span>
+            </div>
+          </div>
+        </SelectItem>
+        {members.map((member) => (
+          <SelectItem value={member.id}>
+            <div className="flex gap-2 cursor-pointer">
+              <MemberAvatar member={member} size="xs" />
+              <div className="flex flex-col">
+                <Label>{member.fullName}</Label>
+                <span>{member.email}</span>
+              </div>
+            </div>
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
