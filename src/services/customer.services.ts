@@ -1,13 +1,13 @@
 import { axiosInstance, BASE_URL } from "@/config/axios.config";
-import { ICustomer } from "@/interfaces/customer.interface";
+import { IAPICustomer } from "@/interfaces/api/customer.interface";
 
 export class CustomerServices {
-  static async getAll(): Promise<ICustomer[]> {
+  static async getAll(): Promise<IAPICustomer[]> {
     const res = await axiosInstance.get(`${BASE_URL}/customer`);
     return res.data;
   }
 
-  static async getById(id: string): Promise<ICustomer> {
+  static async getById(id: string): Promise<IAPICustomer> {
     const res = await axiosInstance.get(`${BASE_URL}/customer/${id}`);
     return res.data;
   }

@@ -6,12 +6,12 @@ import { SendInviteUser } from "./send-invite-user";
 
 interface MemberCardProps {
   member: IMember;
-  type?: "details" | "invite";
+  type?: "details" | "invite" | "read";
 }
 export function MemberCard({ member, type = "details" }: MemberCardProps) {
   return (
     <Card
-      className={`flex flex-col gap-4 p-2  min-w-[300px]   hover:shadow-md transition-all duration-200 `}
+      className={`flex flex-col gap-4 p-2  min-w-[300px] w-full max-md:text-xs  hover:shadow-md transition-all duration-200 `}
     >
       <div className="flex gap-4 ">
         <div className=" flex justify-center items-center  ">
@@ -27,8 +27,12 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
                 {member.role}
               </div>
             </div>
-            {type === "details" && <OpenMemberDetails member={member} />}
-            {type === "invite" && <SendInviteUser member={member} />}
+            {type === "read" ? null : (
+              <>
+                {type === "details" && <OpenMemberDetails member={member} />}
+                {type === "invite" && <SendInviteUser member={member} />}
+              </>
+            )}
           </header>
 
           <span className="font-normal">{member.email || ""}</span>

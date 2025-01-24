@@ -5,20 +5,21 @@ export const CustomerZodSchema = z.object({
   id: z.string(),
   firstName: z.string(),
   lastName: z.string(),
+  fullName: z.string(),
   tenantName: z.string().optional(),
   email: z.string(),
   createdAt: z.string(),
   phone: z.string(),
-  apointments: z.array(AppointmentZodSchema),
+  appointments: z.array(AppointmentZodSchema),
 });
 export const CreateCustomerZodSchema = CustomerZodSchema.omit({
   id: true,
-  apointments: true,
+  appointments: true,
   createdAt: true,
 });
 export const UpdateCustomerZodSchema = CustomerZodSchema.omit({
   id: true,
-  apointments: true,
+  appointments: true,
   createdAt: true,
 }).optional();
 

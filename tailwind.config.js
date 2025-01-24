@@ -113,7 +113,7 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
-  			loader: 'loader 1s  ease-in infinite'
+  			loader: 'loader 3s  ease-out infinite'
   		}
   	}
   },

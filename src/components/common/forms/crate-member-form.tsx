@@ -12,7 +12,6 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import {
   CreateMemberZodSchema,
   ICreateMember,
-  ROLES_VALUES,
 } from "@/interfaces/member.iterface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -27,6 +26,7 @@ import {
 import { BaselineIcon, ShieldCheck } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { ROLES_VALUES } from "@/lib/constants/role";
 const INITIAL_MEMBER_DATA: ICreateMember = {
   email: "",
   lastName: "",
@@ -45,7 +45,6 @@ export function MemberForm() {
   const [loading, setLoading] = useState(false);
   const form = useForm<ICreateMember>({
     resolver: zodResolver(CreateMemberZodSchema),
-    mode: "onChange",
     defaultValues: INITIAL_MEMBER_DATA,
   });
   const onSubmit = async (values: ICreateMember) => {
@@ -73,16 +72,16 @@ export function MemberForm() {
   return (
     <Form {...form}>
       <form
+        autoComplete="off"
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 text-left  h-full max-h-full overflow-auto"
       >
         <section className=" space-y-3">
           <div className="flex flex-col ">
-            <p className="font-medium">Informacion de accesso</p>
+            <p className="font-medium">Informacion personal</p>
             <span className="font-light">
               {" "}
-              Definir las claves de accesso para {form.getValues("name")}{" "}
-              {form.getValues("lastName")}
+              Completar con la información personal del nuevo miembro
             </span>
           </div>
           <FormField
@@ -197,7 +196,12 @@ export function MemberForm() {
               <FormItem>
                 <FormLabel>Nombre de usuario</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nombre de usuario" {...field} />
+                  <Input
+                    placeholder="Nombre de usuario"
+                    autoComplete="off"
+                    {...field}
+                    name="prevent-auto-complete-1"
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -211,7 +215,13 @@ export function MemberForm() {
               <FormItem>
                 <FormLabel>Contraseña</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="******" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="******"
+                    autoComplete="off"
+                    {...field}
+                    name="prevent-auto-complete"
+                  />
                 </FormControl>
 
                 <FormMessage />

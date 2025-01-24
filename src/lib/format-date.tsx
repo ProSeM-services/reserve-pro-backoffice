@@ -23,7 +23,7 @@ export function FromatedDate({ date }: { date: string }) {
     "Diciembre",
   ];
 
-  const weekDay = DAYS[new Date(date).getDay()].long;
+  const weekDay = DAYS[new Date(date).getDay()]?.long;
   const number = new Date(date).getDate();
   const month = MONTHS[new Date(date).getMonth()];
   return (
