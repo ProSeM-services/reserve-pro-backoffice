@@ -49,7 +49,7 @@ export function DeleteCompany({ company }: { company: ICompany }) {
     <Dialog>
       <DialogTrigger>
         <Button variant={"destructive"} className="flex items-center gap-2">
-          <span>Eliminar</span>
+          <span className="max-md:hidden">Eliminar</span>
           <TrashIcon className="size-4" />
         </Button>
       </DialogTrigger>

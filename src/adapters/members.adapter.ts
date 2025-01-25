@@ -3,7 +3,7 @@ import { IMember } from "@/interfaces/member.iterface";
 
 export function memberAdpater(member: IAPIMember): IMember {
   return {
-    companyName: member.companyName,
+    companyName: member?.companyName,
     email: member.email,
     id: member.id,
     lastName: member.lastName,

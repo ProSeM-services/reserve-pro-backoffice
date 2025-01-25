@@ -3,6 +3,7 @@ import "./App.css";
 import { AuthPage } from "./pages/auth/page/auth-page";
 import MainPage from "./pages/main/pages/main-page";
 import ProtectedRoute from "./components/routes/route-protecter";
+import { ConfrimationPage } from "./pages/confirmation-email/page/confirmation-email-page";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         />
         <Route path="/login" element={<AuthPage type="login" />} />
         <Route path="/register" element={<AuthPage type="register" />} />
+        <Route path="/confirmation" element={<ConfrimationPage />} />
       </Routes>
     </main>
   );

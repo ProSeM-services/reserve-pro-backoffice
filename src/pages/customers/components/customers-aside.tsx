@@ -9,7 +9,6 @@ export function CustomerAside() {
     (s) => s.customers
   );
   const dispatch = useAppDispatch();
-  console.log({ asideOpen, asideCustomer, asideType });
   return (
     <Sheet open={asideOpen}>
       <SheetContent>

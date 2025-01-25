@@ -15,7 +15,7 @@ export function EditCompany({ company }: { company: ICompany }) {
     <Sheet>
       <SheetTrigger>
         <Button variant={"secondary"} className="flex items-center gap-2">
-          <span> Editar</span>
+          <span className="max-md:hidden"> Editar</span>
           <PenIcon className="size-4" />
         </Button>
       </SheetTrigger>
