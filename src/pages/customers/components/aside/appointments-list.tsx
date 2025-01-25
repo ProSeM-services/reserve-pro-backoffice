@@ -12,7 +12,7 @@ export function AppointmentList({
 }) {
   const { services } = useAppSelector((s) => s.service);
   const { members } = useAppSelector((s) => s.member);
-
+  console.log({ appointments });
   return (
     <div className="flex flex-wrap gap-4  h-full   p-2 ">
       {appointments.map((app) => (
@@ -23,7 +23,7 @@ export function AppointmentList({
           <section className=" flex justify-between">
             <div>
               <Label>
-                <FromatedDate date={new Date(app.date).toLocaleDateString()} />
+                <FromatedDate date={app.date} />
               </Label>
               <p className="font-medium text-gray-600">{app.time} hs</p>
             </div>
@@ -37,11 +37,13 @@ export function AppointmentList({
             </p>
           </section>
           <div className="flex items-center justify-between ">
-            {app.UserId && (
+            {app.UserId && members.filter((s) => s.id === app.UserId)[0] ? (
               <MemberCard
                 member={members.filter((s) => s.id === app.UserId)[0]}
                 type="read"
               />
+            ) : (
+              app.UserId
             )}
           </div>
           <div className="">
@@ -54,7 +56,7 @@ export function AppointmentList({
 
           <div className=" flex items-center gap-2 justify-end text-gray-500  text-sm">
             Turno agendado el
-            <FromatedDate date={new Date(app.createdAt).toLocaleDateString()} />
+            <FromatedDate date={app.createdAt} />
             <p>{new Date(app.createdAt).toLocaleTimeString()}</p>
           </div>
         </div>

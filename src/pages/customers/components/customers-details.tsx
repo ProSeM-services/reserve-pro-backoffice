@@ -38,7 +38,7 @@ export function CustomerDetails({ customer }: { customer: ICustomer }) {
         </div>
       </header>
       <div className="h-[78%] space-y-2">
-        <Label>Turnos agendados</Label>
+        <Label>Turnos agendados : {customer.appointments.length}</Label>
         <Separator />
         <div className=" max-h-[100%] h-[100%] overflow-auto bg-muted rounded">
           <AppointmentList appointments={appointments} />

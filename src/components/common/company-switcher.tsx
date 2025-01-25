@@ -21,14 +21,17 @@ import { AudioWaveform } from "lucide-react";
 import LoaderWrapper from "./loader-wrapper";
 import { useToast } from "../ui/use-toast";
 import { ICompany } from "@/interfaces";
+import useSession from "@/hooks/useSession";
 export function CompanySwitcher() {
   const { isMobile } = useSidebar();
+  const { member } = useSession();
+  console.log("companyName", member?.companyName);
   const { companies, loading } = useAppSelector((s) => s.company);
-  const [activeTeam, setActiveTeam] = React.useState("Todas");
+  const [activeTeam, setActiveTeam] = React.useState(member?.companyName);
   const { toast } = useToast();
   const handleSelectCompany = (company: ICompany | string) => {
     if (typeof company === "string") {
-      setActiveTeam(company);
+      setActiveTeam(member?.companyName);
       return;
     }
     setActiveTeam(company.name);
@@ -68,13 +71,13 @@ export function CompanySwitcher() {
             <LoaderWrapper loading={loading} type="company">
               <DropdownMenuItem
                 key={"todas"}
-                onClick={() => handleSelectCompany("Todas")}
+                onClick={() => handleSelectCompany(member?.companyName)}
                 className="gap-2 p-2"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <AudioWaveform className="size-4 shrink-0" />
                 </div>
-                Todas
+                {member?.companyName}
                 <DropdownMenuShortcut>⌘{0}</DropdownMenuShortcut>
               </DropdownMenuItem>
               {companies.map((option, index) => (

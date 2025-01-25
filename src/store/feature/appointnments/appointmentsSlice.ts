@@ -61,9 +61,9 @@ export const appointmentSlice = createSlice({
       state.page = action.payload.page;
     },
     addAppointment: (state, action: PayloadAction<IAppointment>) => {
-      state.appointments.push(action.payload);
-      state.inmutablesAppointments.push(action.payload);
-      state.appointmentsTable.push(action.payload);
+      state.appointments.unshift(action.payload);
+      state.inmutablesAppointments.unshift(action.payload);
+      state.appointmentsTable.unshift(action.payload);
     },
     setSelectedAppointment: (state, action: PayloadAction<IAppointment>) => {
       state.selectedAppointment = action.payload;
