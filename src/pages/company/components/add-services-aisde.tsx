@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useAppSelector } from "@/store/hooks";
 import { BarLoader } from "@/components/common/bar-loader";
 import { ServicesServices } from "@/services/services.services";
+import { ServiceCard } from "@/pages/services/components/service-card";
 
 export function AddServicesAside({ company }: { company: ICompany }) {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -59,23 +60,25 @@ export function AddServicesAside({ company }: { company: ICompany }) {
       ) : (
         <div>
           {loading && <BarLoader />}
-          {servicesToShow?.map((service) => (
-            <div
-              className={`flex relative items-center gap-2 border rounded-md border-accent  cursor-pointer hover:bg-secondary transition-all duration-150 ${
-                selectedServices.includes(service.id!)
-                  ? "border border-primary "
-                  : ""
-              }`}
-              key={service.id}
-              onClick={() => handleSelectService(service.id!)}
-            >
-              <div className="w-full">{service.title}</div>
+          <div className="flex flex-col gap-2">
+            {servicesToShow?.map((service) => (
+              <div
+                className={`flex relative items-center gap-2 border rounded-md border-accent  cursor-pointer hover:bg-secondary transition-all duration-150 ${
+                  selectedServices.includes(service.id!)
+                    ? "border border-primary "
+                    : ""
+                }`}
+                key={service.id}
+                onClick={() => handleSelectService(service.id!)}
+              >
+                <ServiceCard service={service} readonly />
 
-              {selectedServices.includes(service.id!) && (
-                <CheckCircleIcon className="text-primary absolute right-2 bottom-2  size-6" />
-              )}
-            </div>
-          ))}
+                {selectedServices.includes(service.id!) && (
+                  <CheckCircleIcon className="text-primary absolute right-2 bottom-2  size-6" />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

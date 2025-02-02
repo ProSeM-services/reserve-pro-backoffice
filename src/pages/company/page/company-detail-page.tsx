@@ -1,4 +1,4 @@
-import { Clock2Icon, HomeIcon, MailCheck, MapPinnedIcon } from "lucide-react";
+import { Clock2Icon, HomeIcon } from "lucide-react";
 import { CategoryCard } from "@/components/common/category-card";
 import { NeedReladcompanyPage } from "../components/need-reload-company";
 import { EditCompany } from "../components/edit-company";
@@ -13,6 +13,7 @@ import WorkhourList from "@/components/common/work-hour-list";
 import { useAppSelector } from "@/store/hooks";
 import { PaymentCard } from "@/components/common/payment-card";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 export function CompanyDetailPage() {
   const { selectedCompany: company } = useAppSelector((s) => s.company);
 
@@ -21,8 +22,17 @@ export function CompanyDetailPage() {
     <div className="flex flex-col gap-4 flex-grow relative p-4 ">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <HomeIcon className="size-5" />
-          <p className="text-lg font-semibold ">{company?.name}</p>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <HomeIcon className="size-5" />
+              <p className="text-lg font-semibold ">{company?.name}</p>
+            </div>
+
+            <div className="flex items-center gap-2  ">
+              <p>{company.address.value}</p>
+            </div>
+            <p>{company.email}</p>
+          </div>
           <NeedReladcompanyPage />
         </div>
 
@@ -31,77 +41,74 @@ export function CompanyDetailPage() {
           <DeleteCompany company={company} />
         </div>
       </div>
-      <hr />
-
+      <Separator />
+      {/* ---------------------------- CATEGORY SECTION ---------------------------- */}
+      <Label>Categorías</Label>
       <div className="flex gap-2">
         {company.category.map((cat) => (
           <CategoryCard key={cat} category={cat} selected />
         ))}
       </div>
+      {/* ---------------------------- PAYMENT METHODS SECTION ---------------------------- */}
       <Label>Métodos de pago</Label>
       <div className="flex  gap-2">
         {company.payment_methods?.map((method) => (
           <PaymentCard key={method} paymentMethod={method} selected />
         ))}
       </div>
-      <div className="flex items-center  gap-2">
-        <MailCheck className="size-5" />
-        <p>{company.email}</p>
+
+      {/* ---------------------------- MAP SECTION ---------------------------- */}
+      <div className="h-[40vh] w-full">
+        {company.address.lat && company.address.lng ? (
+          <MapComponent lat={company.address.lat} lng={company.address.lng} />
+        ) : null}
       </div>
+      <Separator />
 
-      <div className="flex flex-col ">
-        <div className="flex items-center gap-2  ">
-          <MapPinnedIcon className="size-5" />
-
-          <p>{company.address.value}</p>
-        </div>
-        <div className="h-[40vh] w-full">
-          {company.address.lat && company.address.lng ? (
-            <MapComponent lat={company.address.lat} lng={company.address.lng} />
-          ) : null}
-        </div>
-
-        <hr />
-        <section className="mt-2  bg-background">
-          <div className="flex  justify-between p-2">
-            <p className="font-semibold">
-              Miembros{" "}
-              <span className="text-gray-400 text-sm">
-                {" "}
-                ({company.members?.length}){" "}
-              </span>
-            </p>
-            <AddToCompany company={company} type="member" />
+      {/* ---------------------------- MEMBER SECTION ---------------------------- */}
+      <section>
+        <div className="flex  justify-between p-2">
+          <div className="font-semibold">
+            <Label>Miembros</Label>
+            <span className="text-gray-400 text-sm">
+              {" "}
+              ({company.Users?.length}){" "}
+            </span>
           </div>
-          <CompnayMemberList company={company} />
-        </section>
-        <section className="mt-2  bg-background">
-          <div className="flex  justify-between p-2">
-            <p className="font-semibold">
-              Servicios{" "}
-              <span className="text-gray-400 text-sm">
-                {" "}
-                ({company.services?.length}){" "}
-              </span>
-            </p>
-            <AddToCompany company={company} type="service" />
-          </div>
-          <CompnayServicesList company={company} />
-        </section>
-        <div className="mt-2">
-          <p className="font-semibold">Horarios</p>
-          {company.workhours?.length ? (
-            <WorkhourList worhHours={company.workhours} />
-          ) : (
-            <div className="flex flex-col gap-2 bg-background border border-accent    h-52 w-full rounded-md  items-center justify-center    ">
-              <Clock2Icon className="size-10" />
-              <p className="font-light text-sm w-60  text-center">
-                No tienes horarios definidos para esta sucursal.
-              </p>
-            </div>
-          )}
+          <AddToCompany company={company} type="member" />
         </div>
-      </div>
+        <CompnayMemberList company={company} />
+      </section>
+      {/* ---------------------------- SERVICES SECTION ---------------------------- */}
+
+      <section>
+        <div className="flex  justify-between p-2">
+          <div className="font-semibold">
+            <Label>Servicios</Label>
+            <span className="text-gray-400 text-sm">
+              {" "}
+              ({company.Services?.length}){" "}
+            </span>
+          </div>
+          <AddToCompany company={company} type="service" />
+        </div>
+        <CompnayServicesList company={company} />
+      </section>
+
+      {/* ---------------------------- WORKHOURS SECTION ---------------------------- */}
+      <section>
+        <Label>Horarios</Label>
+        {company.workhours?.length ? (
+          <WorkhourList worhHours={company.workhours} />
+        ) : (
+          <div className="flex flex-col gap-2  border border-accent    h-52 w-full rounded-md  items-center justify-center    ">
+            <Clock2Icon className="size-10" />
+            <p className="font-light text-sm w-60  text-center">
+              No tienes horarios definidos para esta sucursal.
+            </p>
+          </div>
+        )}
+      </section>
     </div>
   );
 }
