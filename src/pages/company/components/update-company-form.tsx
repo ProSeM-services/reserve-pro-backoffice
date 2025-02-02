@@ -20,12 +20,17 @@ import { Location } from "@/interfaces/location.interface";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { EditAddressInput } from "./edit-address-input";
 import { CategoryCard } from "@/components/common/category-card";
+import { PAYMENTS_VALUES } from "@/lib/constants/payments";
+import { PaymentCard } from "@/components/common/payment-card";
 interface UpdateCompanyFormProps {
   company: ICompany;
 }
 export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
   const [categoryList, setCategoryList] = useState<Category[]>(
     company.category
+  );
+  const [paymentMethods, setPaymentMethos] = useState<string[]>(
+    company.payment_methods ? company.payment_methods : []
   );
   const [loading, setLoading] = useState(false);
   const { updateCompany } = useCreatingFetch();
@@ -76,6 +81,20 @@ export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
     form.clearErrors("category");
     form.setValue("category", res);
     setCategoryList(res);
+  };
+
+  const handlePaymentMethods = (newMethod: string) => {
+    let res = [];
+
+    if (paymentMethods.includes(newMethod)) {
+      res = paymentMethods.filter((cat) => cat !== newMethod);
+    } else {
+      res = [...paymentMethods, newMethod];
+    }
+
+    form.clearErrors("payment_methods");
+    form.setValue("payment_methods", res);
+    setPaymentMethos(res);
   };
 
   const handleAddressChange = (newLocation: Location) => {
@@ -164,6 +183,33 @@ export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
                       <CategoryCard
                         category={category}
                         selected={categoryList.includes(category)}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="payment_methods"
+            render={() => (
+              <FormItem>
+                <FormLabel>Métodos de pago</FormLabel>
+                <FormDescription className="text-xs">
+                  Métodos de pago aceptados por esta sucursal
+                </FormDescription>
+                <div className="flex w-max space-x-4 py-3 flex-wrap max-w-full gap-2">
+                  {PAYMENTS_VALUES.map((method) => (
+                    <div
+                      key={method}
+                      onClick={() => handlePaymentMethods(method)}
+                    >
+                      <PaymentCard
+                        paymentMethod={method}
+                        selected={paymentMethods.includes(method)}
                       />
                     </div>
                   ))}

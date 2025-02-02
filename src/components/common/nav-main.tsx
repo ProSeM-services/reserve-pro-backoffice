@@ -51,7 +51,7 @@ export function NavMain({
   }) => {
     const filteredItems = subItem.items
       ? subItem.items.filter((item) => {
-          if (!item.permission) return true;
+          if (!item.permission || !member) return true;
           return hasPermission(member, item.permission);
         })
       : [];

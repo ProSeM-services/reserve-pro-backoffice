@@ -6,7 +6,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { PenIcon } from "lucide-react";
+import { PenIcon, XIcon } from "lucide-react";
 
 import { UpdateCompanyForm } from "./update-company-form";
 
@@ -20,11 +20,18 @@ export function EditCompany({ company }: { company: ICompany }) {
         </Button>
       </SheetTrigger>
       <SheetContent>
-        <SheetTitle className="flex items-center gap-1 ">
-          <PenIcon className="size-4" /> <span>{company.name}</span>
-        </SheetTitle>
+        <section className=" flex justify-between">
+          <SheetTitle className="flex items-center gap-1 ">
+            <PenIcon className="size-4" /> <span>{company.name}</span>
+          </SheetTitle>
+          <SheetTrigger>
+            <XIcon />
+          </SheetTrigger>
+        </section>
 
-        <UpdateCompanyForm company={company} />
+        <div className="flex-grow h-[90%]">
+          <UpdateCompanyForm company={company} />
+        </div>
       </SheetContent>
     </Sheet>
   );

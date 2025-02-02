@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { SearchIcon } from "lucide-react";
+import { SearchIcon, XIcon } from "lucide-react";
 import { SearchMembers } from "./search-members";
 export default function TriggerSearchMembers() {
   return (
@@ -19,13 +19,19 @@ export default function TriggerSearchMembers() {
         </Button>
       </SheetTrigger>
       <SheetContent>
-        <SheetHeader>
-          <SheetTitle>Invitar nuevo miembro</SheetTitle>
-          <SheetDescription>
-            Puedes buscar profesionales registrados en <b>Reserve Prop</b> e
-            invitarlos a unirse a tu equipo.
-          </SheetDescription>
-        </SheetHeader>
+        <section className=" flex justify-between">
+          <SheetHeader>
+            <SheetTitle>Invitar nuevo miembro</SheetTitle>
+            <SheetDescription>
+              Puedes buscar profesionales registrados en <b>Reserve Pro</b> e
+              invitarlos a unirse a tu equipo.
+            </SheetDescription>
+          </SheetHeader>
+          <SheetTrigger>
+            <XIcon />
+          </SheetTrigger>
+        </section>
+
         <div className="flex-grow h-[90%]">
           <SearchMembers />
         </div>

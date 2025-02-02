@@ -21,6 +21,9 @@ export function appointmentAdapter(appointment: IAPIAppointment): IAppointment {
     CustomerId: appointment.CustomerId,
     duration: appointment.duration,
     tenantName: appointment.tenantName,
+    confirmed: appointment.confirmed,
+    payment_method: appointment.payment_method,
+    price: appointment.price,
     fullName: `${appointment.name} ${appointment.lastName}`,
   };
 }

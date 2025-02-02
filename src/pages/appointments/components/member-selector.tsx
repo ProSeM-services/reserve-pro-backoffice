@@ -7,6 +7,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import useSession from "@/hooks/useSession";
+import { IMember } from "@/interfaces/member.iterface";
 import { setSelectedMemberForAppointments } from "@/store/feature/appointnments/appointmentsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { UsersRound } from "lucide-react";
@@ -22,13 +23,14 @@ export function MemberSelector() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (!member) return;
     if (member.role === "ADMIN" || member.role === "OWNER") {
       setAbleToSelect(true);
 
       return;
     }
-
-    dispatch(setSelectedMemberForAppointments(member));
+    if (!member) return;
+    dispatch(setSelectedMemberForAppointments(member as IMember));
     setAbleToSelect(false);
   }, []);
 
