@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { ICompany } from "@/interfaces";
-import { IMember } from "@/interfaces/member.iterface";
-import { MemberServices } from "@/services/member.services";
+import { ICompany, IService } from "@/interfaces";
 import { CircleMinus } from "lucide-react";
 import { useState } from "react";
 import {
@@ -11,13 +9,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { memberAdpater } from "@/adapters/members.adapter";
-/* Component to handle the action to remove one member from company */
-export function RemoveMember({
-  member,
+import { ServicesServices } from "@/services/services.services";
+/* Component to handle the action to remove one service from company */
+export function RemoveService({
+  service,
   company,
 }: {
-  member: IMember;
+  service: IService;
   company: ICompany;
 }) {
   const [deleting, setDeleting] = useState(false);
@@ -25,23 +23,21 @@ export function RemoveMember({
   const handleDeleteFromCompany = async () => {
     setDeleting(true);
     try {
-      await MemberServices.removeFromCompany({
+      await ServicesServices.removeFromCompany({
         companyId: company.id,
-        userId: member.id,
+        serviceId: service.id,
       });
       toast({
-        title: `${member.name}, ${member.lastName} elminado de ${company.name}`,
+        title: `${service.title},  elminado de ${company.name}`,
       });
     } catch (error) {
       toast({
-        title: `Hubo un error al eilinar a ${member.name} de ${company.name}`,
+        title: `Hubo un error al eilinar a ${service.title} de ${company.name}`,
       });
     } finally {
       setDeleting(false);
     }
   };
-
-  const adaptedMember = memberAdpater(member);
 
   return (
     <Button
@@ -58,7 +54,7 @@ export function RemoveMember({
           </TooltipTrigger>
           <TooltipContent>
             <p>
-              Remover a {adaptedMember.fullName} de {company.name}
+              Remover a {service.title} de {company.name}
             </p>
           </TooltipContent>
         </Tooltip>

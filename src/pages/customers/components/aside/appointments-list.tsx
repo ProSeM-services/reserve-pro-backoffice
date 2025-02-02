@@ -49,6 +49,7 @@ export function AppointmentList({
           <div className="">
             {app.ServiceId && services.find((s) => s.id === app.ServiceId) && (
               <ServiceCard
+                readonly
                 service={services.filter((s) => s.id === app.ServiceId)[0]}
               />
             )}

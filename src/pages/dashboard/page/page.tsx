@@ -1,12 +1,22 @@
-import { DashboardCard } from "../components/dashboard-card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DashboardStats } from "../components/views/stats-views";
+import { DashboardWe } from "../components/views/we-view";
 
 export function DashboardPage() {
   return (
-    <div className="size-full flex flex-wrap gap-5 overflow-auto  ">
-      <DashboardCard type="member" />
-      <DashboardCard type="company" />
-      <DashboardCard type="services" />
-      <DashboardCard type="appointments" />
+    <div className="size-full  ">
+      <Tabs defaultValue="stats" className="h-[90%]  ">
+        <TabsList>
+          <TabsTrigger value="stats">Estadísticas</TabsTrigger>
+          <TabsTrigger value="we">Nosotros</TabsTrigger>
+        </TabsList>
+        <TabsContent value="stats" className="h-full">
+          <DashboardStats />
+        </TabsContent>
+        <TabsContent value="we" className="h-full">
+          <DashboardWe />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

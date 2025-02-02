@@ -17,9 +17,9 @@ export interface StatsState extends IStoreState {
   INITIAL_DATE_LIMIT: IDateLimt;
 }
 const INITIAL_DATE_LIMIT: IDateLimt = {
-  start: 9,
-  end: 11,
-  year: 2024,
+  start: 1,
+  end: 12,
+  year: new Date().getFullYear(),
 };
 const initialState: StatsState = {
   loading: true,

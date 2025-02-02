@@ -10,14 +10,17 @@ interface ServiceCardProps {
   selectable?: boolean;
 }
 
-export const ServiceCard = ({ service }: ServiceCardProps) => {
+export const ServiceCard = ({
+  service,
+  readonly = false,
+}: ServiceCardProps) => {
   return (
     <Card
       className={`flex flex-col items-start justify-between w-full  gap-1  p-4 rounded-sm shadow-sm lg:flex-grow    bg-background max-lg:w-full  `}
     >
       <section className="flex justify-between w-full">
         <div className="space-y-2">
-          <p className="font-semibold">{service.title}</p>
+          <p className="font-semibold text-lg uppercase">{service.title}</p>
 
           <div className="flex gap-2 items-center text-xs">
             <p className=" rounded-md px-3  flex items-center bg-soft-c text-white font-semibold  ">
@@ -28,7 +31,7 @@ export const ServiceCard = ({ service }: ServiceCardProps) => {
             </p>
           </div>
         </div>
-        <ServiceCardDropDown service={service} />
+        {!readonly && <ServiceCardDropDown service={service} />}
       </section>
 
       <Separator />
