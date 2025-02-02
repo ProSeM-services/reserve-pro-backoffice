@@ -3,12 +3,11 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { IMember } from "@/interfaces/member.iterface";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, XIcon } from "lucide-react";
 import { MemberAsideDetails } from "./aside/member-aside-details";
 
 interface OpenMemberDetailsProps {
@@ -23,14 +22,18 @@ export function OpenMemberDetails({ member }: OpenMemberDetailsProps) {
         </Button>
       </SheetTrigger>
       <SheetContent className="outline ">
-        <SheetHeader>
+        <section className=" flex justify-between">
           <SheetTitle>
+            {" "}
             {member.name}, {member.lastName}
           </SheetTitle>
-          <SheetDescription>
-            <MemberAsideDetails member={member} />
-          </SheetDescription>
-        </SheetHeader>
+          <SheetTrigger>
+            <XIcon />
+          </SheetTrigger>
+        </section>
+        <SheetDescription>
+          <MemberAsideDetails member={member} />
+        </SheetDescription>
       </SheetContent>
     </Sheet>
   );

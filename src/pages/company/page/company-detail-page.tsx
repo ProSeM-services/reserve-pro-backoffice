@@ -11,6 +11,8 @@ import {
 import { MapComponent } from "@/components/common/map";
 import WorkhourList from "@/components/common/work-hour-list";
 import { useAppSelector } from "@/store/hooks";
+import { PaymentCard } from "@/components/common/payment-card";
+import { Label } from "@/components/ui/label";
 export function CompanyDetailPage() {
   const { selectedCompany: company } = useAppSelector((s) => s.company);
 
@@ -36,14 +38,19 @@ export function CompanyDetailPage() {
           <CategoryCard key={cat} category={cat} selected />
         ))}
       </div>
-
-      <div className="flex items-center font-light gap-2">
+      <Label>Métodos de pago</Label>
+      <div className="flex  gap-2">
+        {company.payment_methods?.map((method) => (
+          <PaymentCard key={method} paymentMethod={method} selected />
+        ))}
+      </div>
+      <div className="flex items-center  gap-2">
         <MailCheck className="size-5" />
         <p>{company.email}</p>
       </div>
 
       <div className="flex flex-col ">
-        <div className="flex items-center gap-2 font-light">
+        <div className="flex items-center gap-2  ">
           <MapPinnedIcon className="size-5" />
 
           <p>{company.address.value}</p>

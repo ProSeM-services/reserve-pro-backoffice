@@ -25,6 +25,9 @@ export const AppointmentZodSchema = z.object({
   companyId: z.string().optional(),
   canceled: z.boolean().optional(),
   createdAt: z.string(),
+  price: z.number().optional(),
+  confirmed: z.boolean().optional(),
+  payment_method: z.string().optional(),
   User: MemberZodSchema,
 });
 

@@ -32,6 +32,9 @@ export class AppointmentServices {
   static async createAppointment(data: ICreateAppointment) {
     return await axiosInstance.post(`${BASE_URL}/appointments`, data);
   }
+  static async updateAppointment(data: Partial<IAppointment>) {
+    return await axiosInstance.post(`${BASE_URL}/appointments`, data);
+  }
   static async cancelAppointment(appointmemntId: string) {
     return await axiosInstance.post(`${BASE_URL}/appointments/cancel`, {
       appointmemntId,
@@ -46,6 +49,14 @@ export class AppointmentServices {
   static async getByUser(id: string, date?: string): Promise<IAppointment[]> {
     const res = await axiosInstance.get(
       `${BASE_URL}/appointments/user/${id}?date=${date}`
+    );
+    return res.data;
+  }
+
+  static async update(id: string, data: Partial<IAppointment>) {
+    const res = await axiosInstance.patch(
+      `${BASE_URL}/appointments/${id}`,
+      data
     );
     return res.data;
   }

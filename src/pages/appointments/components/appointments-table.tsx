@@ -2,31 +2,24 @@ import { RootTable } from "@/components/common/table/root-table";
 import { ColumnDef } from "@tanstack/react-table";
 import { useAppSelector } from "@/store/hooks";
 import LoaderWrapper from "@/components/common/loader-wrapper";
-import { CalendarCheck, CalendarX, UserIcon } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import { MemberAvatar } from "@/components/common/members/member-avatar";
 import { Label } from "@/components/ui/label";
 import { FromatedDate } from "@/lib/format-date";
 import { IAppointment } from "@/interfaces/appointments.interface";
 import { ServiceCell } from "./service-cell";
 import { EmptyList } from "@/components/common/emty-list";
+import { AppointmentsTableActions } from "./table/appointmnet-cell-actions";
+import { AppointmentStatusCell } from "./table/appointmnet-status";
 const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "canceled",
     header: "",
     size: 5,
-    cell: ({ getValue }) => (
-      <p
-        className={`${
-          getValue<boolean>() ? "bg-red-700" : "bg-green-700 "
-        } font-light  rounded-full mx-auto size-6 text-white flex justify-center items-center`}
-      >
-        {getValue<boolean>() ? (
-          <CalendarX className="size-3" />
-        ) : (
-          <CalendarCheck className="size-3" />
-        )}
-      </p>
-    ),
+    cell: ({ row }) => {
+      const appointment = row.original;
+      return <AppointmentStatusCell appointment={appointment} />;
+    },
   },
   {
     accessorKey: "fullName",
@@ -89,6 +82,20 @@ const columns: ColumnDef<IAppointment>[] = [
             <FromatedDate date={date} />
           </Label>
           <p className="font-medium text-gray-600">{time} hs</p>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "id",
+    header: "",
+    size: 20,
+    cell: ({ row }) => {
+      const appointment = row.original;
+
+      return (
+        <div className="flex justify-center">
+          <AppointmentsTableActions appointment={appointment} />
         </div>
       );
     },

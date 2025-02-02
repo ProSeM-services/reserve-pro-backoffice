@@ -18,6 +18,8 @@ import { CategoryCard } from "../category-card";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { AddressInput } from "../address-input";
+import { PAYMENTS_VALUES } from "@/lib/constants/payments";
+import { PaymentCard } from "../payment-card";
 
 const INITIAL_COMPANY_DATA: ICreateCompany = {
   address: "",
@@ -25,9 +27,11 @@ const INITIAL_COMPANY_DATA: ICreateCompany = {
   name: "",
   email: "",
   image: "",
+  payment_methods: [],
 };
 export function CompanyForm() {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
+  const [paymentMethods, setPaymentMethos] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const { createCompany } = useCreatingFetch();
   const { toast } = useToast();
@@ -74,6 +78,19 @@ export function CompanyForm() {
     form.clearErrors("category");
     form.setValue("category", res);
     setCategoryList(res);
+  };
+  const handlePaymentMethods = (newMethod: string) => {
+    let res = [];
+
+    if (paymentMethods.includes(newMethod)) {
+      res = paymentMethods.filter((cat) => cat !== newMethod);
+    } else {
+      res = [...paymentMethods, newMethod];
+    }
+
+    form.clearErrors("payment_methods");
+    form.setValue("payment_methods", res);
+    setPaymentMethos(res);
   };
   return (
     <Form {...form}>
@@ -153,6 +170,33 @@ export function CompanyForm() {
                       <CategoryCard
                         category={category}
                         selected={categoryList.includes(category)}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="payment_methods"
+            render={() => (
+              <FormItem>
+                <FormLabel>Métodos de pago</FormLabel>
+                <FormDescription className="text-xs">
+                  Métodos de pago aceptados por esta sucursal
+                </FormDescription>
+                <div className="flex w-max space-x-4 py-3 flex-wrap max-w-full gap-2">
+                  {PAYMENTS_VALUES.map((method) => (
+                    <div
+                      key={method}
+                      onClick={() => handlePaymentMethods(method)}
+                    >
+                      <PaymentCard
+                        paymentMethod={method}
+                        selected={paymentMethods.includes(method)}
                       />
                     </div>
                   ))}

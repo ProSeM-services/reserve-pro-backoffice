@@ -10,6 +10,7 @@ export const CompanyZodSchema = z.object({
   name: z.string(),
   address: LocationZodSchema,
   status: z.boolean().optional(),
+  payment_methods: z.array(z.string()).optional(),
   category: z
     .array(z.enum(CATEGORY_VALUES))
     .max(3, "Puedes elegir como máximo 3 categorías.")
@@ -27,6 +28,7 @@ export const CreateCompanyZodSchema = z.object({
   name: z.string(),
   address: z.string(),
   status: z.boolean().optional(),
+  payment_methods: z.array(z.string()).optional(),
   category: z
     .array(z.enum(CATEGORY_VALUES))
     .max(3, "Puedes elegir como máximo 3 categorías.")

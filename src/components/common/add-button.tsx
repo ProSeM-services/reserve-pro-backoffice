@@ -2,11 +2,10 @@ import { ReactNode } from "react";
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 import { MemberForm } from "./forms/crate-member-form";
 import { CompanyForm } from "./forms/create-company-form";
 import { Button } from "@/components/ui/button";
@@ -57,9 +56,13 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
         </Button>
       </SheetTrigger>
       <SheetContent>
-        <SheetHeader>
+        <section className=" flex justify-between">
           <SheetTitle>{title}</SheetTitle>
-        </SheetHeader>
+          <SheetTrigger>
+            <XIcon />
+          </SheetTrigger>
+        </section>
+
         <div className="flex-grow h-[90%]">
           <Content />
         </div>
