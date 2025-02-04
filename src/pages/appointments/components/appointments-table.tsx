@@ -24,7 +24,7 @@ const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "fullName",
     header: "Cliente",
-    size: 150,
+    size: 120,
     cell: ({ row }) => {
       const fullName = row.original.fullName;
       const email = row.original.email;
@@ -42,12 +42,7 @@ const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "UserId",
     header: "Profesional",
-    enableColumnFilter: false,
-    meta: {
-      filterVariant: "select",
-      filterType: "members",
-    },
-    size: 150,
+    size: 120,
     cell: ({ row }) => {
       const user = row.original.User;
       if (!user) return <p>no data</p>;
@@ -89,12 +84,12 @@ const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "id",
     header: "",
-    size: 20,
+    size: 60,
     cell: ({ row }) => {
       const appointment = row.original;
 
       return (
-        <div className="flex justify-center">
+        <div className="">
           <AppointmentsTableActions appointment={appointment} />
         </div>
       );

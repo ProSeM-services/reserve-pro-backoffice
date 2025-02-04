@@ -11,13 +11,13 @@ import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
 import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { useNavigate } from "react-router";
+import useDeletingFetch from "@/hooks/useDeletingFetch";
 export function DeleteCompany({ company }: { company: ICompany }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
   const router = useNavigate();
-  const { deleteCompany } = useCreatingFetch();
+  const { deleteCompany } = useDeletingFetch();
   const handleDelete = async () => {
     setDeleting(true);
     try {

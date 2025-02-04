@@ -108,6 +108,47 @@ export const appointmentSlice = createSlice({
 
       state.appointments = newlist;
     },
+    editAppointment: (
+      state,
+      action: PayloadAction<{ id: string; changes: Partial<IAppointment> }>
+    ) => {
+      const { id, changes } = action.payload;
+
+      // Encuentra el índice del appointment que deseas actualizar
+      const index = state.appointments.findIndex(
+        (appointment) => appointment.id === id
+      );
+
+      if (index !== -1) {
+        // Actualiza el appointment en el array principal
+        state.appointments[index] = {
+          ...state.appointments[index],
+          ...changes,
+        };
+
+        // Actualiza también los datos en inmutablesAppointments
+        const immutableIndex = state.inmutablesAppointments.findIndex(
+          (appointment) => appointment.id === id
+        );
+        if (immutableIndex !== -1) {
+          state.inmutablesAppointments[immutableIndex] = {
+            ...state.inmutablesAppointments[immutableIndex],
+            ...changes,
+          };
+        }
+
+        // Actualiza también los datos en appointmentsTable
+        const tableIndex = state.appointmentsTable.findIndex(
+          (appointment) => appointment.id === id
+        );
+        if (tableIndex !== -1) {
+          state.appointmentsTable[tableIndex] = {
+            ...state.appointmentsTable[tableIndex],
+            ...changes,
+          };
+        }
+      }
+    },
   },
 });
 
@@ -121,6 +162,7 @@ export const {
   cancleAppointment,
   setAppointmentsFilterDate,
   setSelectedMemberForAppointments,
+  editAppointment,
 } = appointmentSlice.actions;
 
 export default appointmentSlice.reducer;
