@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/utils/format-currency";
 import { useAppSelector } from "@/store/hooks";
 import { Book, DollarSign, SquareUser } from "lucide-react";
 type ICardType = "sales" | "customers" | "appointments";
@@ -15,7 +16,29 @@ interface RevenueCardProps {
 export function RevenueCard({ type }: RevenueCardProps) {
   const { appointments } = useAppSelector((s) => s.appointments);
   const { customers } = useAppSelector((s) => s.customers);
+  const { services } = useAppSelector((s) => s.service);
 
+  const confirmedAppointmentsRevenue = (): number => {
+    const confirmedAppointmnets = appointments.filter((a) => a.confirmed);
+
+    let total = 0;
+
+    confirmedAppointmnets.forEach((app) => {
+      if (app.price) {
+        total = total + app.price;
+        return;
+      }
+
+      const service = services.find((s) => s.id === app.ServiceId);
+
+      if (!service) return;
+
+      total = total + service.price;
+      return;
+    });
+
+    return total;
+  };
   const Config: Record<ICardType, ICardBody> = {
     appointments: {
       feedback: "+20.1% from last month",
@@ -33,7 +56,7 @@ export function RevenueCard({ type }: RevenueCardProps) {
       feedback: "+20.1% from last month",
       Icon: () => <DollarSign className="text-gray-400" />,
       title: "Ingresos",
-      value: `$ 45000`,
+      value: `${formatCurrency(confirmedAppointmentsRevenue())}`,
     },
   };
 

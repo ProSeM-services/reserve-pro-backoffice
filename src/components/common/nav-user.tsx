@@ -37,6 +37,7 @@ export function NavUser({
   const { isMobile } = useSidebar();
   const session = useSession();
 
+  if (!session.member) return;
   const { email, lastName, name, image } = session.member;
 
   return (

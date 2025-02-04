@@ -61,7 +61,7 @@ export function RootTable<TData, TValue>({
     },
     defaultColumn: {
       size: 200,
-      minSize: 50,
+      minSize: 10,
       maxSize: 500,
     },
     autoResetPageIndex: true,

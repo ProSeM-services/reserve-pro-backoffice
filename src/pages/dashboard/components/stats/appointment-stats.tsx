@@ -195,13 +195,16 @@ export function AppointmentStats() {
           </div>
         </CardDescription>
       </CardHeader>
-      <CardContent className=" w-5/6 mx-auto">
+      <CardContent>
         {loading ? (
           <div className=" w-full h-full bg-accent relative rounded-xl">
             <BarLoader />
           </div>
         ) : (
-          <ChartContainer config={chartConfig}>
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto max-h-[450px]  "
+          >
             <BarChart accessibilityLayer data={data}>
               <CartesianGrid vertical={false} />
               <XAxis

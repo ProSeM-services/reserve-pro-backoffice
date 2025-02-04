@@ -26,7 +26,7 @@ import {
   toggleServiceLoading,
 } from "@/store/feature/services/servicesSlice";
 import { setMainFetched } from "@/store/feature/main/mainSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSession } from "@/store/feature/session/sessionSlice";
 import { AuthServices } from "@/services/auth.services";
 import { memberListAdpater } from "@/adapters/members.adapter";
@@ -118,7 +118,29 @@ export default function useFetchData() {
       dispatch(toggleMembersLoading(false));
     }
   };
+  const { inmutablesCompanies } = useAppSelector((s) => s.company);
+  const { inmutableMembers } = useAppSelector((s) => s.member);
+  const { inmutableCustomers } = useAppSelector((s) => s.customers);
+  const { inmutableServices } = useAppSelector((s) => s.service);
+  const { inmutablesAppointments } = useAppSelector((s) => s.appointments);
 
+  const setCrossCompanyData = (companyId: string) => {
+    dispatch(
+      setCompanies(inmutablesCompanies.filter((e) => e.id === companyId))
+    );
+    dispatch(
+      setMembers(inmutableMembers.filter((e) => e.CompanyId === companyId))
+    );
+    dispatch(
+      setAppointments(
+        inmutablesAppointments.filter((e) => e.companyId === companyId)
+      )
+    );
+    // dispatch(setCustomers(inmutableCustomers.filter(e=>e. === companyId))));
+    dispatch(
+      setServices(inmutableServices.filter((e) => e.companyId === companyId))
+    );
+  };
   const clearStore = () => {
     dispatch(setCompanies([]));
     dispatch(setMembers([]));
@@ -135,5 +157,6 @@ export default function useFetchData() {
     fetchAppointments,
     fetchCompanyData,
     fetchMemberLogged,
+    setCrossCompanyData,
   };
 }

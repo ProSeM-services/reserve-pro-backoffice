@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { XIcon } from "lucide-react";
 import { closeAside } from "@/store/feature/services/servicesSlice";
 import AddMembertoServiceAside from "./add-member-aside";
+import { EditServicesForm } from "./aside/edit-service-form";
 
 export function ServiceAside() {
   const { asideOpen, asideService, asideType } = useAppSelector(
@@ -22,6 +23,7 @@ export function ServiceAside() {
         <SheetTitle>
           {asideType === "details" && "Detalles del Servicio"}
           {asideType === "add-member" && "Agregar Miembros"}
+          {asideType === "edit" && "Editar Servicio"}
         </SheetTitle>
         <hr />
         <div className="flex-grow h-[85%] space-y-3">
@@ -31,6 +33,7 @@ export function ServiceAside() {
           {asideService && asideType === "add-member" && (
             <AddMembertoServiceAside service={asideService} />
           )}
+          {asideService && asideType === "edit" && <EditServicesForm />}
         </div>
       </SheetContent>
     </Sheet>

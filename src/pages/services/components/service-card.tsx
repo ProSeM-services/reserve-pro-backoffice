@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ICompany, IService } from "@/interfaces";
 import { ServiceCardDropDown } from "./serivice-card-dropdown";
+import { formatCurrency } from "@/lib/utils/format-currency";
 
 interface ServiceCardProps {
   service: IService;
@@ -16,7 +17,7 @@ export const ServiceCard = ({
 }: ServiceCardProps) => {
   return (
     <Card
-      className={`flex flex-col items-start justify-between w-full  gap-1  p-4 rounded-sm shadow-sm lg:flex-grow    bg-background max-lg:w-full  `}
+      className={`flex flex-col items-start justify-between w-1/3 min-w-[50px]  gap-1  p-4 rounded-sm shadow-sm lg:flex-grow    bg-background max-lg:w-full  `}
     >
       <section className="flex justify-between w-full">
         <div className="space-y-2">
@@ -44,7 +45,7 @@ export const ServiceCard = ({
         )}
       </p>
       <div className="flex items-center justify-between">
-        <p className="font-semibold">${service.price}</p>
+        <p className="font-semibold">{formatCurrency(service.price)}</p>
       </div>
     </Card>
   );

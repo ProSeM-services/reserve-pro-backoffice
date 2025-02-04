@@ -23,7 +23,7 @@ export function DashboardCard({ type }: DashboardCardProps) {
   const { companies } = useAppSelector((s) => s.company);
   const { services } = useAppSelector((s) => s.service);
   const { appointments } = useAppSelector((s) => s.appointments);
-  console.log({ appointments });
+
   const Config: Record<Type, IConfig> = {
     appointments: {
       label: "Turnos",

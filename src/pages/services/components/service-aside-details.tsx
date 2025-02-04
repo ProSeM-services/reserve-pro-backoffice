@@ -50,7 +50,7 @@ export default function ServiceAsideDetails({
   };
   return (
     <div className="p-4 space-y-4">
-      <ServiceCard service={serviceDetails} selectable />
+      <ServiceCard service={serviceDetails} selectable readonly />
 
       <div className="space-y-2 relative">
         <Label>Miembros</Label>

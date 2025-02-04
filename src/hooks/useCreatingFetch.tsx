@@ -22,7 +22,7 @@ import {
 } from "@/store/feature/members/membersSlice";
 import {
   addService,
-  setSerivicesUpdated,
+  updateService,
 } from "@/store/feature/services/servicesSlice";
 import { useAppDispatch } from "@/store/hooks";
 
@@ -108,11 +108,11 @@ export default function useCreatingFetch() {
     }
   };
 
-  const updateService = async (id: string, data: Partial<IService>) => {
+  const editService = async (id: string, data: Partial<IService>) => {
     try {
       //   dispatch(toggleMembersLoading(true));
       await ServicesServices.updateService(id, data);
-      dispatch(setSerivicesUpdated(true));
+      dispatch(updateService({ id, changes: data }));
     } catch (error) {
       console.log("Error creating Service", error);
     } finally {
@@ -137,7 +137,7 @@ export default function useCreatingFetch() {
     createService,
     deleteCompany,
     updateCompany,
-    updateService,
+    editService,
     editMember,
     updateAppointment,
   };

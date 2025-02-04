@@ -18,6 +18,7 @@ import { MembersPage } from "@/pages/members/page/members-page";
 import { ServicesPage } from "@/pages/services/page/services-page";
 import { SetHoursPage } from "@/pages/set-hours/pages/set-hours-page";
 import { Route, Routes } from "react-router";
+import { ContentWrapper } from "../components/content-wrapper";
 
 export default function MainPage() {
   return (
@@ -36,7 +37,7 @@ export default function MainPage() {
                   </section>
                 </div>
               </header>
-              <div className="p-4 flex-1   max-h-[93vh] overflow-auto">
+              <ContentWrapper>
                 <Routes>
                   <Route path="/" element={<DashboardPage />} />
                   <Route path="/dashboard" element={<DashboardPage />} />
@@ -102,7 +103,7 @@ export default function MainPage() {
                   />
                   <Route path="*" element={<h2> NOT FOUND</h2>} />
                 </Routes>
-              </div>
+              </ContentWrapper>
             </SidebarInset>
           </SidebarProvider>
         </NotificationsProvider>

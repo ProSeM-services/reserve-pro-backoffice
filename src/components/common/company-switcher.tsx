@@ -15,25 +15,27 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import { AudioWaveform } from "lucide-react";
 import LoaderWrapper from "./loader-wrapper";
 import { useToast } from "../ui/use-toast";
 import { ICompany } from "@/interfaces";
 import useSession from "@/hooks/useSession";
+import { setCrossMainCompany } from "@/store/feature/main/mainSlice";
 export function CompanySwitcher() {
   const { isMobile } = useSidebar();
   const { member } = useSession();
-  console.log("companyName", member?.companyName);
-  const { companies, loading } = useAppSelector((s) => s.company);
+  const { inmutablesCompanies, loading } = useAppSelector((s) => s.company);
   const [activeTeam, setActiveTeam] = React.useState(member?.companyName);
   const { toast } = useToast();
+  const dispatch = useAppDispatch();
   const handleSelectCompany = (company: ICompany | string) => {
     if (typeof company === "string") {
       setActiveTeam(member?.companyName);
       return;
     }
+    dispatch(setCrossMainCompany(company.id));
     setActiveTeam(company.name);
     toast({
       title: "Atencion",
@@ -80,7 +82,7 @@ export function CompanySwitcher() {
                 {member?.companyName}
                 <DropdownMenuShortcut>⌘{0}</DropdownMenuShortcut>
               </DropdownMenuItem>
-              {companies.map((option, index) => (
+              {inmutablesCompanies.map((option, index) => (
                 <DropdownMenuItem
                   key={option.name}
                   onClick={() => handleSelectCompany(option)}
