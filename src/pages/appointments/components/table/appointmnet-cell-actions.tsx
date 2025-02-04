@@ -26,9 +26,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useAppSelector } from "@/store/hooks";
 import { PaymentCard } from "@/components/common/payment-card";
-import { AppointmentServices } from "@/services/appointment.services";
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import useCreatingFetch from "@/hooks/useCreatingFetch";
 
 interface AppointmentsTableActionsProps {
   appointment: IAppointment;
@@ -37,6 +36,7 @@ export function AppointmentsTableActions({
   appointment,
 }: AppointmentsTableActionsProps) {
   const [selectedPayment, setSelectedPayment] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const { companies } = useAppSelector((s) => s.company);
@@ -46,17 +46,14 @@ export function AppointmentsTableActions({
     (e) => e.id === companyId
   )?.payment_methods;
 
-  const { toast } = useToast();
+  const { updateAppointment } = useCreatingFetch();
   const handleConfirmAppointment = async () => {
     if (!selectedPayment) return;
     try {
       setLoading(true);
-      await AppointmentServices.update(appointment.id, {
+      await updateAppointment(appointment.id, {
         confirmed: true,
         payment_method: selectedPayment,
-      });
-      toast({
-        title: "Turno Confirmado",
       });
     } catch (error) {
     } finally {
@@ -69,7 +66,7 @@ export function AppointmentsTableActions({
   }
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className="flex justify-center w-full">
         <EllipsisVertical />
       </DropdownMenuTrigger>
       <DropdownMenuContent>

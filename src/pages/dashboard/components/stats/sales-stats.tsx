@@ -13,7 +13,7 @@ export function SalesStats() {
         <span>Turnos confirmados</span>
       </div>
       <br />
-      <div>
+      <div className="flex flex-col gap-4">
         {confirmedAppointments.map((appointment) => (
           <div className="flex justify-between">
             <div className="flex gap-2">
@@ -24,8 +24,14 @@ export function SalesStats() {
               </div>
             </div>
 
-            <section className="flex flex-col">
-              <Label>{appointment.price ? appointment.price : "$9.000"}</Label>
+            <section className="flex flex-col items-end">
+              <Label>
+                {appointment.price ? (
+                  `$ ${appointment.price}`
+                ) : (
+                  <PriceFromServices serviceId={appointment.ServiceId} />
+                )}
+              </Label>
               <span>{appointment.payment_method}</span>
             </section>
           </div>
@@ -33,4 +39,14 @@ export function SalesStats() {
       </div>
     </Card>
   );
+}
+
+function PriceFromServices({ serviceId }: { serviceId: string }) {
+  const { services } = useAppSelector((s) => s.service);
+
+  const service = services.find((serv) => serv.id === serviceId);
+
+  if (!service) return <></>;
+
+  return <>$ {service.price}</>;
 }

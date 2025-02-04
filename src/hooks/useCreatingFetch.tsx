@@ -4,10 +4,13 @@ import {
   ICreateService,
   IService,
 } from "@/interfaces";
+import { IAppointment } from "@/interfaces/appointments.interface";
 import { ICreateMember, IMember } from "@/interfaces/member.iterface";
+import { AppointmentServices } from "@/services/appointment.services";
 import { CompanyServices } from "@/services/company.services";
 import { MemberServices } from "@/services/member.services";
 import { ServicesServices } from "@/services/services.services";
+import { editAppointment } from "@/store/feature/appointnments/appointmentsSlice";
 import {
   addCompany,
   removeCompany,
@@ -116,6 +119,18 @@ export default function useCreatingFetch() {
       //   dispatch(toggleMembersLoading(false));
     }
   };
+
+  const updateAppointment = async (id: string, data: Partial<IAppointment>) => {
+    try {
+      //   dispatch(toggleMembersLoading(true));
+      await AppointmentServices.update(id, data);
+      dispatch(editAppointment({ changes: data, id }));
+    } catch (error) {
+      console.log("Error creating Service", error);
+    } finally {
+      //   dispatch(toggleMembersLoading(false));
+    }
+  };
   return {
     createCompany,
     createMember,
@@ -124,5 +139,6 @@ export default function useCreatingFetch() {
     updateCompany,
     updateService,
     editMember,
+    updateAppointment,
   };
 }

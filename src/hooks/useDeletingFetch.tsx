@@ -2,7 +2,7 @@ import { CompanyServices } from "@/services/company.services";
 import { removeCompany } from "@/store/feature/company/companySlice";
 import { useAppDispatch } from "@/store/hooks";
 
-export default function useCreatingFetch() {
+export default function useDeletingFetch() {
   const dispatch = useAppDispatch();
 
   const deleteCompany = async (id: string) => {
