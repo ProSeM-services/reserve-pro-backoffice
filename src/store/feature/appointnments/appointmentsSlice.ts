@@ -40,11 +40,18 @@ export const appointmentSlice = createSlice({
     toggleAppointmentsLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setAppointments: (state, action: PayloadAction<IAppointment[]>) => {
+    setAppointments: (
+      state,
+      action: PayloadAction<{
+        appointments: IAppointment[];
+        fromServer?: boolean;
+      }>
+    ) => {
+      const { appointments, fromServer } = action.payload;
       state.fetched = true;
-      state.appointments = action.payload;
-      state.appointmentsTable = action.payload;
-      state.inmutablesAppointments = action.payload;
+      state.appointments = appointments;
+      state.appointmentsTable = appointments;
+      if (fromServer) state.inmutablesAppointments = appointments;
     },
     setAppointmentsTableData: (
       state,

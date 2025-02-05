@@ -37,8 +37,13 @@ export function ServiceCardDropDown({ service }: { service: IService }) {
           >
             Ver Detalles
           </DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() =>
+              dispatch(setAside({ open: true, service, type: "edit" }))
+            }
+          >
+            Editar
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

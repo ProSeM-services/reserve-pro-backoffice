@@ -15,7 +15,7 @@ const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "canceled",
     header: "",
-    size: 5,
+    size: 10,
     cell: ({ row }) => {
       const appointment = row.original;
       return <AppointmentStatusCell appointment={appointment} />;

@@ -12,13 +12,16 @@ export default function DataProvider({ children }: PropsWithChildren) {
     fetchAppointments,
     setMainLoaderStatus,
     fetchMemberLogged,
+    setCrossCompanyData,
   } = useFetchData();
 
   const { fetched: companyFetched } = useAppSelector((s) => s.company);
   const { fetched: membersFetched } = useAppSelector((s) => s.member);
   const { fetched: customerFetched } = useAppSelector((s) => s.customers);
   const { fetched: servicesFetched } = useAppSelector((s) => s.service);
-  const { fetched: mainFetched } = useAppSelector((s) => s.main);
+  const { fetched: mainFetched, crossCompanyId } = useAppSelector(
+    (s) => s.main
+  );
   const { fetched: sessionFetched, session } = useAppSelector((s) => s.session);
 
   const { fetched: appointmentsFetched } = useAppSelector(
@@ -46,8 +49,13 @@ export default function DataProvider({ children }: PropsWithChildren) {
     };
     fetchData();
   }, [accessToken]);
+  useEffect(() => {
+    if (!crossCompanyId) return;
+    setCrossCompanyData(crossCompanyId);
+  }, [crossCompanyId]);
   if (!mainFetched)
     return (
+      // THIS IS THE LOADER DISPLAYED WHEN THE DATA IS COMING FROM THE SERVER AT THE FIRST LOAD OF THE WEB APP
       <div className=" size-full overflow-hidden">
         <div className=" h-full max-h-full max-md:max-h-[92%]     overflow-hidden rounded-md p-4">
           <div className="flex items-center justify-center h-screen  ">

@@ -30,10 +30,14 @@ export const memberSlice = createSlice({
     setMemberLogged: (state, action: PayloadAction<IMember>) => {
       state.memberLogged = action.payload;
     },
-    setMembers: (state, action: PayloadAction<IMember[]>) => {
+    setMembers: (
+      state,
+      action: PayloadAction<{ members: IMember[]; fromServer?: boolean }>
+    ) => {
+      const { members, fromServer } = action.payload;
       state.fetched = true;
-      state.members = action.payload;
-      state.inmutableMembers = action.payload;
+      state.members = members;
+      if (fromServer) state.inmutableMembers = members;
     },
     addMember: (state, action: PayloadAction<IMember>) => {
       state.members.push(action.payload);
