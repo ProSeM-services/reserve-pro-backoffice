@@ -34,10 +34,14 @@ export const serviceSlice = createSlice({
     setSerivicesUpdated: (state, action: PayloadAction<boolean>) => {
       state.updated = action.payload;
     },
-    setServices: (state, action: PayloadAction<IService[]>) => {
+    setServices: (
+      state,
+      action: PayloadAction<{ services: IService[]; fromServer?: boolean }>
+    ) => {
+      const { services, fromServer } = action.payload;
       state.fetched = true;
-      state.services = action.payload;
-      state.inmutableServices = action.payload;
+      state.services = services;
+      if (fromServer) state.inmutableServices = services;
     },
     addService: (state, action: PayloadAction<IService>) => {
       state.services.push(action.payload);

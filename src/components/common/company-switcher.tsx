@@ -33,6 +33,7 @@ export function CompanySwitcher() {
   const handleSelectCompany = (company: ICompany | string) => {
     if (typeof company === "string") {
       setActiveTeam(member?.companyName);
+      dispatch(setCrossMainCompany("all"));
       return;
     }
     dispatch(setCrossMainCompany(company.id));

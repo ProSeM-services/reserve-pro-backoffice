@@ -42,7 +42,7 @@ export default function useFetchData() {
     try {
       dispatch(toggleCompanyLoading(true));
       const companies = await CompanyServices.getCompanies();
-      dispatch(setCompanies(companies));
+      dispatch(setCompanies({ companies, fromServer: true }));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
@@ -53,7 +53,9 @@ export default function useFetchData() {
     try {
       dispatch(toggleMembersLoading(true));
       const members = await MemberServices.getMembers();
-      dispatch(setMembers(memberListAdpater(members)));
+      dispatch(
+        setMembers({ members: memberListAdpater(members), fromServer: true })
+      );
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
@@ -64,7 +66,7 @@ export default function useFetchData() {
     try {
       dispatch(toggleServiceLoading(true));
       const services = await ServicesServices.getAll();
-      dispatch(setServices(services));
+      dispatch(setServices({ services, fromServer: true }));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
@@ -75,6 +77,7 @@ export default function useFetchData() {
     try {
       dispatch(toggleCustomersLoading(true));
       const customers = await CustomerServices.getAll();
+      console.log("customers", customers);
       dispatch(setCustomers(customersListAdpater(customers)));
     } catch (error) {
       console.log("Error fetching Companies", error);
@@ -87,7 +90,12 @@ export default function useFetchData() {
       dispatch(toggleAppointmentsLoading(true));
       const { appointments, limit, offset, page, total } =
         await AppointmentServices.getAll();
-      dispatch(setAppointments(appointmentListAdpater(appointments)));
+      dispatch(
+        setAppointments({
+          appointments: appointmentListAdpater(appointments),
+          fromServer: true,
+        })
+      );
       dispatch(setAppointmentsTableData({ limit, offset, page, total }));
     } catch (error) {
       console.log("Error fetching Companies", error);
@@ -120,31 +128,56 @@ export default function useFetchData() {
   };
   const { inmutablesCompanies } = useAppSelector((s) => s.company);
   const { inmutableMembers } = useAppSelector((s) => s.member);
-  const { inmutableCustomers } = useAppSelector((s) => s.customers);
-  const { inmutableServices } = useAppSelector((s) => s.service);
   const { inmutablesAppointments } = useAppSelector((s) => s.appointments);
 
   const setCrossCompanyData = (companyId: string) => {
+    if (companyId === "all") {
+      dispatch(
+        setCompanies({
+          companies: inmutablesCompanies,
+          fromServer: false,
+        })
+      );
+      dispatch(
+        setMembers({
+          members: inmutableMembers,
+          fromServer: false,
+        })
+      );
+      dispatch(
+        setAppointments({
+          appointments: inmutablesAppointments,
+          fromServer: false,
+        })
+      );
+      return;
+    }
     dispatch(
-      setCompanies(inmutablesCompanies.filter((e) => e.id === companyId))
+      setCompanies({
+        companies: inmutablesCompanies.filter((e) => e.id === companyId),
+        fromServer: false,
+      })
     );
     dispatch(
-      setMembers(inmutableMembers.filter((e) => e.CompanyId === companyId))
+      setMembers({
+        members: inmutableMembers.filter((e) => e.CompanyId === companyId),
+        fromServer: false,
+      })
     );
     dispatch(
-      setAppointments(
-        inmutablesAppointments.filter((e) => e.companyId === companyId)
-      )
-    );
-    // dispatch(setCustomers(inmutableCustomers.filter(e=>e. === companyId))));
-    dispatch(
-      setServices(inmutableServices.filter((e) => e.companyId === companyId))
+      setAppointments({
+        appointments: inmutablesAppointments.filter(
+          (e) => e.companyId === companyId
+        ),
+        fromServer: false,
+      })
     );
   };
   const clearStore = () => {
-    dispatch(setCompanies([]));
-    dispatch(setMembers([]));
-    dispatch(setAppointments([]));
+    dispatch(setCompanies({ companies: [] }));
+    dispatch(setMembers({ members: [] }));
+    dispatch(setAppointments({ appointments: [] }));
+    dispatch(setServices({ services: [] }));
     dispatch(setCustomers([]));
   };
   return {

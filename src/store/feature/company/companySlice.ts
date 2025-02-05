@@ -28,10 +28,14 @@ export const companySlice = createSlice({
     toggleCompanyLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setCompanies: (state, action: PayloadAction<ICompany[]>) => {
+    setCompanies: (
+      state,
+      action: PayloadAction<{ companies: ICompany[]; fromServer?: boolean }>
+    ) => {
+      const { companies, fromServer } = action.payload;
       state.fetched = true;
-      state.companies = action.payload;
-      state.inmutablesCompanies = action.payload;
+      state.companies = companies;
+      if (fromServer) state.inmutablesCompanies = companies;
     },
     addCompany: (state, action: PayloadAction<ICompany>) => {
       state.companies.push(action.payload);

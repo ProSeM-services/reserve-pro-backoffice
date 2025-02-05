@@ -51,7 +51,6 @@ export default function DataProvider({ children }: PropsWithChildren) {
   }, [accessToken]);
   useEffect(() => {
     if (!crossCompanyId) return;
-    console.log("crossCompanyId", crossCompanyId);
     setCrossCompanyData(crossCompanyId);
   }, [crossCompanyId]);
   if (!mainFetched)
