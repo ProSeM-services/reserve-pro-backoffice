@@ -30,10 +30,12 @@ const columns: ColumnDef<IAppointment>[] = [
       const email = row.original.email;
       return (
         <div className="h-10 flex items-center gap-2  ">
-          <UserIcon className="size-8" />
+          <UserIcon className="size-8 " />
           <div className="flex flex-col">
             <Label>{fullName}</Label>
-            <span className="text-sm text-gray-600">{email}</span>
+            <span className="text-xs text-gray-600  truncate rounded-sm  max-md:w-40  w-40 text-left">
+              {email}
+            </span>
           </div>
         </div>
       );
@@ -84,7 +86,7 @@ const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "id",
     header: "",
-    size: 10,
+    size: 0,
     cell: ({ row }) => {
       const appointment = row.original;
 
