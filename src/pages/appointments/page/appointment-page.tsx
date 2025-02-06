@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppDispatch } from "@/store/hooks";
 import { setAppointmentsFilterDate } from "@/store/feature/appointnments/appointmentsSlice";
 import { MemberSelector } from "../components/member-selector";
+import { CompanySelector } from "../components/company-selector";
 
 export function AppointmentPage() {
   const dispatch = useAppDispatch();
@@ -12,7 +13,13 @@ export function AppointmentPage() {
       <header className=" flex max-md:flex-col md:items-center  justify-between ">
         <h2 className="text-xl font-semibold">Turnos</h2>
         <div className="flex max-md:flex-col  gap-4">
-          <MemberSelector />
+          <div className="w-[300px] ">
+            <MemberSelector />
+          </div>
+          <div className="w-[300px] ">
+            <CompanySelector />
+          </div>
+
           <Tabs defaultValue="all">
             <TabsList>
               <TabsTrigger

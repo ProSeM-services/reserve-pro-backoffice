@@ -84,12 +84,12 @@ const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "id",
     header: "",
-    size: 60,
+    size: 10,
     cell: ({ row }) => {
       const appointment = row.original;
 
       return (
-        <div className="">
+        <div className="flex justify-center">
           <AppointmentsTableActions appointment={appointment} />
         </div>
       );

@@ -1,4 +1,4 @@
-import {} from "@/interfaces";
+import { ICompany } from "@/interfaces";
 import { IAppointment } from "@/interfaces/appointments.interface";
 import { IMember } from "@/interfaces/member.iterface";
 import { IStoreState } from "@/store/interface/state.interface";
@@ -16,6 +16,7 @@ export interface AppointmentState extends IStoreState {
   inmutablesAppointments: IAppointment[];
   appointmentsFilterDate: IAppointmentsFilterDate;
   selectedMemberForAppointments?: IMember | "all";
+  selectedCompanyForAppointments?: ICompany | "all";
 }
 
 const initialState: AppointmentState = {
@@ -31,6 +32,7 @@ const initialState: AppointmentState = {
   fetched: false,
   appointmentsFilterDate: "all",
   selectedMemberForAppointments: "all",
+  selectedCompanyForAppointments: "all",
 };
 
 export const appointmentSlice = createSlice({
@@ -87,8 +89,53 @@ export const appointmentSlice = createSlice({
 
       const member = action.payload as IMember;
 
-      state.appointmentsTable = state.inmutablesAppointments.filter(
+      const filterState = state.inmutablesAppointments.filter(
         (e) => e.UserId === member.id
+      );
+
+      if (state.selectedCompanyForAppointments !== "all") {
+        const company = state.selectedCompanyForAppointments as ICompany;
+        state.appointmentsTable = filterState.filter(
+          (app) => app.companyId === company.id
+        );
+        return;
+      }
+
+      state.appointmentsTable = filterState;
+    },
+    setSelectedCompanyForAppointments: (
+      state,
+      action: PayloadAction<ICompany | "all">
+    ) => {
+      state.selectedCompanyForAppointments = action.payload;
+      if (action.payload === "all") {
+        if (state.selectedMemberForAppointments !== "all") {
+          const member = state.selectedMemberForAppointments as IMember;
+          const filterState = state.inmutablesAppointments.filter(
+            (e) => e.UserId === member.id
+          );
+          state.appointmentsTable = filterState.filter(
+            (app) => app.UserId === member.id
+          );
+          return;
+        }
+        state.appointmentsTable = state.inmutablesAppointments;
+        return;
+      }
+      const company = action.payload as ICompany;
+      if (state.selectedMemberForAppointments !== "all") {
+        const member = state.selectedMemberForAppointments as IMember;
+        const filterState = state.inmutablesAppointments.filter(
+          (e) => e.UserId === member.id
+        );
+        state.appointmentsTable = filterState.filter(
+          (app) => app.companyId === company.id
+        );
+        return;
+      }
+
+      state.appointmentsTable = state.inmutablesAppointments.filter(
+        (e) => e.companyId === company.id
       );
     },
     setAppointmentsFilterDate: (
@@ -169,6 +216,7 @@ export const {
   cancleAppointment,
   setAppointmentsFilterDate,
   setSelectedMemberForAppointments,
+  setSelectedCompanyForAppointments,
   editAppointment,
 } = appointmentSlice.actions;
 

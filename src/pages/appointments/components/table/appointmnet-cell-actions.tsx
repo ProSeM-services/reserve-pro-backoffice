@@ -62,7 +62,13 @@ export function AppointmentsTableActions({
   };
 
   if (appointment.confirmed && appointment.payment_method) {
-    return <PaymentCard paymentMethod={appointment.payment_method} selected />;
+    return (
+      <PaymentCard
+        paymentMethod={appointment.payment_method}
+        selected
+        size="sm"
+      />
+    );
   }
   return (
     <DropdownMenu>
