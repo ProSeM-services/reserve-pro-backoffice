@@ -9,7 +9,9 @@ export function ServicesList() {
     <LoaderWrapper loading={loading} type="services">
       <div className="flex max-md:flex-col gap-4 flex-wrap ">
         {services.map((service) => (
-          <ServiceCard service={service} key={service.id} />
+          <div className=" w-1/3 min-w-[50px]   lg:flex-grow    max-lg:w-full">
+            <ServiceCard service={service} key={service.id} />
+          </div>
         ))}
       </div>
     </LoaderWrapper>

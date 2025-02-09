@@ -104,7 +104,7 @@ export function AppointmentStats() {
 
   if (appointments.length === 0 && allAppointmentFetched)
     return (
-      <Card className="flex flex-col  h-full   w-full p-1">
+      <Card className="flex flex-col  h-full   max-md:h-[500px]  w-full p-1">
         <div className="bg-card rounded h-full w-full  p-4 flex flex-col  ">
           <div className="flex items-center justify-between font-bold text-lg">
             <CardTitle>Turnos Agendados</CardTitle>
@@ -120,7 +120,7 @@ export function AppointmentStats() {
       </Card>
     );
   return (
-    <Card className=" w-full h-full flex flex-col justify-between  border-border ">
+    <Card className=" w-full h-full max-md:h-[500px] flex flex-col justify-between  border-border ">
       <CardHeader>
         <CardTitle>Turnos Agendados</CardTitle>
         <CardDescription>

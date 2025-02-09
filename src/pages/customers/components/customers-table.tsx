@@ -12,11 +12,6 @@ const customerColumns: ColumnDef<ICustomer>[] = [
     accessorKey: "email",
     header: "Cliente",
     size: 300,
-    meta: {
-      filterVariant: "select",
-      filterType: "customers",
-    },
-    enableColumnFilter: false,
     cell: ({ row }) => {
       const fullName = row.original.fullName;
       const email = row.original.email;
