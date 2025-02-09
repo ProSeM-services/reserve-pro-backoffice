@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IAppointment } from "@/interfaces/appointments.interface";
-import { Check, EllipsisVertical } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +28,10 @@ import { useAppSelector } from "@/store/hooks";
 import { PaymentCard } from "@/components/common/payment-card";
 import { useState } from "react";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { AppointmentStatusComponent } from "./appointmnet-status";
+import { ContactButton } from "../contact-button";
+import { AppointmentServices } from "@/services/appointment.services";
+import { useToast } from "@/components/ui/use-toast";
 
 interface AppointmentsTableActionsProps {
   appointment: IAppointment;
@@ -46,6 +50,7 @@ export function AppointmentsTableActions({
     (e) => e.id === companyId
   )?.payment_methods;
 
+  const {} = useToast();
   const { updateAppointment } = useCreatingFetch();
   const handleConfirmAppointment = async () => {
     if (!selectedPayment) return;
@@ -60,6 +65,22 @@ export function AppointmentsTableActions({
       setLoading(false);
     }
   };
+  const handleCancelAppointment = async () => {
+    try {
+      setLoading(true);
+      await AppointmentServices.cancelAppointment(appointment.id);
+      await updateAppointment(appointment.id, {
+        canceled: true,
+      });
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (appointment.canceled) {
+    return null;
+  }
 
   if (appointment.confirmed && appointment.payment_method) {
     return (
@@ -81,7 +102,7 @@ export function AppointmentsTableActions({
         <div className="p-2 hover:bg-muted cursor-pointer text-sm">
           <Dialog>
             <DialogTrigger className="flex items-center gap-2">
-              <Check className="size-4" />
+              <AppointmentStatusComponent statuts="confirmed" />
               <span>Confirmar</span>
             </DialogTrigger>
             <DialogContent>
@@ -115,6 +136,41 @@ export function AppointmentsTableActions({
               </Button>
             </DialogContent>
           </Dialog>
+        </div>
+        <div
+          className="p-2 hover:bg-muted cursor-pointer text-sm"
+          aria-disabled
+        >
+          <Dialog>
+            <DialogTrigger className="flex items-center gap-2">
+              <AppointmentStatusComponent statuts="canceled" />
+              <span>Cancelar</span>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Cancelación del turno</DialogTitle>
+                <DialogDescription>
+                  Esta acción dará por cancelado el turno. ¿Estás seguro que
+                  desea hacerlo?
+                </DialogDescription>
+                <DialogDescription>
+                  El cliente recibirá un mail notificándole la cancelación del
+                  mismo.
+                </DialogDescription>
+              </DialogHeader>
+
+              <Button
+                onClick={handleCancelAppointment}
+                isLoading={loading}
+                variant={"destructive"}
+              >
+                Cancelar
+              </Button>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <div className="p-2 hover:bg-muted cursor-pointer text-sm">
+          <ContactButton phoneNumber={appointment.phone} />
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
