@@ -19,8 +19,8 @@ export function CompanyDetailPage() {
 
   if (!company) return;
   return (
-    <div className="flex flex-col gap-4 flex-grow relative p-4 ">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-4 md:flex-grow relative p-4  max-md:max-w-full ">
+      <div className="flex max-md:flex-col  gap-2 md:items-center justify-between  ">
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
@@ -46,19 +46,19 @@ export function CompanyDetailPage() {
       <Label>Categorías</Label>
       <div className="flex gap-2">
         {company.category.map((cat) => (
-          <CategoryCard key={cat} category={cat} selected />
+          <CategoryCard key={cat} category={cat} selected={false} />
         ))}
       </div>
       {/* ---------------------------- PAYMENT METHODS SECTION ---------------------------- */}
       <Label>Métodos de pago</Label>
-      <div className="flex  gap-2">
+      <div className="flex  gap-2 max-md:gap-1  max-md:flex-wrap">
         {company.payment_methods?.map((method) => (
-          <PaymentCard key={method} paymentMethod={method} selected />
+          <PaymentCard key={method} paymentMethod={method} selected={false} />
         ))}
       </div>
 
       {/* ---------------------------- MAP SECTION ---------------------------- */}
-      <div className="h-[40vh] w-full">
+      <div className="h-[40vh] w-full  ">
         {company.address.lat && company.address.lng ? (
           <MapComponent lat={company.address.lat} lng={company.address.lng} />
         ) : null}
@@ -66,7 +66,7 @@ export function CompanyDetailPage() {
       <Separator />
 
       {/* ---------------------------- MEMBER SECTION ---------------------------- */}
-      <section>
+      <section className="">
         <div className="flex  justify-between p-2">
           <div className="font-semibold">
             <Label>Miembros</Label>
@@ -81,7 +81,7 @@ export function CompanyDetailPage() {
       </section>
       {/* ---------------------------- SERVICES SECTION ---------------------------- */}
 
-      <section>
+      <section className="">
         <div className="flex  justify-between p-2">
           <div className="font-semibold">
             <Label>Servicios</Label>
@@ -96,7 +96,7 @@ export function CompanyDetailPage() {
       </section>
 
       {/* ---------------------------- WORKHOURS SECTION ---------------------------- */}
-      <section>
+      <section className="max-md:w-[90%]">
         <Label>Horarios</Label>
         {company.workhours?.length ? (
           <WorkhourList worhHours={company.workhours} />

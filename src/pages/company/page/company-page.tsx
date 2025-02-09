@@ -55,8 +55,8 @@ export function CompanyPage() {
 
 function EmptyCompanyDetailPage() {
   return (
-    <div className="h-full w-ful grid place-items-center ">
-      <Label className="text-xl">
+    <div className="h-full w-ful grid place-items-center  ">
+      <Label className="text-xl max-md:text-lg text-center">
         Selecciona una sucursal para ver sus detalles
       </Label>
     </div>

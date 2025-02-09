@@ -14,7 +14,6 @@ export default function AuthorizationWrapper({
 
   if (!member) return null;
   if (!hasPermission(member, permission)) {
-    console.log(`User no tiene permiso para ${permission}`);
     return null;
   }
   return <Fragment>{children}</Fragment>;
