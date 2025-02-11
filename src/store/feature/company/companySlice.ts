@@ -1,4 +1,4 @@
-import { ICompany, IWorkhour } from "@/interfaces";
+import { ICompany } from "@/interfaces";
 import { IStoreState } from "@/store/interface/state.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
@@ -53,9 +53,9 @@ export const companySlice = createSlice({
     setCompanyIsUpdated: (state, action: PayloadAction<boolean>) => {
       state.companyUpdated = action.payload;
     },
-    updateWorkHours: (
+    updateCompany: (
           state,
-          action: PayloadAction<{ id: string; changes: Partial<IWorkhour> }>
+          action: PayloadAction<{ id: string; changes: Partial<ICompany> }>
         ) => {
           const { id, changes } = action.payload;
     
@@ -95,7 +95,7 @@ export const {
   setSelectedCompany,
   removeCompany,
   setCompanyIsUpdated,
-  updateWorkHours,
+  updateCompany,
 } = companySlice.actions;
 
 export default companySlice.reducer;

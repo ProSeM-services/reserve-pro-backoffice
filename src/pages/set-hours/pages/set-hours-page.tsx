@@ -40,12 +40,12 @@ export function SetHoursPage() {
   return (
 
     <div className="space-y-4 h-full  flex flex-col">
-      <Tabs defaultValue="miembros" className="h-[95%]  ">
+      <Tabs defaultValue="members" className="h-[95%]  ">
         <TabsList>
-          <TabsTrigger value="miembros">Miembros</TabsTrigger>
-          <TabsTrigger value="sucursales">Sucursales</TabsTrigger>
+          <TabsTrigger value="members">Miembros</TabsTrigger>
+          <TabsTrigger value="company">Sucursales</TabsTrigger>
         </TabsList>
-        <TabsContent value="miembros" >
+        <TabsContent value="members" >
           {!hasPermission(member, Permission.UPDATE_WORKHOURS) &&
             member.role !== "OWNER" &&
             member.role !== "ADMIN" ? (
@@ -74,7 +74,7 @@ export function SetHoursPage() {
             <WorkhoursEditor id={selectedMember.id} type={"member"} workhours={selectedMember.workhours} />
           </section>
         </TabsContent>
-        <TabsContent value="sucursales">
+        <TabsContent value="company">
           {!hasPermission(member, Permission.UPDATE_WORKHOURS) &&
             member.role !== "OWNER" &&
             member.role !== "ADMIN" ? (
