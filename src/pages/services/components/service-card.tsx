@@ -17,7 +17,7 @@ export const ServiceCard = ({
 }: ServiceCardProps) => {
   return (
     <Card
-      className={`flex flex-col items-start justify-between w-1/3 min-w-[50px]  gap-1  p-4 rounded-sm shadow-sm lg:flex-grow    bg-background max-lg:w-full  `}
+      className={`flex flex-col items-start justify-between w-full h-full min-w-[50px]  gap-1  p-4 rounded-sm shadow-sm lg:flex-grow    bg-background max-lg:w-full   `}
     >
       <section className="flex justify-between w-full">
         <div className="space-y-2">

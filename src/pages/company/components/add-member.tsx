@@ -6,7 +6,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { AddMemberAside } from "./add-member-aside";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 import { ICompany } from "@/interfaces";
 import { AddServicesAside } from "./add-services-aisde";
 interface AddToCompanyProps {
@@ -37,7 +37,7 @@ export function AddToCompany({ company, type }: AddToCompanyProps) {
     },
   };
 
-  const { Component, description, title, sheetTile } = Confg[type];
+  const { Component, description, title } = Confg[type];
   return (
     <Sheet>
       <SheetTrigger>
@@ -47,7 +47,12 @@ export function AddToCompany({ company, type }: AddToCompanyProps) {
         </div>
       </SheetTrigger>
       <SheetContent>
-        <SheetTitle>{sheetTile}</SheetTitle>
+        <section className=" flex justify-between">
+          <SheetTitle>{title}</SheetTitle>
+          <SheetTrigger>
+            <XIcon />
+          </SheetTrigger>
+        </section>
         <div className="flex-grow h-[85%] space-y-3">
           <p className=" text-foreground/80 text-sm space-x-1">
             {description}

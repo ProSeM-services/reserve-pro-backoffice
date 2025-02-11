@@ -8,10 +8,10 @@ import { Separator } from "@/components/ui/separator";
 export function CustomerDetails({ customer }: { customer: ICustomer }) {
   const appointments = customer.appointments;
   return (
-    <div className="flex flex-col  gap-4  max-h-full bg-background rounded-md  p-2 h-full">
-      <header className="  max-h-[15%] text-[14px] border p-4 rounded ">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
+    <div className="flex flex-col  gap-4  max-h-full bg-background rounded-md  p-2 max-md:p-0 h-full">
+      <header className="  max-h-[15%] text-[14px]  py-2 rounded ">
+        <div className="flex max-md:flex-col md:items-center justify-between">
+          <div className="flex  items-center gap-2">
             <UserCircle2 className="size-5" />
             <p className=" font-bold text-[18px]">
               {customer.firstName}, {customer.lastName}

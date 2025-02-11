@@ -49,7 +49,7 @@ export function MemberSelector() {
       onValueChange={(value) => handleSelectMember(value)}
       disabled={!ableToSelect}
     >
-      <SelectTrigger className="h-12 px-4 space-x-4">
+      <SelectTrigger className="h-12 px-4 space-x-4 w-full">
         {selectedMemberForAppointments === "all" ? (
           <div className="flex gap-2 cursor-pointer">
             <UsersRound />
@@ -82,12 +82,9 @@ export function MemberSelector() {
         </SelectItem>
         {members.map((member) => (
           <SelectItem value={member.id}>
-            <div className="flex gap-2 cursor-pointer">
+            <div className="flex items-center gap-2 cursor-pointer">
               <MemberAvatar member={member} size="xs" />
-              <div className="flex flex-col">
-                <Label>{member.fullName}</Label>
-                <span>{member.email}</span>
-              </div>
+              <Label>{member.fullName}</Label>
             </div>
           </SelectItem>
         ))}

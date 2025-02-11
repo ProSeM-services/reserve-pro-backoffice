@@ -6,6 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { BarLoader } from "@/components/common/bar-loader";
 import { MemberServices } from "@/services/member.services";
 import { MemberCard } from "@/pages/members/components/member-card";
+import { EmptyList } from "@/components/common/emty-list";
 
 export function AddMemberAside({ company }: { company: ICompany }) {
   const [loading, setLoading] = useState(false);
@@ -69,7 +70,7 @@ export function AddMemberAside({ company }: { company: ICompany }) {
     <div className="space-y-2 h-full max-h-full overflow-auto  ">
       {loading ? <BarLoader /> : null}
       {!loading && members && !members.length ? (
-        <p>no hay miembros</p>
+        <EmptyList type="no-members-to-add" />
       ) : (
         members?.map((member) => (
           <div
