@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Segment } from "@/interfaces";
-import { IMember } from "@/interfaces/member.iterface";
+import { IWorkhour, Segment } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import { CircleCheck, CircleDot, Copy, Minus, PlusIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -79,13 +78,17 @@ const DAYS = [
   { short: "sab", long: "sábado" },
 ];
 
-export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
+export const WorkhoursEditor: React.FC<{
+  id: string,
+  workhours?: IWorkhour[],
+  type: "member" | "company"
+}> = ({ id, workhours, type }) => {
   // console.log("WorkhoursEditor", member.workhours);
   const { toast } = useToast();
   const [week, setWeek] = useState(
     DAYS.map((day, index) => ({
       ...day,
-      workhour: member.workhours?.find((e) => e.day === index) || {
+      workhour: workhours?.find((e) => e.day === index) || {
         day: index,
         segments: [],
       },
@@ -96,14 +99,14 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
     setWeek(
       DAYS.map((day, index) => ({
         ...day,
-        workhour: member.workhours?.find((e) => e.day === index) || {
+        workhour: workhours?.find((e) => e.day === index) || {
           day: index,
           segments: [],
         },
         selected: false, // Add selected property for each day
       }))
     );
-  }, [member.id]);
+  }, [id]);
 
   const [updating, setUpdating] = useState(false);
 
@@ -116,16 +119,16 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       prev.map((entry) =>
         entry.workhour?.day === day
           ? {
-              ...entry,
-              workhour: {
-                ...entry.workhour,
-                segments: entry.workhour.segments.map((segment, index) =>
-                  index === segmentIndex
-                    ? { ...segment, ...updatedSegment }
-                    : segment
-                ),
-              },
-            }
+            ...entry,
+            workhour: {
+              ...entry.workhour,
+              segments: entry.workhour.segments.map((segment, index) =>
+                index === segmentIndex
+                  ? { ...segment, ...updatedSegment }
+                  : segment
+              ),
+            },
+          }
           : entry
       )
     );
@@ -136,15 +139,15 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       prev.map((entry) =>
         entry.workhour?.day === day
           ? {
-              ...entry,
-              workhour: {
-                ...entry.workhour,
-                segments: [
-                  ...entry.workhour.segments,
-                  { startime: "", endTime: "", duration: 0 },
-                ],
-              },
-            }
+            ...entry,
+            workhour: {
+              ...entry.workhour,
+              segments: [
+                ...entry.workhour.segments,
+                { startime: "", endTime: "", duration: 0 },
+              ],
+            },
+          }
           : entry
       )
     );
@@ -155,14 +158,14 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       prev.map((entry) =>
         entry.workhour?.day === day
           ? {
-              ...entry,
-              workhour: {
-                ...entry.workhour,
-                segments: entry.workhour.segments.filter(
-                  (_, index) => index !== segmentIndex
-                ),
-              },
-            }
+            ...entry,
+            workhour: {
+              ...entry.workhour,
+              segments: entry.workhour.segments.filter(
+                (_, index) => index !== segmentIndex
+              ),
+            },
+          }
           : entry
       )
     );
@@ -188,23 +191,27 @@ export const WorkhoursEditor: React.FC<{ member: IMember }> = ({ member }) => {
       prev.map((entry) =>
         entry.selected && entry.workhour.day !== sourceDay
           ? {
-              ...entry,
-              workhour: {
-                ...entry.workhour,
-                segments: [...sourceWorkhour.segments],
-              },
-            }
+            ...entry,
+            workhour: {
+              ...entry.workhour,
+              segments: [...sourceWorkhour.segments],
+            },
+          }
           : entry
       )
     );
   };
 
-  const { editMember } = useCreatingFetch();
+  const { editMember, updateCompany } = useCreatingFetch();
   const handleSave = async () => {
     try {
       setUpdating(true);
       const updatedWorkhours = week.map((entry) => entry.workhour);
-      await editMember(member.id, { workhours: updatedWorkhours });
+      if (type === 'member') {
+        await editMember(id, { workhours: updatedWorkhours });
+      } else {
+        await updateCompany(id, { workhours: updatedWorkhours })
+      }
       toast({
         title: "Horarios actualizados",
         variant: "success",
