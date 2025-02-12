@@ -1,3 +1,4 @@
+import { memberAdpater } from "@/adapters/members.adapter";
 import {
   ICompany,
   ICreateCompany,
@@ -75,7 +76,7 @@ export default function useCreatingFetch() {
     try {
       //   dispatch(toggleMembersLoading(true));
       const newMember = await MemberServices.createMember(data);
-      dispatch(addMember(newMember));
+      dispatch(addMember(memberAdpater(newMember)));
     } catch (error) {
       console.log("Error creating Member", error);
       throw error;
