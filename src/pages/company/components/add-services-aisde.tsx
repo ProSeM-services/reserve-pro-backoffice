@@ -5,15 +5,15 @@ import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppSelector } from "@/store/hooks";
 import { BarLoader } from "@/components/common/bar-loader";
-import { ServicesServices } from "@/services/services.services";
 import { ServiceCard } from "@/pages/services/components/service-card";
+import useCreatingFetch from "@/hooks/useCreatingFetch";
 
 export function AddServicesAside({ company }: { company: ICompany }) {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false); // Added state for loading
 
   const { services } = useAppSelector((s) => s.service);
-
+  const { addServicesToCompany } = useCreatingFetch();
   const { toast } = useToast();
   const handleSelectService = (memberId: string) => {
     let res = [];
@@ -29,10 +29,7 @@ export function AddServicesAside({ company }: { company: ICompany }) {
   const handleAddServices = async () => {
     setLoading(true); // Set loading to true when adding services
     try {
-      const allServicesToAdd = selectedServices.map((serviceId) =>
-        ServicesServices.addToCompany({ companyId: company.id!, serviceId })
-      );
-      await Promise.all(allServicesToAdd);
+      await addServicesToCompany(selectedServices, company.id);
       toast({
         title: "Servicios cargados!",
         description: `Los servicios fueron agregados exitosamente a ${company.name}!`,

@@ -70,7 +70,7 @@ export function AppointmentsTableActions({
       setLoading(true);
       await AppointmentServices.cancelAppointment(appointment.id);
       await updateAppointment(appointment.id, {
-        canceled: true,
+        canceled: !appointment.canceled,
       });
     } catch (error) {
     } finally {
@@ -78,17 +78,66 @@ export function AppointmentsTableActions({
     }
   };
 
-  if (appointment.canceled) {
-    return null;
-  }
-
   if (appointment.confirmed && appointment.payment_method) {
     return (
-      <PaymentCard
-        paymentMethod={appointment.payment_method}
-        selected
-        size="sm"
-      />
+      <DropdownMenu>
+        <DropdownMenuTrigger className="flex justify-center w-full">
+          <PaymentCard
+            paymentMethod={appointment.payment_method}
+            selected
+            size="sm"
+          />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <div className="p-2 hover:bg-muted cursor-pointer text-sm">
+            <Dialog>
+              <DialogTrigger className="flex items-center gap-2">
+                <AppointmentStatusComponent statuts="confirmed" />
+                <span>Modificar</span>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Modificacion de pago</DialogTitle>
+                  <DialogDescription>
+                    Esta acción dará por modificará el método de pago
+                  </DialogDescription>
+                </DialogHeader>
+
+                <Label>
+                  Metodo de pago seleccionado:{" "}
+                  <PaymentCard
+                    paymentMethod={appointment.payment_method}
+                    selected={false}
+                  />
+                </Label>
+                <Select onValueChange={(value) => setSelectedPayment(value)}>
+                  <SelectTrigger className="">
+                    <SelectValue placeholder="Metodo de pago" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {paymentOptions?.map((method) => (
+                      <SelectItem value={method} key={method}>
+                        <PaymentCard paymentMethod={method} selected={false} />
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  disabled={
+                    !selectedPayment ||
+                    loading ||
+                    appointment.payment_method === selectedPayment
+                  }
+                  onClick={handleConfirmAppointment}
+                  isLoading={loading}
+                >
+                  Confimar
+                </Button>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   }
   return (
@@ -99,72 +148,80 @@ export function AppointmentsTableActions({
       <DropdownMenuContent>
         <DropdownMenuLabel>Acciones</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <div className="p-2 hover:bg-muted cursor-pointer text-sm">
-          <Dialog>
-            <DialogTrigger className="flex items-center gap-2">
-              <AppointmentStatusComponent statuts="confirmed" />
-              <span>Confirmar</span>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Confirmacion del turno</DialogTitle>
-                <DialogDescription>
-                  Esta acción dará por realizado el turno. Seleccionar el método
-                  de pago por el cliente.
-                </DialogDescription>
-              </DialogHeader>
+        {!appointment.canceled && (
+          <div className="p-2 hover:bg-muted cursor-pointer text-sm">
+            <Dialog>
+              <DialogTrigger className="flex items-center gap-2">
+                <AppointmentStatusComponent statuts="confirmed" />
+                <span>Confirmar</span>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Confirmacion del turno</DialogTitle>
+                  <DialogDescription>
+                    Esta acción dará por realizado el turno. Seleccionar el
+                    método de pago por el cliente.
+                  </DialogDescription>
+                </DialogHeader>
 
-              <Label>${appointment.price}</Label>
-              <Select onValueChange={(value) => setSelectedPayment(value)}>
-                <SelectTrigger className="">
-                  <SelectValue placeholder="Metodo de pago" />
-                </SelectTrigger>
-                <SelectContent>
-                  {paymentOptions?.map((method) => (
-                    <SelectItem value={method} key={method}>
-                      <PaymentCard paymentMethod={method} selected={false} />
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button
-                disabled={!selectedPayment || loading}
-                onClick={handleConfirmAppointment}
-                isLoading={loading}
-              >
-                Confimar
-              </Button>
-            </DialogContent>
-          </Dialog>
-        </div>
+                <Label>${appointment.price}</Label>
+                <Select onValueChange={(value) => setSelectedPayment(value)}>
+                  <SelectTrigger className="">
+                    <SelectValue placeholder="Metodo de pago" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {paymentOptions?.map((method) => (
+                      <SelectItem value={method} key={method}>
+                        <PaymentCard paymentMethod={method} selected={false} />
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Button
+                  disabled={!selectedPayment || loading}
+                  onClick={handleConfirmAppointment}
+                  isLoading={loading}
+                >
+                  Confimar
+                </Button>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
         <div
           className="p-2 hover:bg-muted cursor-pointer text-sm"
           aria-disabled
         >
           <Dialog>
             <DialogTrigger className="flex items-center gap-2">
-              <AppointmentStatusComponent statuts="canceled" />
-              <span>Cancelar</span>
+              <AppointmentStatusComponent
+                statuts={appointment.canceled ? "pending" : "canceled"}
+              />
+              <span>{appointment.canceled ? "Reactivar" : "Cancelar"}</span>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Cancelación del turno</DialogTitle>
+                <DialogTitle>
+                  {" "}
+                  {appointment.canceled
+                    ? "Reactivación del turno"
+                    : "Cancelación del turno"}
+                </DialogTitle>
                 <DialogDescription>
-                  Esta acción dará por cancelado el turno. ¿Estás seguro que
-                  desea hacerlo?
+                  Esta acción volverá a activar el turno.
                 </DialogDescription>
                 <DialogDescription>
-                  El cliente recibirá un mail notificándole la cancelación del
-                  mismo.
+                  El cliente recibirá un mail notificándole que su turno fue
+                  reactivado. Por favor, coordine esta acción con el mismo.
                 </DialogDescription>
               </DialogHeader>
 
               <Button
                 onClick={handleCancelAppointment}
                 isLoading={loading}
-                variant={"destructive"}
+                variant={appointment.canceled ? "default" : "destructive"}
               >
-                Cancelar
+                Confirmar
               </Button>
             </DialogContent>
           </Dialog>

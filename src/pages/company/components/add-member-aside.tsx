@@ -7,6 +7,7 @@ import { BarLoader } from "@/components/common/bar-loader";
 import { MemberServices } from "@/services/member.services";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { EmptyList } from "@/components/common/emty-list";
+import useCreatingFetch from "@/hooks/useCreatingFetch";
 
 export function AddMemberAside({ company }: { company: ICompany }) {
   const [loading, setLoading] = useState(false);
@@ -40,15 +41,11 @@ export function AddMemberAside({ company }: { company: ICompany }) {
 
     setSelectedMembers(res);
   };
-
+  const { addMembersToCompany } = useCreatingFetch();
   const handleAddMembers = async () => {
     setIsAdding(true);
     try {
-      const allMembersToAdd = selecetedMembers.map((userId) =>
-        MemberServices.addToCompany({ companyId: company.id!, userId })
-      );
-      await Promise.all(allMembersToAdd);
-
+      await addMembersToCompany(selecetedMembers, company.id);
       toast({
         title: "Miembros cargados!",
         description: `Los miembros fueron agregados exitosamente a ${company.name}!`,
@@ -75,7 +72,7 @@ export function AddMemberAside({ company }: { company: ICompany }) {
         members?.map((member) => (
           <div
             className={`cursor-pointer border border-transparent rounded-lg ${
-              selecetedMembers.includes(member.id!) ? " border-sky-400 " : ""
+              selecetedMembers.includes(member.id) ? "bg-sky-400  " : ""
             }`}
             key={member.id}
             onClick={() => handleSelectMember(member.id!)}

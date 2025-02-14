@@ -33,7 +33,7 @@ export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
     company.payment_methods ? company.payment_methods : []
   );
   const [loading, setLoading] = useState(false);
-  const { updateCompany } = useCreatingFetch();
+  const { editCompany } = useCreatingFetch();
   const { toast } = useToast();
 
   const form = useForm<Partial<ICompany>>({
@@ -46,7 +46,7 @@ export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
     console.log("VALUES TO UPDATE: ", values);
     try {
       setLoading(true);
-      await updateCompany(company.id, values);
+      await editCompany(company.id, values);
       toast({
         title: "Sucursal actualizada correctamente!",
         description: `Se actualiazron los datos de ${values.name}, recargar la pagina para ver los cambios.`,
