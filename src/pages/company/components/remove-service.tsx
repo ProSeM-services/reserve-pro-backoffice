@@ -9,7 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ServicesServices } from "@/services/services.services";
+import useCreatingFetch from "@/hooks/useCreatingFetch";
 /* Component to handle the action to remove one service from company */
 export function RemoveService({
   service,
@@ -20,13 +20,11 @@ export function RemoveService({
 }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
+  const { removeServiceFromCompany } = useCreatingFetch();
   const handleDeleteFromCompany = async () => {
     setDeleting(true);
     try {
-      await ServicesServices.removeFromCompany({
-        companyId: company.id,
-        serviceId: service.id,
-      });
+      await removeServiceFromCompany(service.id, company.id);
       toast({
         title: `${service.title},  elminado de ${company.name}`,
       });

@@ -4,22 +4,20 @@ import { Button } from "@/components/ui/button";
 import { IService } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppSelector } from "@/store/hooks";
-import { ServicesServices } from "@/services/services.services";
 import { EmptyList } from "@/components/common/emty-list";
 import { MemberAvatar } from "@/components/common/members/member-avatar";
+import useCreatingFetch from "@/hooks/useCreatingFetch";
 
 export default function AddMembertoServiceAside({
   service,
-  fetchServiceData,
 }: {
   service: IService;
   fetchServiceData?: () => void;
 }) {
   const [isAdding, setIsAdding] = useState(false);
-  // const [members, setMembers] = useState<IMember[]>([]);
   const [selecetedMembers, setSelectedMembers] = useState<string[]>([]);
   const { members } = useAppSelector((s) => s.member);
-
+  const { addMemberToService } = useCreatingFetch();
   const { toast } = useToast();
   const handleSelectMember = (memberId: string) => {
     let res = [];
@@ -31,27 +29,14 @@ export default function AddMembertoServiceAside({
 
     setSelectedMembers(res);
   };
-  const handleAddMembers = async (selecetedMembers: string[]) => {
-    try {
-      const allMembersToAdd = selecetedMembers.map((userId) =>
-        ServicesServices.addMember({ serviceId: service.id!, userId })
-      );
-      await Promise.all(allMembersToAdd);
-    } catch (error) {
-      console.log(error);
-    }
-  };
   const handleAddSelectedMembers = async () => {
     setIsAdding(true);
     try {
-      await handleAddMembers(selecetedMembers);
+      await addMemberToService(selecetedMembers, service.id);
       toast({
         title: "Miembros cargados!",
         description: `Los miembros fueron agregados exitosamente a ${service.title}!`,
       });
-      if (fetchServiceData) {
-        fetchServiceData();
-      }
     } catch (error) {
       console.log(error);
       toast({

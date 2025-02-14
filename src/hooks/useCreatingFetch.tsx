@@ -15,7 +15,7 @@ import { editAppointment } from "@/store/feature/appointnments/appointmentsSlice
 import {
   addCompany,
   removeCompany,
-  setCompanyIsUpdated,
+  updateCompany,
 } from "@/store/feature/company/companySlice";
 import {
   addMember,
@@ -40,7 +40,7 @@ export default function useCreatingFetch() {
       //   dispatch(toggleCompanyLoading(false));
     }
   };
-  const updateCompany = async (id: string, data: Partial<ICompany>) => {
+  const editCompany = async (id: string, data: Partial<ICompany>) => {
     try {
       //   dispatch(toggleCompanyLoading(true));
 
@@ -49,7 +49,7 @@ export default function useCreatingFetch() {
         data.image ? data : { ...data, image: "" }
       );
 
-      dispatch(setCompanyIsUpdated(true));
+      dispatch(updateCompany({ id, changes: data }));
     } catch (error) {
       console.log("Error updating company", error);
 
@@ -132,14 +132,89 @@ export default function useCreatingFetch() {
       //   dispatch(toggleMembersLoading(false));
     }
   };
+  const addServicesToCompany = async (
+    servicesIds: string[],
+    companyId: string
+  ) => {
+    try {
+      const allServicesToAdd = servicesIds.map((serviceId) =>
+        ServicesServices.addToCompany({ companyId, serviceId })
+      );
+      await Promise.all(allServicesToAdd);
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
+  const addMemberToService = async (
+    membersIds: string[],
+    serviceId: string
+  ) => {
+    try {
+      const allMembersToAdd = membersIds.map((userId) =>
+        ServicesServices.addMember({ serviceId, userId })
+      );
+      await Promise.all(allMembersToAdd);
+      const updatedService = await ServicesServices.getById(serviceId);
+      dispatch(updateService({ id: serviceId, changes: updatedService }));
+    } catch (error) {}
+  };
+  const addMembersToCompany = async (
+    membersIds: string[],
+    companyId: string
+  ) => {
+    try {
+      const allMembersToAdd = membersIds.map((userId) =>
+        MemberServices.addToCompany({ companyId, userId })
+      );
+      await Promise.all(allMembersToAdd);
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
+  const removeMemberFromService = async (userId: string, serviceId: string) => {
+    try {
+      await ServicesServices.removeMember({ serviceId, userId });
+      const updatedService = await ServicesServices.getById(serviceId);
+      dispatch(updateService({ id: serviceId, changes: updatedService }));
+    } catch (error) {}
+  };
+  const removeMemberFromCompany = async (userId: string, companyId: string) => {
+    try {
+      await MemberServices.removeFromCompany({
+        companyId,
+        userId,
+      });
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
+  const removeServiceFromCompany = async (
+    serviceId: string,
+    companyId: string
+  ) => {
+    try {
+      await ServicesServices.removeFromCompany({
+        companyId,
+        serviceId,
+      });
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
   return {
+    addMembersToCompany,
+    addServicesToCompany,
+    addMemberToService,
     createCompany,
     createMember,
     createService,
     deleteCompany,
-    updateCompany,
+    editCompany,
     editService,
     editMember,
     updateAppointment,
+    removeMemberFromService,
+    removeMemberFromCompany,
+    removeServiceFromCompany,
   };
 }
