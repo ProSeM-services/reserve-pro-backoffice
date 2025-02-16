@@ -29,41 +29,34 @@ const Config: Record<PageType, IConfigBody> = {
   },
 };
 export function AuthPage({ type }: AuthPageProps) {
-  const { footerMessage, oppositeLink, oppositeRoute, title } = Config[type];
+  const { footerMessage, oppositeLink, oppositeRoute } = Config[type];
   return (
-    <div className="w-full  h-screen   ">
+    <div className="w-full min-h-screen h-screen     overflow-hidden  ">
       <div className="    -z-0 ">
         <BackgroundMark />
       </div>
-      <div className="flex items-center justify-center py-12  h-full outline ">
-        <div className="mx-auto grid md:w-[450px] max-md:w-5/6  gap-6 z-10 ">
-          <div className=" h-full w-full flex items-center justify-center">
+      <div className="flex items-center justify-center   h-full ">
+        <div className=" flex w-full h-full items-center     max-md:w-5/6  gap-6 z-10 ">
+          <div className=" h-full w-1/2 flex items-center  justify-center">
             <img
               src="/images/reserve-pro-high-resolution-logo-transparent.png"
               className="w-[250px] object-cover"
             />
           </div>
-          <h1 className=" text-center">{title}</h1>
+          <div className="flex flex-col justify-center gap-2 text-xs py-2 flex-grow bg  h-full ">
+            <div className="  w-5/6 max-w-[550px] mx-auto  ">
+              {type === "login" ? <LoginForm /> : <RegisterForm />}
+            </div>
 
-          {type === "login" ? <LoginForm /> : <RegisterForm />}
-
-          <div className="mt-4 text-center text-sm flex gap-3 items-center  justify-center">
-            <p>{footerMessage}</p>
-            <Link to={oppositeRoute} className="underline">
-              {oppositeLink}
-            </Link>
+            <div className=" text-center text-sm flex gap-3 items-center   justify-center">
+              <p>{footerMessage}</p>
+              <Link to={oppositeRoute} className="underline">
+                {oppositeLink}
+              </Link>
+            </div>
           </div>
         </div>
       </div>
-      {/* <div className="hidden  lg:block relative  ">
-        <BackgroundMark />
-        <div className=" h-full w-full flex items-center justify-center">
-          <img
-            src="/images/reserve-pro-high-resolution-logo-transparent.png"
-            className="object-cover w-1/2"
-          />
-        </div>
-      </div> */}
     </div>
   );
 }

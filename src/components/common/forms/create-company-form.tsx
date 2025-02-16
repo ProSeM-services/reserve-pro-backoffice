@@ -50,6 +50,8 @@ export function CompanyForm() {
         variant: "default",
       });
       form.reset();
+      setCategoryList([]);
+      setPaymentMethos([]);
     } catch (error) {
       console.log("Hubo un error al crear la sucursal", error);
       toast({
@@ -141,6 +143,7 @@ export function CompanyForm() {
                 <FormLabel>Address</FormLabel>
                 <FormControl>
                   <AddressInput
+                    value={form.getValues("address")}
                     handleSelect={(value: string) =>
                       form.setValue("address", value)
                     }
@@ -188,7 +191,7 @@ export function CompanyForm() {
                 <FormDescription className="text-xs">
                   Métodos de pago aceptados por esta sucursal
                 </FormDescription>
-                <div className="flex w-max space-x-4 py-3 flex-wrap max-w-full gap-2">
+                <div className="flex w-max  py-3 flex-wrap max-w-full gap-2">
                   {PAYMENTS_VALUES.map((method) => (
                     <div
                       key={method}

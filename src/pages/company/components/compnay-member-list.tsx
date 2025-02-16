@@ -12,7 +12,7 @@ export function CompnayMemberList({ company }: { company: ICompany }) {
           {members.map((member) => (
             <div className="flex items-center gap-2" key={member.id}>
               <RemoveMember member={member} company={company} />
-              <MemberCard member={member} type="details" />
+              <MemberCard member={member} type="read" />
             </div>
           ))}
         </div>

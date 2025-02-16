@@ -128,7 +128,7 @@ export function DashboardCard({ type }: DashboardCardProps) {
 
   const { Component, label, count, permission } = Config[type];
   return (
-    <Card className="flex flex-col  w-[30%] max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] h-1/2 p-2 gap-2 ">
+    <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] ">
       <section className="   flex flex-col  gap-4 ">
         <div className="flex flex-col items-center ">
           <Label className="text-3xl">{count}</Label>

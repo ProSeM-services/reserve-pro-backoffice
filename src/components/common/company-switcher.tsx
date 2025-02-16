@@ -34,13 +34,17 @@ export function CompanySwitcher() {
     if (typeof company === "string") {
       setActiveTeam(member?.companyName);
       dispatch(setCrossMainCompany("all"));
+      toast({
+        title: "Atencion",
+        description: `Los datos de la aplicación estarán relacionades a toda la empresa`,
+      });
       return;
     }
     dispatch(setCrossMainCompany(company.id));
     setActiveTeam(company.name);
     toast({
       title: "Atencion",
-      description: `Los datos de la aplicación serán relacionades a la sucursal ${company.name}`,
+      description: `Los datos de la aplicación estarán relacionades a la sucursal ${company.name}`,
     });
   };
   return (
@@ -75,7 +79,7 @@ export function CompanySwitcher() {
               <DropdownMenuItem
                 key={"todas"}
                 onClick={() => handleSelectCompany(member?.companyName)}
-                className="gap-2 p-2"
+                className="gap-2 p-2 border rounded-none bg-gray-800 text-white cursor-pointer"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <AudioWaveform className="size-4 shrink-0" />
@@ -87,7 +91,7 @@ export function CompanySwitcher() {
                 <DropdownMenuItem
                   key={option.name}
                   onClick={() => handleSelectCompany(option)}
-                  className="gap-2 p-2"
+                  className="gap-2 p-2 cursor-pointer"
                 >
                   <div className="flex size-6 items-center justify-center rounded-sm border">
                     <AudioWaveform className="size-4 shrink-0" />

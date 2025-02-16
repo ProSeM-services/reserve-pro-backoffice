@@ -16,6 +16,10 @@ import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
 import { Permission } from "@/lib/constants/permissions";
 import { Label } from "@/components/ui/label";
 
+interface IDay {
+  short: string;
+  long: string;
+}
 const HOURS_VALUES = [
   "00:00",
   "00:30",
@@ -68,7 +72,7 @@ const HOURS_VALUES = [
   "24:00",
 ];
 
-const DAYS = [
+const DAYS: IDay[] = [
   { short: "dom", long: "domingo" },
   { short: "lun", long: "lunes" },
   { short: "mar", long: "martes" },
@@ -85,6 +89,12 @@ export const WorkhoursEditor: React.FC<{
 }> = ({ id, workhours, type }) => {
   // console.log("WorkhoursEditor", member.workhours);
   const { toast } = useToast();
+  const [selectedDay, setSelectedDay] = useState<{
+    short: string;
+    long: string;
+    selected: boolean;
+    workhour: IWorkhour;
+  }>();
   const [week, setWeek] = useState(
     DAYS.map((day, index) => ({
       ...day,
@@ -96,16 +106,17 @@ export const WorkhoursEditor: React.FC<{
     }))
   );
   useEffect(() => {
-    setWeek(
-      DAYS.map((day, index) => ({
-        ...day,
-        workhour: workhours?.find((e) => e.day === index) || {
-          day: index,
-          segments: [],
-        },
-        selected: false, // Add selected property for each day
-      }))
-    );
+    const initialWeek = DAYS.map((day, index) => ({
+      ...day,
+      workhour: workhours?.find((e) => e.day === index) || {
+        day: index,
+        segments: [],
+      },
+      selected: false, // Add selected property for each day
+    }));
+    setWeek(initialWeek);
+
+    setSelectedDay(initialWeek[0]);
   }, [id]);
 
   const [updating, setUpdating] = useState(false);
@@ -115,68 +126,67 @@ export const WorkhoursEditor: React.FC<{
     segmentIndex: number,
     updatedSegment: Partial<Segment>
   ) => {
-    setWeek((prev) =>
-      prev.map((entry) =>
-        entry.workhour?.day === day
-          ? {
-              ...entry,
-              workhour: {
-                ...entry.workhour,
-                segments: entry.workhour.segments.map((segment, index) =>
-                  index === segmentIndex
-                    ? { ...segment, ...updatedSegment }
-                    : segment
-                ),
-              },
-            }
-          : entry
-      )
+    const updatedWeek = week.map((entry) =>
+      entry.workhour?.day === day
+        ? {
+            ...entry,
+            workhour: {
+              ...entry.workhour,
+              segments: entry.workhour.segments.map((segment, index) =>
+                index === segmentIndex
+                  ? { ...segment, ...updatedSegment }
+                  : segment
+              ),
+            },
+          }
+        : entry
     );
+    setWeek(updatedWeek);
+    setSelectedDay(updatedWeek.find((e) => e.workhour.day === day));
   };
 
   const handleAddSegment = (day: number) => {
-    setWeek((prev) =>
-      prev.map((entry) =>
-        entry.workhour?.day === day
-          ? {
-              ...entry,
-              workhour: {
-                ...entry.workhour,
-                segments: [
-                  ...entry.workhour.segments,
-                  { startime: "", endTime: "", duration: 0 },
-                ],
-              },
-            }
-          : entry
-      )
+    const updatedWeek = week.map((entry) =>
+      entry.workhour?.day === day
+        ? {
+            ...entry,
+            workhour: {
+              ...entry.workhour,
+              segments: [
+                ...entry.workhour.segments,
+                { startime: "", endTime: "", duration: 0 },
+              ],
+            },
+          }
+        : entry
     );
+    setWeek(updatedWeek);
+
+    setSelectedDay(updatedWeek.find((e) => e.workhour.day === day));
   };
 
   const handleRemoveSegment = (day: number, segmentIndex: number) => {
-    setWeek((prev) =>
-      prev.map((entry) =>
-        entry.workhour?.day === day
-          ? {
-              ...entry,
-              workhour: {
-                ...entry.workhour,
-                segments: entry.workhour.segments.filter(
-                  (_, index) => index !== segmentIndex
-                ),
-              },
-            }
-          : entry
-      )
+    const updatedWeek = week.map((entry) =>
+      entry.workhour?.day === day
+        ? {
+            ...entry,
+            workhour: {
+              ...entry.workhour,
+              segments: entry.workhour.segments.filter(
+                (_, index) => index !== segmentIndex
+              ),
+            },
+          }
+        : entry
     );
+    setWeek(updatedWeek);
+    setSelectedDay(updatedWeek.find((e) => e.workhour.day === day));
   };
 
-  const handleDaySelection = (day: number) => {
+  const handleDaySelection = (long: string) => {
     setWeek((prev) =>
       prev.map((entry) =>
-        entry.workhour?.day === day
-          ? { ...entry, selected: !entry.selected }
-          : entry
+        entry.long === long ? { ...entry, selected: !entry.selected } : entry
       )
     );
   };
@@ -200,6 +210,12 @@ export const WorkhoursEditor: React.FC<{
           : entry
       )
     );
+
+    const replicatedDays = week.filter((w) => w.selected).map((e) => e.long);
+    toast({
+      title: "Horarios Replicados",
+      description: `Horarios replicados en ${replicatedDays}`,
+    });
   };
 
   const { editMember, editCompany } = useCreatingFetch();
@@ -224,24 +240,202 @@ export const WorkhoursEditor: React.FC<{
     }
   };
 
+  const handleSelectDay = (e: string) => {
+    const newSelectedDay = week.find((w) => w.long === e);
+    if (!newSelectedDay) return;
+    setSelectedDay(newSelectedDay);
+  };
+
   return (
-    <div className="flex flex-col items-start  w-full h-full justify-between">
+    <div className="flex flex-col items-start  w-full h-full justify-between gap-2  ">
       <div className="flex flex-col gap-4 w-full">
-        <header className="text-[14px] flex justify-center bg-muted py-1 rounded max-md:flex-col max-md:text-xs gap-2 text-gray-700">
+        <header className="text-[12px] flex justify-center bg-muted py-1 rounded max-md:flex-col max-md:text-xs gap-2 text-gray-700">
           <div className="flex items-center gap-1 px-2 ">
-            <CircleDot className="  size-6 text-gray-950" />
+            <CircleDot className="  size-4 text-gray-950" />
             <p> Selecciona los dias donde quieras replicar un mismo horario</p>
           </div>
           <div className="flex items-center gap-1 px-2 ">
-            <PlusIcon className="  size-6 text-gray-950" />
+            <PlusIcon className="  size-4 text-gray-950" />
             <p> Agrega un "slot" de horarios</p>
           </div>
           <div className="flex items-center gap-1 px-2 ">
-            <Copy className="  size-6 text-gray-950" />
+            <Copy className="  size-4 text-gray-950" />
             <p> Replica los horarios sobre los dias seleccionados</p>
           </div>
         </header>
-        <section className="grid grid-cols-4 max-lg:grid-cols-2 max-md:flex  max-md:flex-col w-full gap-4 overflow-x-auto ">
+
+        <div className="flex gap-4 ">
+          <div className="flex flex-col gap-2 w-1/3 ">
+            <p>Seleccionar un dia</p>
+            {week.map((day) => (
+              <div key={day.long} className="flex gap-1">
+                {selectedDay && (
+                  <Button
+                    variant={day.selected ? "default" : "ghost"}
+                    onClick={() => handleDaySelection(day.long)}
+                  >
+                    {day.selected ? (
+                      <CircleCheck className="  size-4" />
+                    ) : (
+                      <CircleDot className="  size-4" />
+                    )}
+                  </Button>
+                )}
+                <div
+                  key={day.long}
+                  onClick={() => handleSelectDay(day.long)}
+                  className={`p-2 flex-grow border cursor-pointer transition-all duration-150 ${
+                    selectedDay?.long === day.long
+                      ? "bg-primary text-white"
+                      : ""
+                  }`}
+                >
+                  <div className="flex gap-1 items-center">{day.long}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <section className="flex-grow flex flex-col items-end gap-2">
+            {selectedDay && (
+              <Card className="flex flex-col w-full   flex-grow items-center   gap-4 p-2">
+                <div className="flex flex-col items-center gap-2">
+                  <Label className="font-medium uppercase">
+                    {selectedDay.long}
+                  </Label>
+
+                  <AuthorizationWrapper
+                    permission={Permission.UPDATE_WORKHOURS}
+                  >
+                    <div className="flex items-center  gap-2">
+                      <Button
+                        onClick={() =>
+                          handleAddSegment(selectedDay.workhour.day)
+                        }
+                        variant="secondary"
+                        className="flex gap-2"
+                      >
+                        <p>Agregar</p>
+                        <PlusIcon className="  size-4" />
+                      </Button>
+
+                      <Button
+                        variant="secondary"
+                        onClick={() =>
+                          handleReplicate(selectedDay.workhour.day)
+                        }
+                        className="flex gap-2"
+                      >
+                        <p>Replicar</p>
+                        <Copy className="  size-4" />
+                      </Button>
+                    </div>
+                  </AuthorizationWrapper>
+                </div>
+                <div
+                  key={selectedDay.long}
+                  className=" w-full h-full flex flex-col gap-2  "
+                >
+                  {selectedDay.workhour.segments.length === 0 ? (
+                    <div className=" grid place-items-center h-full">
+                      Sin horarios definidos
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-start gap-4 w-full ">
+                      {selectedDay.workhour.segments.map(
+                        (segment, segmentIndex) => (
+                          <div
+                            key={segmentIndex}
+                            className="flex items-center w-full gap-4"
+                          >
+                            <div className="flex  flex-col w-full gap-2">
+                              <Select
+                                value={segment.startime}
+                                onValueChange={(startime) =>
+                                  handleSegmentChange(
+                                    selectedDay.workhour.day,
+                                    segmentIndex,
+                                    {
+                                      startime,
+                                    }
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="">
+                                  <SelectValue placeholder="Inicio" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {HOURS_VALUES.map((hour) => (
+                                    <SelectItem value={hour} key={hour}>
+                                      <div className="flex gap-1 items-center">
+                                        {hour} hs
+                                      </div>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                              <Select
+                                value={segment.endTime}
+                                onValueChange={(endTime) =>
+                                  handleSegmentChange(
+                                    selectedDay.workhour.day,
+                                    segmentIndex,
+                                    {
+                                      endTime,
+                                    }
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="">
+                                  <SelectValue placeholder="Fin" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {HOURS_VALUES.map((hour) => (
+                                    <SelectItem value={hour} key={hour}>
+                                      <div className="flex gap-1 items-center">
+                                        {hour} hs
+                                      </div>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <Button
+                              onClick={() =>
+                                handleRemoveSegment(
+                                  selectedDay.workhour.day,
+                                  segmentIndex
+                                )
+                              }
+                              variant="secondary"
+                              size="icon"
+                              className="size-6"
+                            >
+                              <Minus className="  size-4" />
+                            </Button>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  )}
+                </div>
+              </Card>
+            )}
+
+            <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
+              <div className="flex flex-col items-start gap-4  w-full">
+                <Button
+                  onClick={handleSave}
+                  isLoading={updating}
+                  className="w-full"
+                >
+                  Actualizar Horarios
+                </Button>
+              </div>
+            </AuthorizationWrapper>
+          </section>
+        </div>
+        {/* <section className="grid grid-cols-4 max-lg:grid-cols-2 max-md:flex  max-md:flex-col w-full gap-4 overflow-x-auto ">
           {week.map((entry) => (
             <Card className="flex flex-col w-full   flex-grow items-center   gap-4 p-2">
               <div className="flex flex-col items-center gap-2">
@@ -350,16 +544,8 @@ export const WorkhoursEditor: React.FC<{
               </div>
             </Card>
           ))}
-        </section>
+        </section> */}
       </div>
-
-      <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
-        <div className="flex flex-col items-start gap-4">
-          <Button onClick={handleSave} isLoading={updating}>
-            Actualizar Horarios
-          </Button>
-        </div>
-      </AuthorizationWrapper>
     </div>
   );
 };

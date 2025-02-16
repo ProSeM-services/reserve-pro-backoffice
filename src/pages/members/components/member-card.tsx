@@ -15,7 +15,7 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
     >
       <div className="flex gap-4 ">
         <div className=" flex justify-center items-center  ">
-          <MemberAvatar member={member} />
+          <MemberAvatar member={member} size="md" />
         </div>
         <div className="flex flex-col w-full justify-start text-md ">
           <header className="flex w-full  justify-between items-center  ">
@@ -35,14 +35,15 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
             )}
           </header>
 
-          <span className="font-normal">{member.email || ""}</span>
-
-          {member.createdAt && (
-            <div className="flex items-center gap-2 ">
-              <span className="font-medium">Joining Date: </span>
-              <span>{new Date(member.createdAt).toLocaleDateString()}</span>
-            </div>
-          )}
+          <div className="text-xs text-gray-600">
+            <span className="font-normal">{member.email || ""} </span>
+            {member.createdAt && (
+              <div className="flex items-center gap-2 ">
+                <span className="font-medium">Fecha de ingreso: </span>
+                <span>{new Date(member.createdAt).toLocaleDateString()}</span>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </Card>
