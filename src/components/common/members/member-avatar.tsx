@@ -4,8 +4,10 @@ import { IMember } from "@/interfaces/member.iterface";
 export function MemberAvatar({
   member,
   size = "lg",
+  className,
 }: {
   member: IMember;
+  className?: string;
   size?: "xs" | "sm" | "md" | "lg";
 }) {
   const sizeValue =
@@ -19,7 +21,7 @@ export function MemberAvatar({
       ? "size-8 max-md:size-8 rounded-full"
       : "";
   return (
-    <Avatar className={`rounded-lg ${sizeValue}  `}>
+    <Avatar className={`rounded-lg ${sizeValue}   ${className}`}>
       <AvatarImage
         src={member.image ? member.image : ""}
         alt={`image ${member.name}'s profile`}

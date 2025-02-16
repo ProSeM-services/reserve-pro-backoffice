@@ -26,7 +26,7 @@ export function ServiceAside() {
           {asideType === "edit" && "Editar Servicio"}
         </SheetTitle>
         <hr />
-        <div className="flex-grow h-[85%] space-y-3">
+        <div className="flex-grow h-[95%] max-h-[95%] overflow-auto space-y-3 ">
           {asideService && asideType === "details" && (
             <ServiceAsideDetails service={asideService} />
           )}

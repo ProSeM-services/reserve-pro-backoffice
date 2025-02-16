@@ -65,9 +65,9 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="rounded-lg flex flex-col gap-8  ">
-          <div className="w-full">
+      <form onSubmit={form.handleSubmit(onSubmit)} className=" h-full w-full  ">
+        <div className=" flex flex-col justify-center gap-4 h-full ">
+          <div className="w-full flex flex-col   justify-center    gap-4">
             <FormField
               control={form.control}
               name="user"
@@ -104,17 +104,19 @@ export function LoginForm() {
               )}
             />
           </div>
-          <Button
-            type="submit"
-            className="w-full text-white"
-            disabled={loading}
-            isLoading={loading}
-          >
-            Login
-          </Button>
-          <Button variant="outline" className="w-full" disabled>
-            Login with Google
-          </Button>
+          <section className=" flex flex-col gap-2">
+            <Button
+              type="submit"
+              className="w-full text-white"
+              disabled={loading}
+              isLoading={loading}
+            >
+              Login
+            </Button>
+            <Button variant="outline" className="w-full" disabled>
+              Login with Google
+            </Button>
+          </section>
         </div>
       </form>
     </Form>

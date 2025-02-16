@@ -61,7 +61,7 @@ const customerColumns: ColumnDef<ICustomer>[] = [
 ];
 export function CustomerTable() {
   const { loading, customers, fetched } = useAppSelector((s) => s.customers);
-  console.log("customers", customers);
+
   return (
     <LoaderWrapper loading={loading && !fetched} type="customers">
       <RootTable

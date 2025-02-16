@@ -3,6 +3,7 @@ import {
   Building,
   CalendarX,
   HousePlugIcon,
+  ListX,
   LucideProps,
   UserRoundX,
   Users2Icon,
@@ -11,10 +12,21 @@ import {
 export function EmptyList({
   type,
 }: {
-  type: "member" | "company" | "service" | "no-members-to-add" | "appointments";
+  type:
+    | "member"
+    | "company"
+    | "service"
+    | "no-members-to-add"
+    | "appointments"
+    | "no-services-to-add";
 }) {
   const Config: Record<
-    "member" | "company" | "service" | "no-members-to-add" | "appointments",
+    | "member"
+    | "company"
+    | "service"
+    | "no-members-to-add"
+    | "appointments"
+    | "no-services-to-add",
     {
       Icon: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
@@ -47,6 +59,11 @@ export function EmptyList({
       title: "Equipo vacío",
       description: "No hay más miembros en tu equipo para que puedas agregar",
       Icon: UserRoundX,
+    },
+    "no-services-to-add": {
+      title: "Lista vacía",
+      description: "No hay más servicios en tu empresa para que puedas agregar",
+      Icon: ListX,
     },
   };
 

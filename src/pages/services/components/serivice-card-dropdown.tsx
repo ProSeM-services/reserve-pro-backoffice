@@ -1,5 +1,5 @@
 import { IService } from "@/interfaces";
-import { EllipsisIcon } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,37 +15,35 @@ export function ServiceCardDropDown({ service }: { service: IService }) {
   const dispatch = useAppDispatch();
 
   return (
-    <div>
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <EllipsisIcon />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel>{service.title}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() =>
-              dispatch(setAside({ open: true, service, type: "add-member" }))
-            }
-          >
-            Agregar Miembro
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() =>
-              dispatch(setAside({ open: true, service, type: "details" }))
-            }
-          >
-            Ver Detalles
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() =>
-              dispatch(setAside({ open: true, service, type: "edit" }))
-            }
-          >
-            Editar
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <EllipsisVertical className="size-5" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>{service.title}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() =>
+            dispatch(setAside({ open: true, service, type: "add-member" }))
+          }
+        >
+          Agregar Miembro
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            dispatch(setAside({ open: true, service, type: "details" }))
+          }
+        >
+          Ver Detalles
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() =>
+            dispatch(setAside({ open: true, service, type: "edit" }))
+          }
+        >
+          Editar
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

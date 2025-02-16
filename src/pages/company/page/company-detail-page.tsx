@@ -15,8 +15,8 @@ import { PaymentCard } from "@/components/common/payment-card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 export function CompanyDetailPage() {
-  const { selectedCompany: company } = useAppSelector((s) => s.company);
-
+  const { selectedCompany, companies } = useAppSelector((s) => s.company);
+  const company = companies.find((comp) => comp.id === selectedCompany);
   if (!company) return;
   return (
     <div className="flex flex-col gap-4 md:flex-grow relative p-4  max-md:max-w-full ">

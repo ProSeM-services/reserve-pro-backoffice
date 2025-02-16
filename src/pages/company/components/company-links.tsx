@@ -18,7 +18,7 @@ export function CompanyLinks() {
   const { companies, loading } = useAppSelector((s) => s.company);
   const dispatch = useAppDispatch();
   const handleSelectCompany = (company: ICompany) => {
-    dispatch(setSelectedCompany(company));
+    dispatch(setSelectedCompany(company.id));
   };
   return (
     <>

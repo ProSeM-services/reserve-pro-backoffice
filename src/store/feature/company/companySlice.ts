@@ -6,7 +6,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export interface CompanyState extends IStoreState {
   value: number;
   companies: ICompany[];
-  selectedCompany?: ICompany;
+  selectedCompany?: string;
   companyUpdated?: boolean;
   inmutablesCompanies: ICompany[];
 }
@@ -47,43 +47,43 @@ export const companySlice = createSlice({
         (c) => c.id !== action.payload
       );
     },
-    setSelectedCompany: (state, action: PayloadAction<ICompany>) => {
+    setSelectedCompany: (state, action: PayloadAction<string>) => {
       state.selectedCompany = action.payload;
     },
     setCompanyIsUpdated: (state, action: PayloadAction<boolean>) => {
       state.companyUpdated = action.payload;
     },
     updateCompany: (
-          state,
-          action: PayloadAction<{ id: string; changes: Partial<ICompany> }>
-        ) => {
-          const { id, changes } = action.payload;
-    
-          const index = state.companies.findIndex((company) => company.id === id);
-    
-          if (index !== -1) {
-            state.companies[index] = {
-              ...state.companies[index],
-              ...changes,
-            };
-    
-            const immutableIndex = state.inmutablesCompanies.findIndex(
-              (company) => company.id === id
-            );
-            if (immutableIndex !== -1) {
-              state.inmutablesCompanies[immutableIndex] = {
-                ...state.inmutablesCompanies[immutableIndex],
-                ...changes,
-              };
-            }
-          }
-          //     if (state.asideService?.id === id) {
-          //   state.asideService = {
-          //     ...state.asideService,
-          //     ...changes,
-          //   };
-          // }
+      state,
+      action: PayloadAction<{ id: string; changes: Partial<ICompany> }>
+    ) => {
+      const { id, changes } = action.payload;
+
+      const index = state.companies.findIndex((company) => company.id === id);
+
+      if (index !== -1) {
+        state.companies[index] = {
+          ...state.companies[index],
+          ...changes,
+        };
+
+        const immutableIndex = state.inmutablesCompanies.findIndex(
+          (company) => company.id === id
+        );
+        if (immutableIndex !== -1) {
+          state.inmutablesCompanies[immutableIndex] = {
+            ...state.inmutablesCompanies[immutableIndex],
+            ...changes,
+          };
         }
+      }
+      //     if (state.asideService?.id === id) {
+      //   state.asideService = {
+      //     ...state.asideService,
+      //     ...changes,
+      //   };
+      // }
+    },
   },
 });
 

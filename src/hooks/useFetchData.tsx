@@ -108,7 +108,7 @@ export default function useFetchData() {
     try {
       dispatch(toggleAppointmentsLoading(true));
       const company = await CompanyServices.getCopanyById(id);
-      dispatch(setSelectedCompany(company));
+      dispatch(setSelectedCompany(company.id));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {

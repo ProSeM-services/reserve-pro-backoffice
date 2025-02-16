@@ -7,6 +7,7 @@ import { useAppSelector } from "@/store/hooks";
 import { BarLoader } from "@/components/common/bar-loader";
 import { ServiceCard } from "@/pages/services/components/service-card";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { EmptyList } from "@/components/common/emty-list";
 
 export function AddServicesAside({ company }: { company: ICompany }) {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
@@ -53,11 +54,11 @@ export function AddServicesAside({ company }: { company: ICompany }) {
   return (
     <div className="space-y-2 h-full max-h-full overflow-auto  ">
       {servicesToShow.length === 0 ? (
-        <p>No hay servicios para mostrar!</p>
+        <EmptyList type="no-services-to-add" />
       ) : (
         <div>
           {loading && <BarLoader />}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 text-xs">
             {servicesToShow?.map((service) => (
               <div
                 className={`flex relative items-center gap-2 border rounded-md border-accent  cursor-pointer hover:bg-secondary transition-all duration-150 ${
@@ -68,7 +69,7 @@ export function AddServicesAside({ company }: { company: ICompany }) {
                 key={service.id}
                 onClick={() => handleSelectService(service.id!)}
               >
-                <ServiceCard service={service} readonly />
+                <ServiceCard service={service} readonly selectable />
 
                 {selectedServices.includes(service.id!) && (
                   <CheckCircleIcon className="text-primary absolute right-2 bottom-2  size-6" />

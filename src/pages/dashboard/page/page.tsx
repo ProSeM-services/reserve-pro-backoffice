@@ -5,7 +5,7 @@ import { DashboardWe } from "../components/views/we-view";
 export function DashboardPage() {
   return (
     <div className="size-full   ">
-      <Tabs defaultValue="stats" className="h-[95%]  ">
+      <Tabs defaultValue="stats" className="  ">
         <TabsList>
           <TabsTrigger value="stats">Estadísticas</TabsTrigger>
           <TabsTrigger value="we">Nosotros</TabsTrigger>
