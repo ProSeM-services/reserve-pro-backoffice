@@ -32,8 +32,13 @@ import { AuthServices } from "@/services/auth.services";
 import { memberListAdpater } from "@/adapters/members.adapter";
 import { appointmentListAdpater } from "@/adapters/appointments.adpater";
 import { customersListAdpater } from "@/adapters/customers.adapter";
+import { IAPICustomer } from "@/interfaces/api/customer.interface";
+import { IMember } from "@/interfaces/member.iterface";
 
 export default function useFetchData() {
+  const storageMember = localStorage.getItem("userLogged");
+  const member = storageMember ? (JSON.parse(storageMember) as IMember) : null;
+
   const dispatch = useAppDispatch();
   const setMainLoaderStatus = (status: boolean) => {
     dispatch(setMainFetched(status));
@@ -75,10 +80,33 @@ export default function useFetchData() {
   };
   const fetchCustomers = async () => {
     try {
+      if (!member) return;
+      const role = member.role;
       dispatch(toggleCustomersLoading(true));
       const customers = await CustomerServices.getAll();
-      console.log("customers", customers);
-      dispatch(setCustomers(customersListAdpater(customers)));
+      if (role === "BASIC") {
+        const filteredCustomers = customers
+          .map((customer) => {
+            const memberAppointmnets = customer.Appointments.filter(
+              (app) => app.UserId === member.id
+            );
+
+            if (memberAppointmnets.length > 0) {
+              const res: IAPICustomer = {
+                ...customer,
+                Appointments: memberAppointmnets,
+              };
+
+              return res;
+            }
+          })
+          .filter((e) => e !== undefined);
+
+        console.log("Filtered Customers", filteredCustomers);
+        dispatch(setCustomers(customersListAdpater(filteredCustomers)));
+      } else {
+        dispatch(setCustomers(customersListAdpater(customers)));
+      }
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
@@ -87,15 +115,30 @@ export default function useFetchData() {
   };
   const fetchAppointments = async () => {
     try {
+      if (!member) return;
+      const role = member.role;
       dispatch(toggleAppointmentsLoading(true));
       const { appointments, limit, offset, page, total } =
         await AppointmentServices.getAll();
-      dispatch(
-        setAppointments({
-          appointments: appointmentListAdpater(appointments),
-          fromServer: true,
-        })
-      );
+
+      if (role === "BASIC") {
+        const filteredAppointmnets = appointments.filter(
+          (app) => app.UserId === member.id
+        );
+        dispatch(
+          setAppointments({
+            appointments: appointmentListAdpater(filteredAppointmnets),
+            fromServer: true,
+          })
+        );
+      } else {
+        dispatch(
+          setAppointments({
+            appointments: appointmentListAdpater(appointments),
+            fromServer: true,
+          })
+        );
+      }
       dispatch(setAppointmentsTableData({ limit, offset, page, total }));
     } catch (error) {
       console.log("Error fetching Companies", error);

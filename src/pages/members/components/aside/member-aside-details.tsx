@@ -57,7 +57,6 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
   });
 
   const onSubmit = async (values: IEditMember) => {
-    console.log("VALUES : ", values);
     try {
       setLoading(true);
       let data = values;
@@ -124,8 +123,6 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
       fileInputRef.current.click();
     }
   };
-
-  console.log("errors : ", form.formState.errors);
 
   return (
     <Form {...form}>

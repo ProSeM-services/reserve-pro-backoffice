@@ -15,6 +15,8 @@ import {
 import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
 import { Permission } from "@/lib/constants/permissions";
 import { Label } from "@/components/ui/label";
+import { hasPermission } from "@/lib/auth/has-permission";
+import useSession from "@/hooks/useSession";
 
 interface IDay {
   short: string;
@@ -245,41 +247,33 @@ export const WorkhoursEditor: React.FC<{
     if (!newSelectedDay) return;
     setSelectedDay(newSelectedDay);
   };
+  const { member } = useSession();
+
+  const selectIsDisabled = !hasPermission(member, Permission.UPDATE_WORKHOURS);
 
   return (
     <div className="flex flex-col items-start  w-full h-full justify-between gap-2  ">
       <div className="flex flex-col gap-4 w-full">
-        <header className="text-[12px] flex justify-center bg-muted py-1 rounded max-md:flex-col max-md:text-xs gap-2 text-gray-700">
-          <div className="flex items-center gap-1 px-2 ">
-            <CircleDot className="  size-4 text-gray-950" />
-            <p> Selecciona los dias donde quieras replicar un mismo horario</p>
-          </div>
-          <div className="flex items-center gap-1 px-2 ">
-            <PlusIcon className="  size-4 text-gray-950" />
-            <p> Agrega un "slot" de horarios</p>
-          </div>
-          <div className="flex items-center gap-1 px-2 ">
-            <Copy className="  size-4 text-gray-950" />
-            <p> Replica los horarios sobre los dias seleccionados</p>
-          </div>
-        </header>
-
         <div className="flex gap-4 ">
           <div className="flex flex-col gap-2 w-1/3 ">
             <p>Seleccionar un dia</p>
             {week.map((day) => (
               <div key={day.long} className="flex gap-1">
                 {selectedDay && (
-                  <Button
-                    variant={day.selected ? "default" : "ghost"}
-                    onClick={() => handleDaySelection(day.long)}
+                  <AuthorizationWrapper
+                    permission={Permission.UPDATE_WORKHOURS}
                   >
-                    {day.selected ? (
-                      <CircleCheck className="  size-4" />
-                    ) : (
-                      <CircleDot className="  size-4" />
-                    )}
-                  </Button>
+                    <Button
+                      variant={day.selected ? "default" : "ghost"}
+                      onClick={() => handleDaySelection(day.long)}
+                    >
+                      {day.selected ? (
+                        <CircleCheck className="  size-4" />
+                      ) : (
+                        <CircleDot className="  size-4" />
+                      )}
+                    </Button>
+                  </AuthorizationWrapper>
                 )}
                 <div
                   key={day.long}
@@ -350,6 +344,7 @@ export const WorkhoursEditor: React.FC<{
                           >
                             <div className="flex  flex-col w-full gap-2">
                               <Select
+                                disabled={selectIsDisabled}
                                 value={segment.startime}
                                 onValueChange={(startime) =>
                                   handleSegmentChange(
@@ -375,6 +370,7 @@ export const WorkhoursEditor: React.FC<{
                                 </SelectContent>
                               </Select>
                               <Select
+                                disabled={selectIsDisabled}
                                 value={segment.endTime}
                                 onValueChange={(endTime) =>
                                   handleSegmentChange(
@@ -400,19 +396,23 @@ export const WorkhoursEditor: React.FC<{
                                 </SelectContent>
                               </Select>
                             </div>
-                            <Button
-                              onClick={() =>
-                                handleRemoveSegment(
-                                  selectedDay.workhour.day,
-                                  segmentIndex
-                                )
-                              }
-                              variant="secondary"
-                              size="icon"
-                              className="size-6"
+                            <AuthorizationWrapper
+                              permission={Permission.UPDATE_WORKHOURS}
                             >
-                              <Minus className="  size-4" />
-                            </Button>
+                              <Button
+                                onClick={() =>
+                                  handleRemoveSegment(
+                                    selectedDay.workhour.day,
+                                    segmentIndex
+                                  )
+                                }
+                                variant="secondary"
+                                size="icon"
+                                className="size-6"
+                              >
+                                <Minus className="  size-4" />
+                              </Button>
+                            </AuthorizationWrapper>
                           </div>
                         )
                       )}
@@ -435,6 +435,21 @@ export const WorkhoursEditor: React.FC<{
             </AuthorizationWrapper>
           </section>
         </div>
+        <header className="text-[12px] flex justify-center bg-muted py-1 rounded max-md:flex-col max-md:text-xs gap-2 text-gray-700">
+          <div className="flex items-center gap-1 px-2 ">
+            <CircleDot className="  size-4 text-gray-950" />
+            <p> Selecciona los dias donde quieras replicar un mismo horario</p>
+          </div>
+          <div className="flex items-center gap-1 px-2 ">
+            <PlusIcon className="  size-4 text-gray-950" />
+            <p> Agrega un "slot" de horarios</p>
+          </div>
+          <div className="flex items-center gap-1 px-2 ">
+            <Copy className="  size-4 text-gray-950" />
+            <p> Replica los horarios sobre los dias seleccionados</p>
+          </div>
+        </header>
+
         {/* <section className="grid grid-cols-4 max-lg:grid-cols-2 max-md:flex  max-md:flex-col w-full gap-4 overflow-x-auto ">
           {week.map((entry) => (
             <Card className="flex flex-col w-full   flex-grow items-center   gap-4 p-2">

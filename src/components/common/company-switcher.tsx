@@ -23,6 +23,7 @@ import { useToast } from "../ui/use-toast";
 import { ICompany } from "@/interfaces";
 import useSession from "@/hooks/useSession";
 import { setCrossMainCompany } from "@/store/feature/main/mainSlice";
+import CompanyDetailCell from "@/pages/appointments/components/table/company-detail-cell";
 export function CompanySwitcher() {
   const { isMobile } = useSidebar();
   const { member } = useSession();
@@ -47,6 +48,10 @@ export function CompanySwitcher() {
       description: `Los datos de la aplicación estarán relacionades a la sucursal ${company.name}`,
     });
   };
+
+  if (member.role === "BASIC" && member.CompanyId) {
+    return <CompanyDetailCell companyId={member.CompanyId} />;
+  }
   return (
     <SidebarMenu>
       <SidebarMenuItem>

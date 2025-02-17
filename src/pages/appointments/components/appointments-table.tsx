@@ -11,6 +11,7 @@ import { ServiceCell } from "./service-cell";
 import { EmptyList } from "@/components/common/emty-list";
 import { AppointmentsTableActions } from "./table/appointmnet-cell-actions";
 import { AppointmentStatusCell } from "./table/appointmnet-status";
+import CompanyDetailCell from "./table/company-detail-cell";
 const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "canceled",
@@ -39,6 +40,16 @@ const columns: ColumnDef<IAppointment>[] = [
           </div>
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "UserId",
+    header: "Sucursal",
+    size: 120,
+    cell: ({ row }) => {
+      const companyId = row.original.companyId;
+      if (!companyId) return <p>no data</p>;
+      return <CompanyDetailCell companyId={companyId} />;
     },
   },
   {
@@ -109,6 +120,7 @@ export function AppointmentsTable() {
   const data =
     appointmentsFilterDate === "today" ? todayAppointments : appointmentsTable;
 
+  console.log("appointmentsTable", appointmentsTable);
   return (
     <LoaderWrapper loading={loading && !fetched} type="appointments">
       {data.length === 0 ? (

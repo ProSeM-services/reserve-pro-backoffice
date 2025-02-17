@@ -40,6 +40,11 @@ export class AppointmentServices {
       appointmemntId,
     });
   }
+  static async reactiveAppointment(appointmemntId: string) {
+    return await axiosInstance.post(`${BASE_URL}/appointments/reactive`, {
+      appointmemntId,
+    });
+  }
   static async getByEmail(id: string): Promise<IAppointment[]> {
     const res = await axiosInstance.get(
       `${BASE_URL}/appointments/customer/${id}`

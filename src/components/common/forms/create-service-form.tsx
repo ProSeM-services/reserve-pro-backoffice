@@ -26,6 +26,7 @@ const INITIAL_SERVICE_DATA: ICreateService = {
   provision: "Presencial",
   title: "",
   description: "",
+  images: [],
 };
 export function CreateServicesForm() {
   const { toast } = useToast();
