@@ -35,8 +35,8 @@ export default function DataProvider({ children }: PropsWithChildren) {
       try {
         setMainLoaderStatus(false);
         await setAuthInterceptor(accessToken);
-        !companyFetched && (await fetchCompanies());
         !membersFetched && (await fetchMembers());
+        !companyFetched && (await fetchCompanies());
         !customerFetched && (await fetchCustomers());
         !servicesFetched && (await fetchServices());
         !appointmentsFetched && (await fetchAppointments());

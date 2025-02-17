@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  BadgeDollarSign,
   Building,
   CalendarX,
   HousePlugIcon,
@@ -18,7 +19,8 @@ export function EmptyList({
     | "service"
     | "no-members-to-add"
     | "appointments"
-    | "no-services-to-add";
+    | "no-services-to-add"
+    | "no-incomes";
 }) {
   const Config: Record<
     | "member"
@@ -26,7 +28,8 @@ export function EmptyList({
     | "service"
     | "no-members-to-add"
     | "appointments"
-    | "no-services-to-add",
+    | "no-services-to-add"
+    | "no-incomes",
     {
       Icon: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
@@ -64,6 +67,11 @@ export function EmptyList({
       title: "Lista vacía",
       description: "No hay más servicios en tu empresa para que puedas agregar",
       Icon: ListX,
+    },
+    "no-incomes": {
+      title: "Vacío",
+      description: "No hay turnos confirmados.",
+      Icon: BadgeDollarSign,
     },
   };
 

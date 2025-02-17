@@ -1,4 +1,3 @@
-import { Calendar } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -40,6 +39,7 @@ import {
 import { MonthlyData } from "@/interfaces/stats.interface";
 import useSession from "@/hooks/useSession";
 import { MONTHS } from "../../constants";
+import { EmptyList } from "@/components/common/emty-list";
 
 export function AppointmentStats() {
   const { session } = useSession();
@@ -104,18 +104,13 @@ export function AppointmentStats() {
 
   if (appointments.length === 0 && allAppointmentFetched)
     return (
-      <Card className="flex flex-col  h-full   max-md:h-[500px]  w-full p-1">
+      <Card className="size-full ">
         <div className="bg-card rounded h-full w-full  p-4 flex flex-col  ">
           <div className="flex items-center justify-between font-bold text-lg">
             <CardTitle>Turnos Agendados</CardTitle>
           </div>
 
-          <div className="flex-grow flex flex-col justify-center items-center text-gray-400">
-            <Calendar className="size-28" />
-            <p className="text-wrap w-1/2 text-center">
-              No hay informacion de turnos agendados para cargar
-            </p>
-          </div>
+          <EmptyList type="appointments" />
         </div>
       </Card>
     );

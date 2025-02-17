@@ -33,12 +33,15 @@ export function SetHoursPage() {
     const selectedCompany = companies.filter((b) => b.id === id)[0];
     if (selectedCompany) setSelectedCompany(selectedCompany);
   };
+
   return (
     <Tabs defaultValue="members" className="  ">
-      <TabsList>
-        <TabsTrigger value="members">Miembros</TabsTrigger>
-        <TabsTrigger value="company">Sucursales</TabsTrigger>
-      </TabsList>
+      {(member.role === "OWNER" || member.role === "ADMIN") && (
+        <TabsList>
+          <TabsTrigger value="members">Miembros</TabsTrigger>
+          <TabsTrigger value="company">Sucursales</TabsTrigger>
+        </TabsList>
+      )}
       <TabsContent value="members" className="flex flex-col gap-2 h-[90%] ">
         {!hasPermission(member, Permission.UPDATE_WORKHOURS) &&
         member.role !== "OWNER" &&

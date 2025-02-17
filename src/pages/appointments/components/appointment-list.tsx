@@ -9,10 +9,10 @@ export function AppointmentList() {
   const { members } = useAppSelector((s) => s.member);
 
   return (
-    <div className="flex flex-wrap gap-4  h-full   p-2 ">
+    <div className="flex flex-col border rounded-md p-2 flex-wrap   h-full ">
       {appointmentsTable.map((app) => (
         <div
-          className=" bg-background  w-full  p-4 rounded-md border border-border space-y-2"
+          className=" bg-background   w-full   p-2 rounded-md    space-y-1"
           key={app.id}
         >
           <section className=" flex justify-between">

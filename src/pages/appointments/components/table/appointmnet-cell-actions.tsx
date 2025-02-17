@@ -31,7 +31,8 @@ import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { AppointmentStatusComponent } from "./appointmnet-status";
 import { ContactButton } from "../contact-button";
 import { AppointmentServices } from "@/services/appointment.services";
-import { useToast } from "@/components/ui/use-toast";
+import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
+import { Permission } from "@/lib/constants/permissions";
 
 interface AppointmentsTableActionsProps {
   appointment: IAppointment;
@@ -45,12 +46,10 @@ export function AppointmentsTableActions({
 
   const { companies } = useAppSelector((s) => s.company);
   const companyId = appointment.companyId;
-
   const paymentOptions = companies.find(
     (e) => e.id === companyId
   )?.payment_methods;
 
-  const {} = useToast();
   const { updateAppointment } = useCreatingFetch();
   const handleConfirmAppointment = async () => {
     if (!selectedPayment) return;
@@ -68,7 +67,11 @@ export function AppointmentsTableActions({
   const handleCancelAppointment = async () => {
     try {
       setLoading(true);
-      await AppointmentServices.cancelAppointment(appointment.id);
+      if (!appointment.canceled) {
+        await AppointmentServices.cancelAppointment(appointment.id);
+      } else {
+        await AppointmentServices.reactiveAppointment(appointment.id);
+      }
       await updateAppointment(appointment.id, {
         canceled: !appointment.canceled,
       });
@@ -188,44 +191,48 @@ export function AppointmentsTableActions({
             </Dialog>
           </div>
         )}
-        <div
-          className="p-2 hover:bg-muted cursor-pointer text-sm"
-          aria-disabled
-        >
-          <Dialog>
-            <DialogTrigger className="flex items-center gap-2">
-              <AppointmentStatusComponent
-                statuts={appointment.canceled ? "pending" : "canceled"}
-              />
-              <span>{appointment.canceled ? "Reactivar" : "Cancelar"}</span>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>
-                  {" "}
-                  {appointment.canceled
-                    ? "Reactivación del turno"
-                    : "Cancelación del turno"}
-                </DialogTitle>
-                <DialogDescription>
-                  Esta acción volverá a activar el turno.
-                </DialogDescription>
-                <DialogDescription>
-                  El cliente recibirá un mail notificándole que su turno fue
-                  reactivado. Por favor, coordine esta acción con el mismo.
-                </DialogDescription>
-              </DialogHeader>
+        <AuthorizationWrapper permission={Permission.UPDATE_APPOINTMENTS}>
+          {" "}
+          <div
+            className="p-2 hover:bg-muted cursor-pointer text-sm"
+            aria-disabled
+          >
+            <Dialog>
+              <DialogTrigger className="flex items-center gap-2">
+                <AppointmentStatusComponent
+                  statuts={appointment.canceled ? "pending" : "canceled"}
+                />
+                <span>{appointment.canceled ? "Reactivar" : "Cancelar"}</span>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>
+                    {" "}
+                    {appointment.canceled
+                      ? "Reactivación del turno"
+                      : "Cancelación del turno"}
+                  </DialogTitle>
+                  <DialogDescription>
+                    Esta acción volverá a activar el turno.
+                  </DialogDescription>
+                  <DialogDescription>
+                    El cliente recibirá un mail notificándole que su turno fue
+                    reactivado. Por favor, coordine esta acción con el mismo.
+                  </DialogDescription>
+                </DialogHeader>
 
-              <Button
-                onClick={handleCancelAppointment}
-                isLoading={loading}
-                variant={appointment.canceled ? "default" : "destructive"}
-              >
-                Confirmar
-              </Button>
-            </DialogContent>
-          </Dialog>
-        </div>
+                <Button
+                  onClick={handleCancelAppointment}
+                  isLoading={loading}
+                  variant={appointment.canceled ? "default" : "destructive"}
+                >
+                  Confirmar
+                </Button>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </AuthorizationWrapper>
+
         <div className="p-2 hover:bg-muted cursor-pointer text-sm">
           <ContactButton phoneNumber={appointment.phone} />
         </div>

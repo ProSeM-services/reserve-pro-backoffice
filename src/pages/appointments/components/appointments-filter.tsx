@@ -12,6 +12,8 @@ import {
 import { FilterIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
+import { Permission } from "@/lib/constants/permissions";
 
 function Filters() {
   const dispatch = useAppDispatch();
@@ -20,9 +22,11 @@ function Filters() {
       <div className="w-[300px] max-md:w-full">
         <MemberSelector />
       </div>
-      <div className="w-[300px] max-md:w-full">
-        <CompanySelector />
-      </div>
+      <AuthorizationWrapper permission={Permission.VIEW_COMPANY}>
+        <div className="w-[300px] max-md:w-full">
+          <CompanySelector />
+        </div>
+      </AuthorizationWrapper>
 
       <Tabs defaultValue="all">
         <TabsList>

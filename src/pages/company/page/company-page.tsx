@@ -15,7 +15,7 @@ import { CompanyTable } from "../components/table/company-table";
 type PageOptions = "list" | "table";
 export function CompanyPage() {
   const { companies } = useAppSelector((s) => s.company);
-  const [pageOption, setPageOption] = useState<PageOptions>("table");
+  const [pageOption, setPageOption] = useState<PageOptions>("list");
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (companies.length > 1) return;
