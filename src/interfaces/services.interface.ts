@@ -14,6 +14,7 @@ export const ServiceZodSchema = z.object({
   description: z.string().optional(),
   price: z.number(),
   duration: z.number(),
+  images: z.array(z.string()).default([]).nullable(),
   provision: z.enum(PROVISION_VALUES),
   Users: z.array(MemberZodSchema),
   companyId: z.string().optional(),

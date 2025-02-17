@@ -1,11 +1,11 @@
 import {
-  CreateServiceZodSchema,
-  ICreateService,
+  IUpdateService,
   Provision,
   PROVISION_VALUES,
+  UpdateServiceZodSchema,
 } from "@/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -21,24 +21,44 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { useAppSelector } from "@/store/hooks";
+import { Paperclip, TrashIcon } from "lucide-react";
+import { FilesServices } from "@/services/files.services";
 
 export function EditServicesForm() {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File[]>([]);
   const { asideService } = useAppSelector((s) => s.service);
+  const [preview, setPreview] = useState<{ name: string; src: string }[]>([]);
+
+  const originalImages = asideService?.images ? asideService.images : [];
+
   const { toast } = useToast();
   const { editService } = useCreatingFetch();
   const [loading, setLoading] = useState(false);
   const [selectedProvision, setSelectedProvision] =
     useState<Provision>("Presencial");
-  const form = useForm<ICreateService>({
-    resolver: zodResolver(CreateServiceZodSchema),
+  const form = useForm<IUpdateService>({
+    resolver: zodResolver(UpdateServiceZodSchema),
     mode: "onChange",
-    defaultValues: asideService,
+    defaultValues: {
+      ...asideService,
+      images: asideService?.images ? asideService?.images : [],
+    },
   });
-  const onSubmit = async (values: ICreateService) => {
+
+  const onSubmit = async (values: IUpdateService) => {
     if (!asideService) return;
     try {
       setLoading(true);
-      await editService(asideService.id, values);
+      let data = values;
+      if (file.length > 0) {
+        const allImagesToAdd = file.map((value) => FilesServices.upload(value));
+        const response = await Promise.all(allImagesToAdd);
+        console.log("RESPONSE OF IMAGES LOADED: ", response);
+        data = { ...values, images: response.map((re) => re.url) };
+      }
+
+      await editService(asideService.id, data);
       toast({
         title: "Servicio Actualizado!",
         description: `El servicio ${values.title} fue actualizado.`,
@@ -52,6 +72,12 @@ export function EditServicesForm() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
     }
   };
 
@@ -71,6 +97,24 @@ export function EditServicesForm() {
     form.setValue("duration", duration);
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0] || null;
+    if (!selectedFile) return;
+    setFile((s) => [...s, selectedFile]);
+    const fileReader = new FileReader();
+    fileReader.onload = () =>
+      setPreview((s) => [
+        ...s,
+        { src: fileReader.result as string, name: selectedFile.name },
+      ]);
+    fileReader.readAsDataURL(selectedFile); // Convierte la imagen a Base64 para previsualización
+  };
+
+  const handleDeleteImages = (value: string) => {
+    console.log({ value, file });
+    setFile((s) => s.filter((f) => f.name !== value));
+    setPreview((s) => s.filter((f) => f.name !== value));
+  };
   return (
     <Form {...form}>
       <form
@@ -182,6 +226,75 @@ export function EditServicesForm() {
               </FormItem>
             )}
           />
+
+          <div>
+            <FormLabel>Imágenes</FormLabel>
+            <FormDescription className="text-sm">
+              Agrega imagenes del servicio ofrecido para que el cliente pueda
+              tener una referencia visual sobre el misno.
+            </FormDescription>
+            <div className="flex">
+              {originalImages.length > 0 && (
+                <div className="flex gap-2 items-center">
+                  {originalImages.map((src) => (
+                    <div className="relative">
+                      <img
+                        src={src}
+                        alt="algo"
+                        className="size-32 object-cover"
+                      />
+                      <Button
+                        className="size-6 p-0 aspect-square absolute top-2 right-2"
+                        variant={"destructive"}
+                        type="button"
+                        // onClick={() => handleDeleteImages(src)}
+                      >
+                        <TrashIcon className="size-4 as" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {preview.length > 0 && (
+                <div className="flex gap-2 items-center">
+                  {preview.map(({ name, src }) => (
+                    <div className="relative">
+                      <img
+                        src={src}
+                        alt="algo"
+                        className="size-32 object-cover"
+                      />
+                      <Button
+                        className="size-6 p-0 aspect-square absolute top-2 right-2"
+                        variant={"secondary"}
+                        type="button"
+                        onClick={() => handleDeleteImages(name)}
+                      >
+                        <TrashIcon className="size-4 as" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Button
+              onClick={handleButtonClick}
+              variant={"ghost"}
+              type="button"
+              className="space-x-2"
+              disabled={originalImages.length + preview.length === 3}
+            >
+              <span>Agregar Imagen</span>
+              <Paperclip className="size-4 text-primary" />
+            </Button>
+            <Input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+          </div>
         </section>
 
         <section className="absolute bottom-0 right-0 p-2 w-full">
@@ -192,7 +305,7 @@ export function EditServicesForm() {
               isLoading={loading}
               disabled={loading}
             >
-              Crear
+              Actualizar
             </Button>
           </div>
         </section>
