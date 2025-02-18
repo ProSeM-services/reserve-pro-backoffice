@@ -19,6 +19,7 @@ import { ServicesPage } from "@/pages/services/page/services-page";
 import { SetHoursPage } from "@/pages/set-hours/pages/set-hours-page";
 import { Route, Routes } from "react-router";
 import { ContentWrapper } from "../components/content-wrapper";
+import { CalendarPage } from "@/pages/calendar/page/calendar-page";
 
 export default function MainPage() {
   return (
@@ -98,6 +99,16 @@ export default function MainPage() {
                         permission={Permission.VIEW_WORKHOURS}
                       >
                         <SetHoursPage />
+                      </RouteAuthorizationWrapper>
+                    }
+                  />
+                  <Route
+                    path="/calendar"
+                    element={
+                      <RouteAuthorizationWrapper
+                        permission={Permission.VIEW_APPOINTMENTS}
+                      >
+                        <CalendarPage />
                       </RouteAuthorizationWrapper>
                     }
                   />

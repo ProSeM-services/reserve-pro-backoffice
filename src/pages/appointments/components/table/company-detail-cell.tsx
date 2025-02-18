@@ -17,9 +17,6 @@ export default function CompanyDetailCell({
       <HomeIcon className="size-6" />
       <div className="flex flex-col">
         <Label>{company.name}</Label>
-        <span className="text-xs text-gray-600  truncate rounded-sm  max-md:w-40  w-40 text-left">
-          {company.address.value}
-        </span>
       </div>
     </div>
   );

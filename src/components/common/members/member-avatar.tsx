@@ -27,7 +27,7 @@ export function MemberAvatar({
         alt={`image ${member.name}'s profile`}
         className="object-cover aspect-square"
       />
-      <AvatarFallback className="rounded-lg uppercase">
+      <AvatarFallback className="rounded-lg uppercase bg-primary text-white">
         {member.name[0]}
         {member.lastName[0]}
       </AvatarFallback>
