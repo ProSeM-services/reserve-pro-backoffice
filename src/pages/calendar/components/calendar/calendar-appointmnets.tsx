@@ -92,7 +92,7 @@ export function CalendarAppointments({
                 <div>{data.labelDay}</div>
                 <div>{data.dd_mm}</div>
               </header>
-              <section className="flex flex-col gap-2 p-1 relative border-t border-l border-gray-200 bg-gray-100 h-[90%]">
+              <section className="flex flex-col gap-2 p-1 relative border-t border-l border-gray-200 bg-gray-50 h-[90%] overflow-auto">
                 {data.appointments.map((appointment) => (
                   <AppointmnetCard
                     appointment={appointment}

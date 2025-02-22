@@ -18,7 +18,7 @@ export function MemberAvatar({
       : size === "sm"
       ? "size-10 max-md:size-10"
       : size === "xs"
-      ? "size-8 max-md:size-8 rounded-full"
+      ? "size-6 max-md:size-8 rounded-full"
       : "";
   return (
     <Avatar className={`rounded-lg ${sizeValue}   ${className}`}>
