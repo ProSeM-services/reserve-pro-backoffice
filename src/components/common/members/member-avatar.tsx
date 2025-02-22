@@ -18,7 +18,7 @@ export function MemberAvatar({
       : size === "sm"
       ? "size-10 max-md:size-10"
       : size === "xs"
-      ? "size-8 max-md:size-8 rounded-full"
+      ? "size-6 max-md:size-8 rounded-full"
       : "";
   return (
     <Avatar className={`rounded-lg ${sizeValue}   ${className}`}>
@@ -27,7 +27,7 @@ export function MemberAvatar({
         alt={`image ${member.name}'s profile`}
         className="object-cover aspect-square"
       />
-      <AvatarFallback className="rounded-lg uppercase">
+      <AvatarFallback className="rounded-lg uppercase bg-primary text-white">
         {member.name[0]}
         {member.lastName[0]}
       </AvatarFallback>

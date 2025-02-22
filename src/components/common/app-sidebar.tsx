@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/sidebar";
 import { Permission } from "@/lib/constants/permissions";
 
-// This is sample data.
 const data = {
   user: {
     name: "shadcn",
@@ -68,6 +67,11 @@ const data = {
           title: "Clientes",
           url: "/customers",
           permission: Permission.VIEW_CUSTOMERS,
+        },
+        {
+          title: "Calendario",
+          url: "/calendar",
+          permission: Permission.VIEW_APPOINTMENTS,
         },
       ],
     },
