@@ -28,12 +28,12 @@ import {
 import { setMainFetched } from "@/store/feature/main/mainSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSession } from "@/store/feature/session/sessionSlice";
-import { AuthServices } from "@/services/auth.services";
 import { memberListAdpater } from "@/adapters/members.adapter";
 import { appointmentListAdpater } from "@/adapters/appointments.adpater";
 import { customersListAdpater } from "@/adapters/customers.adapter";
 import { IAPICustomer } from "@/interfaces/api/customer.interface";
 import { IMember } from "@/interfaces/member.iterface";
+import { UserZod } from "@/interfaces";
 
 export default function useFetchData() {
   const storageMember = localStorage.getItem("userLogged");
@@ -158,16 +158,8 @@ export default function useFetchData() {
       dispatch(toggleAppointmentsLoading(false));
     }
   };
-  const fetchMemberLogged = async () => {
-    try {
-      dispatch(toggleMembersLoading(true));
-      const member = await AuthServices.me();
-      dispatch(setSession(member));
-    } catch (error) {
-      console.log("Error fetching Member logged", error);
-    } finally {
-      dispatch(toggleMembersLoading(false));
-    }
+  const fetchMemberLogged = (member: UserZod) => {
+    dispatch(setSession(member));
   };
   const { inmutablesCompanies } = useAppSelector((s) => s.company);
   const { inmutableMembers } = useAppSelector((s) => s.member);

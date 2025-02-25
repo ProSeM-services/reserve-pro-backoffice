@@ -9,6 +9,7 @@ export const UserZodSchema = z.object({
   role: z.enum(ROLES_VALUES),
   image: z.string().optional(),
   tenantName: z.string().optional(),
+  membership_status: z.boolean().optional(),
   companyName: z.string().optional(),
   permissions: z
     .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })

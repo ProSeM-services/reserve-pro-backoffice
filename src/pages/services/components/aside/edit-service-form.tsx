@@ -54,7 +54,7 @@ export function EditServicesForm() {
       if (file.length > 0) {
         const allImagesToAdd = file.map((value) => FilesServices.upload(value));
         const response = await Promise.all(allImagesToAdd);
-        console.log("RESPONSE OF IMAGES LOADED: ", response);
+        setPreview([]);
         data = { ...values, images: response.map((re) => re.url) };
       }
 
