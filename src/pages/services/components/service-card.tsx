@@ -47,7 +47,7 @@ export const ServiceCard = ({
         )}
       </p>
 
-      {showMembers && (
+      {showMembers && service.Users && (
         <div className="flex">
           {service.Users.map((user) => (
             <div

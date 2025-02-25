@@ -11,7 +11,6 @@ export default function DataProvider({ children }: PropsWithChildren) {
     fetchServices,
     fetchAppointments,
     setMainLoaderStatus,
-    fetchMemberLogged,
     setCrossCompanyData,
   } = useFetchData();
 
@@ -22,7 +21,6 @@ export default function DataProvider({ children }: PropsWithChildren) {
   const { fetched: mainFetched, crossCompanyId } = useAppSelector(
     (s) => s.main
   );
-  const { fetched: sessionFetched, session } = useAppSelector((s) => s.session);
 
   const { fetched: appointmentsFetched } = useAppSelector(
     (s) => s.appointments
@@ -40,7 +38,6 @@ export default function DataProvider({ children }: PropsWithChildren) {
         !customerFetched && (await fetchCustomers());
         !servicesFetched && (await fetchServices());
         !appointmentsFetched && (await fetchAppointments());
-        !sessionFetched && !session && (await fetchMemberLogged());
       } catch (error) {
         console.log("error fetching data", error);
       } finally {

@@ -26,7 +26,13 @@ export function LoginForm() {
         user: values.user,
         password: values.password,
       });
-
+      if (res.user && !res.user.membership_status) {
+        toast({
+          title: "Cuenta inactiva",
+          variant: "destructive",
+        });
+        return;
+      }
       await setAuthInterceptor(res.backendTokens.accessToken);
 
       dispatch(setSession(res.user));
