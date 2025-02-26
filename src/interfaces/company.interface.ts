@@ -39,7 +39,7 @@ export const CreateCompanyZodSchema = z.object({
 });
 
 export type ICompany = z.infer<typeof CompanyZodSchema>;
-export const CompanyEditSchema = CompanyZodSchema.optional();
+export const CompanyEditSchema = CompanyZodSchema.omit({id: true}).partial(); //deleter optional and add omit and partial
 export type IEditCompany = z.infer<typeof CompanyEditSchema>;
 
 export type ICreateCompany = z.infer<typeof CreateCompanyZodSchema>;

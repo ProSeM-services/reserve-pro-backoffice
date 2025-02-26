@@ -14,10 +14,13 @@ import { useAppSelector } from "@/store/hooks";
 import { PaymentCard } from "@/components/common/payment-card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { AddImageCompany } from "../components/add-image-company";
 export function CompanyDetailPage() {
   const { selectedCompany, companies } = useAppSelector((s) => s.company);
   const company = companies.find((comp) => comp.id === selectedCompany);
   if (!company) return;
+  const images = typeof company.image === "string" ? [company.image] : company.image ?? [];
+
   return (
     <div className="flex flex-col gap-4 md:flex-grow relative p-4  max-md:max-w-full ">
       <div className="flex max-md:flex-col  gap-2 md:items-center justify-between  ">
@@ -109,6 +112,21 @@ export function CompanyDetailPage() {
           </div>
         )}
       </section>
+
+      {/* ---------------------------- IMAGES SECTION ---------------------------- */}
+      <section className="">
+        <div className="flex  justify-between p-2">
+          <div className="font-semibold">
+            <Label>Imagenes</Label>
+            <span className="text-gray-400 text-sm">
+              {" "}
+              ({images.length}){" "}
+            </span>
+          </div>
+        </div>
+        <AddImageCompany company={company} key={company.id} />
+      </section>
+
     </div>
   );
 }
