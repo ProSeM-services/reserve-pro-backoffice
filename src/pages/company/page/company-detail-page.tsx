@@ -19,7 +19,6 @@ export function CompanyDetailPage() {
   const { selectedCompany, companies } = useAppSelector((s) => s.company);
   const company = companies.find((comp) => comp.id === selectedCompany);
   if (!company) return;
-  const images = typeof company.image === "string" ? [company.image] : company.image ?? [];
 
   return (
     <div className="flex flex-col gap-4 md:flex-grow relative p-4  max-md:max-w-full ">
@@ -117,11 +116,7 @@ export function CompanyDetailPage() {
       <section className="">
         <div className="flex  justify-between p-2">
           <div className="font-semibold">
-            <Label>Imagenes</Label>
-            <span className="text-gray-400 text-sm">
-              {" "}
-              ({images.length}){" "}
-            </span>
+            <Label>Imagen Principal</Label>
           </div>
         </div>
         <AddImageCompany company={company} key={company.id} />

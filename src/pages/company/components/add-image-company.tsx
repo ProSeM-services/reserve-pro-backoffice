@@ -48,29 +48,6 @@ export function AddImageCompany({ company }: { company: ICompany }) {
         reader.onload = () => setPreview(reader.result as string);
     };
 
-    // const handleDeleteImage = async (index: number) => {
-
-    //     const imageToDelete = preview[index]; //? Para eliminar imagen
-
-    //     // Realizar la eliminación en AWS (asegúrate de implementar esta función en tu servicio)
-    //     try {
-    // // await FilesServices.upload(imageToDelete);   //?Aca esta la solucion para eliminar la imagen!!!!!!
-    //         toast({
-    //             title: "Imagen eliminada!",
-    //             variant: "success",
-    //         });
-    //     } catch (error) {
-    //         toast({
-    //             title: "Error al eliminar la imagen del servidor",
-    //             variant: "destructive",
-    //         });
-    //         return; // Opcional: podrías decidir no eliminar la imagen del estado local si falla la eliminación remota
-    //     }
-
-    //     setPreview((prev) => prev.filter((_, i) => i !== index));  //? Para eliminar la foto
-    //     Si la imagen a eliminar proviene de los archivos recién seleccionados, también la removemos del estado files.
-    //     setFiles((prev) => prev.filter((_, i) => i !== index));  //? Para eliminar la foto
-    // };
 
     const handleButtonClick = () => {
         fileInputRef.current?.click();
@@ -111,21 +88,6 @@ export function AddImageCompany({ company }: { company: ICompany }) {
             className=" space-y-4  overflow-auto max-h-[80vh]   "
         >
 
-            {/* <div className="flex flex-wrap gap-2">
-                {preview.map((img, index) => (
-                    img && (
-                        <div key={index}>
-                            <button
-                                type="button"
-                                onClick={() => handleDeleteImage(index)}
-                                className="absolute bg-red-600 rounded-md p-1"
-                            >
-                                <Trash className="w-4 h-4 text-white" />
-                            </button>
-                            <img src={img} alt={`${index + 1}`} className="w-32 h-32 rounded-lg object-cover border" />
-                        </div>
-                    )))}
-            </div> */}
             {preview && (
                 <div className="relative">
                     <button
