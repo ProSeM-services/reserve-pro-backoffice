@@ -74,4 +74,9 @@ export class ServicesServices {
 
     return res.data;
   }
+  static async deleteService(serviceId: string){
+    const res = await axiosInstance.delete(
+      `${BASE_URL}/services/${serviceId}`);
+    return res.data
+  }
 }
