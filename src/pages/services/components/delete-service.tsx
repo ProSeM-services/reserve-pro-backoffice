@@ -3,18 +3,13 @@ import { TrashIcon } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import useDeletingFetch from "@/hooks/useDeletingFetch";
-import { useNavigate } from "react-router";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { removeService } from "@/store/feature/services/servicesSlice";
 
 
 export function DeleteService({ service }: { service: IService }) {
     const [deleting, setDeleting] = useState(false);
     const { toast } = useToast();
-    const dispatch = useDispatch();
-    const router = useNavigate();
     const { deleteService } = useDeletingFetch();
 
     const handleDelete = async () => {
@@ -37,13 +32,11 @@ export function DeleteService({ service }: { service: IService }) {
                 return
             }
             await deleteService(service.id);
-            dispatch(removeService(service.id));
 
             toast({
                 title: "Servicio eliminado!",
                 description: `El servicio "${service.title}" ha sido eliminado correctamente.`
             });
-            router("/services");
         } catch (error) {
             console.log("errrer", error);
             toast({

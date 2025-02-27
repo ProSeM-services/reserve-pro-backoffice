@@ -1,6 +1,7 @@
 import { CompanyServices } from "@/services/company.services";
 import { ServicesServices } from "@/services/services.services";
 import { removeCompany } from "@/store/feature/company/companySlice";
+import { removeService } from "@/store/feature/services/servicesSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 export default function useDeletingFetch() {
@@ -19,7 +20,7 @@ export default function useDeletingFetch() {
   const deleteService = async (id: string) => {
     try {
       await ServicesServices.deleteService(id);
-      console.log(`Service ${id} deleted successfully`);
+      dispatch(removeService(id));
     } catch (error) {
       console.log("Error deleting Service", error);
       throw error;
