@@ -103,6 +103,10 @@ export const serviceSlice = createSlice({
         };
       }
     },
+    removeService: (state, action: PayloadAction<string>) => {
+      state.services = state.services.filter((service) => service.id !== action.payload);
+      state.inmutableServices = state.inmutableServices.filter((service) => service.id !== action.payload);
+    },
   },
 });
 
@@ -115,6 +119,7 @@ export const {
   setAside,
   closeAside,
   updateService,
+  removeService,
 } = serviceSlice.actions;
 
 export default serviceSlice.reducer;

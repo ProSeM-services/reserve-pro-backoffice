@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAppDispatch } from "@/store/hooks";
 import { setAside } from "@/store/feature/services/servicesSlice";
+import { DeleteService } from "./delete-service";
 
 export function ServiceCardDropDown({ service }: { service: IService }) {
   const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ export function ServiceCardDropDown({ service }: { service: IService }) {
         >
           Editar
         </DropdownMenuItem>
+        <DeleteService service={service} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
