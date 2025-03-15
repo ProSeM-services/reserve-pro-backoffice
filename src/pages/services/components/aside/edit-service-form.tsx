@@ -55,7 +55,7 @@ export function EditServicesForm() {
         const allImagesToAdd = file.map((value) => FilesServices.upload(value));
         const response = await Promise.all(allImagesToAdd);
         setPreview([]);
-        data = { ...values, images: response.map((re) => re.url) };
+        data = { ...values, images: response.map((re) => re.fileName) };
       }
 
       await editService(asideService.id, data);

@@ -1,17 +1,23 @@
 import useFetchData from "@/hooks/useFetchData";
 import { AuthServices } from "@/services/auth.services";
-import { Fragment, PropsWithChildren, useEffect } from "react";
+import { Fragment, PropsWithChildren, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 export function SessionProvider({ children }: PropsWithChildren) {
   const nav = useNavigate();
   const { fetchMemberLogged } = useFetchData();
+
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const validateSession = async () => {
       try {
+        setLoading(true);
         const res = await AuthServices.me();
+        console.log(res);
         fetchMemberLogged(res);
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         localStorage.clear();
         nav("/login");
       }
@@ -19,5 +25,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
     validateSession();
   }, []);
+
+  if (loading) return null;
+
   return <Fragment>{children}</Fragment>;
 }

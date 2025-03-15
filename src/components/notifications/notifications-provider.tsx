@@ -20,7 +20,6 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
     });
 
     socket.on("nuevo-turno", (turno: IAppointment) => {
-      console.log("NUEVO TURNO!!");
       const User = members.find((member) => member.id === turno.UserId);
       if (User) {
         dispatch(addAppointment(appointmentAdapter({ ...turno, User })));
@@ -32,9 +31,9 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
       });
     });
 
-    // return () => {
-    //   socket.disconnect();
-    // };
+    return () => {
+      socket.disconnect();
+    };
   }, []);
   return <>{children}</>;
 }

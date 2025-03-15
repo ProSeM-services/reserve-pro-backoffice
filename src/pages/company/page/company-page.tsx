@@ -12,13 +12,14 @@ import { Label } from "@/components/ui/label";
 import { Table2, TableOfContents } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompanyTable } from "../components/table/company-table";
+import { EmptyList } from "@/components/common/emty-list";
 type PageOptions = "list" | "table";
 export function CompanyPage() {
   const { companies } = useAppSelector((s) => s.company);
   const [pageOption, setPageOption] = useState<PageOptions>("list");
   const dispatch = useAppDispatch();
   useEffect(() => {
-    if (companies.length > 1) return;
+    if (companies.length < 1) return;
 
     dispatch(setSelectedCompany(companies[0].id));
   }, [companies]);
@@ -29,7 +30,7 @@ export function CompanyPage() {
   };
   return (
     <>
-      <div className="flex flex-col   size-full space-y-4">
+      <div className="flex flex-col    size-full space-y-4">
         <section className=" flex items-end  justify-between">
           <h2 className="text-xl font-semibold">Sucursales</h2>
 
@@ -43,28 +44,36 @@ export function CompanyPage() {
           </div>
         </section>
         <Separator />
-        {pageOption === "list" ? (
+        {companies.length === 0 ? (
+          <div className=" h-full flex items-center justify-center">
+            <EmptyList type="company" />
+          </div>
+        ) : (
           <>
-            {companies.length > 1 ? (
-              <section className="flex max-lg:flex-col gap-2  h-[90%]">
-                <div className=" space-y-2  w-1/4 max-lg:w-full  lg:h-full ">
-                  <CompanyLinks />
-                </div>
-                <div className="flex flex-col gap-3 flex-grow overflow-auto max-h-full lg:max-w-[75%]  bg-background rounded-md md:p-6 border border-border">
-                  <Routes>
-                    <Route path="/" element={<EmptyCompanyDetailPage />} />
-                    <Route path="/:id" element={<CompanyDetailPage />} />
-                  </Routes>
-                </div>
-              </section>
+            {pageOption === "list" ? (
+              <>
+                {companies.length > 1 ? (
+                  <section className="flex max-lg:flex-col gap-2  h-[90%]">
+                    <div className=" space-y-2  w-1/4 max-lg:w-full  lg:h-full ">
+                      <CompanyLinks />
+                    </div>
+                    <div className="flex flex-col gap-3 flex-grow overflow-auto max-h-full lg:max-w-[75%]  bg-background rounded-md md:p-6 border border-border">
+                      <Routes>
+                        <Route path="/" element={<EmptyCompanyDetailPage />} />
+                        <Route path="/:id" element={<CompanyDetailPage />} />
+                      </Routes>
+                    </div>
+                  </section>
+                ) : (
+                  <section className="flex max-lg:flex-col gap-2  h-[90%]">
+                    <CompanyDetailPage />
+                  </section>
+                )}
+              </>
             ) : (
-              <section className="flex max-lg:flex-col gap-2  h-[90%]">
-                <CompanyDetailPage />
-              </section>
+              <CompanyTable />
             )}
           </>
-        ) : (
-          <CompanyTable />
         )}
       </div>
     </>

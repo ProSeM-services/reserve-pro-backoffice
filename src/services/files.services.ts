@@ -11,7 +11,7 @@ interface IUploadImageAPIResponse {
   };
   ETag: string;
   ServerSideEncryption: string;
-  url: string;
+  fileName: string;
 }
 export class FilesServices {
   static async upload(data: File): Promise<IUploadImageAPIResponse> {
@@ -21,6 +21,13 @@ export class FilesServices {
       headers: {
         "Content-Type": "multipart/form-data",
       },
+    });
+
+    return response.data;
+  }
+  static async detele(fileName: string) {
+    const response = await axios.post(`${BASE_URL}/upload/delete`, {
+      fileName,
     });
 
     return response.data;
