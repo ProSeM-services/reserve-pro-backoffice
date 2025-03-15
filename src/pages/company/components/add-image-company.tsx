@@ -4,6 +4,7 @@ import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import useFetchData from "@/hooks/useFetchData";
 import { CompanyEditSchema, ICompany, IEditCompany } from "@/interfaces";
+import { getS3Url } from "@/lib/utils/s3-image";
 import { FilesServices } from "@/services/files.services";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Paperclip, Trash } from "lucide-react";
@@ -14,7 +15,7 @@ export function AddImageCompany({ company }: { company: ICompany }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
-    typeof company.image === "string" ? company.image : null
+    typeof company.image === "string" ? getS3Url(company.image) : null
   );
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
