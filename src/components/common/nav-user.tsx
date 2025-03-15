@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import useSession from "@/hooks/useSession";
 import { LogOutButton } from "./log-out-button";
+import { getS3Url } from "@/lib/utils/s3-image";
 
 export function NavUser({
   user,
@@ -51,7 +52,7 @@ export function NavUser({
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={image ? image : user.avatar}
+                  src={image ? getS3Url(image) : user.avatar}
                   alt={`image ${name}'s profile`}
                   className="aspect-square object-cover"
                 />

@@ -38,7 +38,7 @@ export function ConfrimationResponse({ result }: ConfrimationResponseProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-md">
-        <div className=" items-center text-center flex flex-col gap-4">
+        <div className=" flex flex-col  items-center text-center gap-4">
           <CheckCircle className="h-16 w-16 text-green-500" />
           <h1 className="text-2xl font-semibold text-gray-800">
             ¡Correo confirmado!

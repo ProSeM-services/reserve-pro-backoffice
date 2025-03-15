@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { IMember } from "@/interfaces/member.iterface";
+import { getS3Url } from "@/lib/utils/s3-image";
 
 export function MemberAvatar({
   member,
@@ -20,10 +21,11 @@ export function MemberAvatar({
       : size === "xs"
       ? "size-6 max-md:size-8 rounded-full"
       : "";
+
   return (
     <Avatar className={`rounded-lg ${sizeValue}   ${className}`}>
       <AvatarImage
-        src={member.image ? member.image : ""}
+        src={member.image ? getS3Url(member.image) : ""}
         alt={`image ${member.name}'s profile`}
         className="object-cover aspect-square"
       />

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User2Icon, KeyIcon, Mail, HouseIcon } from "lucide-react";
+import { User2Icon, KeyIcon, Mail, HouseIcon, MailCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -18,14 +18,7 @@ import {
 } from "@/interfaces/member.iterface";
 import { AuthServices } from "@/services/auth.services";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import { useNavigate } from "react-router";
 const EMPTY_TENANT_DATA: ICreateTentant = {
   email: "",
@@ -237,15 +230,19 @@ export function RegisterForm() {
       </Form>
       <Dialog open={open} onOpenChange={() => handleCloseDialog(!open)}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar tu mail</DialogTitle>
-            <DialogDescription>
-              Hemos enviado un correo electrónico a la dirección proporcionada.
-              Por favor, revisa tu bandeja de entrada y haz clic en el enlace de
-              confirmación para activar tu cuenta.
-            </DialogDescription>
-          </DialogHeader>
-          {/* Agrega un botón aquí para reenviar el correo si es necesario */}
+          <div className="w-full max-w-md rounded-lg bg-white p-6 ">
+            <div className=" flex flex-col  items-center text-center gap-4">
+              <MailCheck className="h-16 w-16 text-green-500" />
+              <h1 className="text-2xl font-semibold text-gray-800">
+                Confirmar tu mail
+              </h1>
+              <p className="text-sm text-gray-600">
+                Hemos enviado un correo electrónico a la dirección
+                proporcionada. Por favor, revisa tu bandeja de entrada y haz
+                clic en el enlace de confirmación para activar tu cuenta.
+              </p>
+            </div>
+          </div>
           <DialogClose onClick={() => setOpen(false)}></DialogClose>
         </DialogContent>
       </Dialog>

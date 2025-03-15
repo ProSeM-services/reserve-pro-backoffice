@@ -56,6 +56,7 @@ export const CreateMemberZodSchema = ZodTenantSchema.omit({
 });
 export const EditMemberZodSchema = MemberZodSchema.omit({
   password: true,
+  CompanyId: true,
 })
   .partial()
   .extend({
