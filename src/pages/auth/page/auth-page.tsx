@@ -1,7 +1,8 @@
 import { Link } from "react-router";
 import { LoginForm, RegisterForm } from "../components";
 import { BackgroundMark } from "@/components/common/BackgroundMark";
-type PageType = "login" | "register";
+import { ResetPassword } from "@/pages/reset-passowd/components/reset-password";
+type PageType = "login" | "register" | "reset-password";
 interface AuthPageProps {
   type: PageType;
 }
@@ -27,6 +28,13 @@ const Config: Record<PageType, IConfigBody> = {
     oppositeLink: "Iniciar Sesión",
     oppositeRoute: "/login",
   },
+  "reset-password": {
+    title: "Recuperar contraseña",
+    description: "Ingresar tu inforamción para crear una cuenta en ReservePro",
+    footerMessage: "Ya tenés cuenta?",
+    oppositeLink: "Iniciar Sesión",
+    oppositeRoute: "/login",
+  },
 };
 export function AuthPage({ type }: AuthPageProps) {
   const { footerMessage, oppositeLink, oppositeRoute } = Config[type];
@@ -35,25 +43,25 @@ export function AuthPage({ type }: AuthPageProps) {
       <div className="    -z-0 ">
         <BackgroundMark />
       </div>
-      <div className="flex items-center justify-center   h-full ">
-        <div className=" flex w-full h-full items-center     max-md:w-5/6  gap-6 z-10 ">
-          <div className=" h-full w-1/2 flex items-center  justify-center">
-            <img
-              src="/images/reserve-pro-high-resolution-logo-transparent.png"
-              className="w-[250px] object-cover"
-            />
-          </div>
-          <div className="flex flex-col justify-center gap-2 text-xs py-2 flex-grow bg  h-full ">
-            <div className="  w-5/6 max-w-[550px] mx-auto  ">
-              {type === "login" ? <LoginForm /> : <RegisterForm />}
-            </div>
+      <div className=" flex flex-col items-center justify-center gap-8  h-full max-w-sm mx-auto ">
+        <div className="  w-full max-w-sm flex justify-center items-center ">
+          <img
+            src="/images/reserve-pro-high-resolution-logo-transparent.png"
+            className="w-[250px] object-cover"
+          />
+        </div>
 
-            <div className=" text-center text-sm flex gap-3 items-center   justify-center">
-              <p>{footerMessage}</p>
-              <Link to={oppositeRoute} className="underline">
-                {oppositeLink}
-              </Link>
-            </div>
+        <div className="flex flex-col w-full gap-4 z-10">
+          <div className=" w-full  z-10 ">
+            {type === "login" && <LoginForm />}
+            {type === "register" && <RegisterForm />}
+            {type === "reset-password" && <ResetPassword />}
+          </div>
+          <div className=" text-center text-sm flex gap-3 items-center   justify-center">
+            <p>{footerMessage}</p>
+            <Link to={oppositeRoute} className="underline">
+              {oppositeLink}
+            </Link>
           </div>
         </div>
       </div>

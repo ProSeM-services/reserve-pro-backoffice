@@ -21,6 +21,10 @@ function App() {
         <Route path="/login" element={<AuthPage type="login" />} />
         <Route path="/register" element={<AuthPage type="register" />} />
         <Route path="/confirmation" element={<ConfrimationPage />} />
+        <Route
+          path="/reset-password"
+          element={<AuthPage type="reset-password" />}
+        />
       </Routes>
     </main>
   );

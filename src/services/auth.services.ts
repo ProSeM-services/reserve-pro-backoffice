@@ -20,8 +20,24 @@ export class AuthServices {
 
     return response.data;
   }
+  static async getUserByToken(data: { token: string }): Promise<ITentant> {
+    const response = await axios.post(
+      `${BASE_URL}/auth/get-user-by-token`,
+      data
+    );
+
+    return response.data;
+  }
   static async me(): Promise<UserZod> {
     const response = await axiosInstance.post(`${BASE_URL}/auth/me`);
+
+    return response.data;
+  }
+  static async resetPasswordEmail(email: string) {
+    const response = await axiosInstance.post(
+      `${BASE_URL}/auth/reset-password`,
+      { email }
+    );
 
     return response.data;
   }
