@@ -24,7 +24,6 @@ import {
   TrashIcon,
   XIcon,
 } from "lucide-react";
-import useFetchData from "@/hooks/useFetchData";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { useToast } from "@/components/ui/use-toast";
 import { FilesServices } from "@/services/files.services";
@@ -50,7 +49,6 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
   );
   const { toast } = useToast();
   const { editMember } = useCreatingFetch();
-  const { fetchMembers } = useFetchData();
   const [loading, setLoading] = useState(false);
   const [deletingImage, setDeletingImage] = useState(false);
   const [open, setOpen] = useState(false);
@@ -85,7 +83,6 @@ export function MemberAsideDetails({ member }: { member: IMember }) {
         description: `Se actualizaron los datos de ${values.name} ${values.lastName}  `,
         variant: "default",
       });
-      form.reset();
     } catch (error) {
       toast({
         title: "Error al editar un miembro!",

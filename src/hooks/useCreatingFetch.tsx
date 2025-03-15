@@ -17,10 +17,7 @@ import {
   removeCompany,
   updateCompany,
 } from "@/store/feature/company/companySlice";
-import {
-  addMember,
-  setMemberUpdated,
-} from "@/store/feature/members/membersSlice";
+import { addMember, updateMember } from "@/store/feature/members/membersSlice";
 import {
   addService,
   updateService,
@@ -87,14 +84,11 @@ export default function useCreatingFetch() {
 
   const editMember = async (id: string, data: Partial<IMember>) => {
     try {
-      //   dispatch(toggleMembersLoading(true));
       await MemberServices.update(id, data);
-      dispatch(setMemberUpdated(true));
+      dispatch(updateMember({ id, changes: data }));
     } catch (error) {
       console.log("Error creating Member", error);
       throw error;
-    } finally {
-      //   dispatch(toggleMembersLoading(false));
     }
   };
   const createService = async (data: ICreateService) => {

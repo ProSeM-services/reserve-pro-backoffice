@@ -46,6 +46,31 @@ export const memberSlice = createSlice({
     setMemberUpdated: (state, action: PayloadAction<boolean>) => {
       state.updated = action.payload;
     },
+    updateMember: (
+      state,
+      action: PayloadAction<{ id: string; changes: Partial<IMember> }>
+    ) => {
+      const { id, changes } = action.payload;
+
+      const index = state.members.findIndex((m) => m.id === id);
+
+      if (index !== -1) {
+        state.members[index] = {
+          ...state.members[index],
+          ...changes,
+        };
+
+        const immutableIndex = state.inmutableMembers.findIndex(
+          (m) => m.id === id
+        );
+        if (immutableIndex !== -1) {
+          state.inmutableMembers[immutableIndex] = {
+            ...state.inmutableMembers[immutableIndex],
+            ...changes,
+          };
+        }
+      }
+    },
   },
 });
 
@@ -56,6 +81,7 @@ export const {
   toggleMembersLoading,
   setMemberLogged,
   setMemberUpdated,
+  updateMember,
 } = memberSlice.actions;
 
 export default memberSlice.reducer;
