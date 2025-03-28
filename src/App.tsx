@@ -4,10 +4,12 @@ import { AuthPage } from "./pages/auth/page/auth-page";
 import MainPage from "./pages/main/pages/main-page";
 import ProtectedRoute from "./components/routes/route-protecter";
 import { ConfrimationPage } from "./pages/confirmation-email/page/confirmation-email-page";
+import { AccountDefinitionPage } from "./pages/account-definition/page/account-definition-page";
+import { CreateBusinessPage } from "./pages/create-business/page/create-business-page";
 
 function App() {
   return (
-    <main className="w-screen ">
+    <main className="w-screen h-screen ">
       <Routes>
         <Route
           path="/*"
@@ -18,6 +20,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/account-definition" element={<AccountDefinitionPage />} />
+        <Route path="/create-business" element={<CreateBusinessPage />} />
         <Route path="/login" element={<AuthPage type="login" />} />
         <Route path="/register" element={<AuthPage type="register" />} />
         <Route path="/confirmation" element={<ConfrimationPage />} />
