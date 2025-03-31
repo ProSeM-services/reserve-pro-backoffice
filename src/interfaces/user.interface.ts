@@ -7,6 +7,7 @@ export const UserZodSchema = z.object({
   name: z.string(),
   lastName: z.string(),
   email: z.string(),
+  EnterpriseId: z.string(),
   role: z.enum(ROLES_VALUES),
   image: z.string().optional(),
   tenantName: z.string().optional(),

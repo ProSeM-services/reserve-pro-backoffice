@@ -17,20 +17,42 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { AddressInput } from "@/components/common/address-input";
+import { setAuthInterceptor } from "@/config/axios.config";
+import { useState } from "react";
+import { EnterpiseServices } from "@/services/enterprise.services";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router";
 
 export function CreateBusinessPage() {
+  const [loading, setLoading] = useState(false);
   const form = useForm<IEnterprise>({
     resolver: zodResolver(EnterpriseSchema),
     defaultValues: {
       address: "",
       name: "",
       email: "",
-      website: "",
     },
   });
 
-  const onSubmit = (values: IEnterprise) => {
-    console.log("values", values);
+  const { toast } = useToast();
+  const nav = useNavigate();
+  const onSubmit = async (values: IEnterprise) => {
+    const accessToken = localStorage.getItem("accessToken");
+    try {
+      setLoading(true);
+      await setAuthInterceptor(accessToken);
+      await EnterpiseServices.create(values);
+      toast({
+        title: "Empresa creada",
+        description: `${values.name} fue creado exitosamente!`,
+      });
+
+      nav("/dashboard");
+    } catch (error) {
+      console.log("error Creating Enterprise : ", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -82,7 +104,7 @@ export function CreateBusinessPage() {
             <FormField
               control={form.control}
               name="address"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>Dirección</FormLabel>
                   <FormControl>
@@ -97,7 +119,7 @@ export function CreateBusinessPage() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" isLoading={loading}>
               Crear
             </Button>
           </form>

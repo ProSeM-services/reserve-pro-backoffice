@@ -13,8 +13,16 @@ export function SessionProvider({ children }: PropsWithChildren) {
       try {
         setLoading(true);
         const res = await AuthServices.me();
-        console.log(res);
         fetchMemberLogged(res);
+        console.log("USUARIO == ", res);
+        if (!res.account_type) {
+          nav("/account-definition");
+          return;
+        }
+        if (res.account_type === "BUSSINESS" && !res.EnterpriseId) {
+          nav("/create-business");
+          return;
+        }
         setLoading(false);
       } catch (error) {
         setLoading(false);

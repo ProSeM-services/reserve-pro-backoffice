@@ -2,7 +2,7 @@ import { axiosInstance, BASE_URL } from "@/config/axios.config";
 import { IApiEnterprise } from "@/interfaces/api/enterprise.interface";
 import { IEnterprise } from "@/interfaces/enterprise.interface";
 
-export class CustomerServices {
+export class EnterpiseServices {
   static async getAll(): Promise<IApiEnterprise[]> {
     const res = await axiosInstance.get(`${BASE_URL}/enterprise`);
     return res.data;
