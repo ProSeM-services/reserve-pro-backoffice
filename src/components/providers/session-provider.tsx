@@ -1,3 +1,4 @@
+import { setAuthInterceptor } from "@/config/axios.config";
 import useFetchData from "@/hooks/useFetchData";
 import { AuthServices } from "@/services/auth.services";
 import { Fragment, PropsWithChildren, useEffect, useState } from "react";
@@ -8,13 +9,15 @@ export function SessionProvider({ children }: PropsWithChildren) {
   const { fetchMemberLogged } = useFetchData();
 
   const [loading, setLoading] = useState(false);
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
     const validateSession = async () => {
       try {
         setLoading(true);
+        await setAuthInterceptor(accessToken);
         const res = await AuthServices.me();
+        console.log("RES /ME", res);
         fetchMemberLogged(res);
-        console.log("USUARIO == ", res);
         if (!res.account_type) {
           nav("/account-definition");
           return;

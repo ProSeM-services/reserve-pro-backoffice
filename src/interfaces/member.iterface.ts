@@ -14,6 +14,7 @@ export const ZodTenantSchema = z.object({
   tenantName: z.string().optional(),
   companyName: z.string(),
   image: z.string().optional(),
+  EnterpriseId: z.string().optional(),
 });
 export const CreateTenantZodSchema = ZodTenantSchema.omit({
   id: true,

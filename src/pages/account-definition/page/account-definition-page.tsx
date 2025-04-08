@@ -19,6 +19,7 @@ export function AccountDefinitionPage() {
       <div className="flex gap-2 z-10">
         {ACCOUNT_TYPE_VALUES.map((value) => (
           <Button
+            key={value}
             className="h-32 text-lg aspect-video"
             variant={"secondary"}
             onClick={() => handleSelectType(value)}

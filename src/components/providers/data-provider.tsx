@@ -15,7 +15,9 @@ export default function DataProvider({ children }: PropsWithChildren) {
   } = useFetchData();
 
   const { fetched: companyFetched } = useAppSelector((s) => s.company);
-  const { fetched: membersFetched } = useAppSelector((s) => s.member);
+  const { fetched: membersFetched, memberLogged } = useAppSelector(
+    (s) => s.member
+  );
   const { fetched: customerFetched } = useAppSelector((s) => s.customers);
   const { fetched: servicesFetched } = useAppSelector((s) => s.service);
   const { fetched: mainFetched, crossCompanyId } = useAppSelector(
@@ -45,7 +47,7 @@ export default function DataProvider({ children }: PropsWithChildren) {
       }
     };
     fetchData();
-  }, [accessToken]);
+  }, [memberLogged]);
   useEffect(() => {
     if (!crossCompanyId) return;
     setCrossCompanyData(crossCompanyId);

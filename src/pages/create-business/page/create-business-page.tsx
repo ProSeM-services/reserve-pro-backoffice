@@ -22,6 +22,8 @@ import { useState } from "react";
 import { EnterpiseServices } from "@/services/enterprise.services";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router";
+import { AuthServices } from "@/services/auth.services";
+import useFetchData from "@/hooks/useFetchData";
 
 export function CreateBusinessPage() {
   const [loading, setLoading] = useState(false);
@@ -36,6 +38,7 @@ export function CreateBusinessPage() {
 
   const { toast } = useToast();
   const nav = useNavigate();
+  const { fetchMemberLogged } = useFetchData();
   const onSubmit = async (values: IEnterprise) => {
     const accessToken = localStorage.getItem("accessToken");
     try {
@@ -46,6 +49,9 @@ export function CreateBusinessPage() {
         title: "Empresa creada",
         description: `${values.name} fue creado exitosamente!`,
       });
+
+      const res = await AuthServices.me();
+      fetchMemberLogged(res);
 
       nav("/dashboard");
     } catch (error) {
