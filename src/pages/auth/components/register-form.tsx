@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User2Icon, KeyIcon, Mail, HouseIcon, MailCheck } from "lucide-react";
+import { User2Icon, KeyIcon, Mail, MailCheck, PhoneIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -30,6 +30,7 @@ const EMPTY_TENANT_DATA: ICreateTentant = {
   companyName: "",
   userName: "",
   image: "",
+  phone: "",
 };
 
 export function RegisterForm() {
@@ -134,17 +135,17 @@ export function RegisterForm() {
                 />
                 <FormField
                   control={form.control}
-                  name="companyName"
+                  name="phone"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <Label htmlFor="email">Nombre de tu Negocio</Label>
+                      <Label htmlFor="phone">Numero de celular</Label>
                       <div className="relative">
                         <Input
                           className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                           {...field}
-                          placeholder="Nombre de tu negocio"
+                          placeholder="+1 1111 111"
                         />
-                        <HouseIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                        <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                       </div>
                     </FormItem>
                   )}
