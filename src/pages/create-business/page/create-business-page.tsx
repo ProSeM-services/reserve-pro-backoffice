@@ -1,7 +1,7 @@
 import { BackgroundMark } from "@/components/common/BackgroundMark";
 import {
-  IEnterprise,
-  EnterpriseSchema,
+  ICreateEnterprise,
+  CreateEnterpriseSchema,
 } from "@/interfaces/enterprise.interface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -22,38 +22,39 @@ import { useState } from "react";
 import { EnterpiseServices } from "@/services/enterprise.services";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router";
-import { AuthServices } from "@/services/auth.services";
-import useFetchData from "@/hooks/useFetchData";
+import { Clock } from "lucide-react";
 
 export function CreateBusinessPage() {
   const [loading, setLoading] = useState(false);
-  const form = useForm<IEnterprise>({
-    resolver: zodResolver(EnterpriseSchema),
+  const form = useForm<ICreateEnterprise>({
+    resolver: zodResolver(CreateEnterpriseSchema),
     defaultValues: {
       address: "",
       name: "",
       email: "",
+      company_count: 0,
     },
   });
 
   const { toast } = useToast();
   const nav = useNavigate();
-  const { fetchMemberLogged } = useFetchData();
-  const onSubmit = async (values: IEnterprise) => {
+  const onSubmit = async (values: ICreateEnterprise) => {
     const accessToken = localStorage.getItem("accessToken");
     try {
       setLoading(true);
       await setAuthInterceptor(accessToken);
-      await EnterpiseServices.create(values);
-      toast({
-        title: "Empresa creada",
-        description: `${values.name} fue creado exitosamente!`,
+      await EnterpiseServices.create({
+        ...values,
+        company_count: Number(values.company_count),
       });
 
-      const res = await AuthServices.me();
-      fetchMemberLogged(res);
+      toast({
+        title: "Empresa creada",
+        description: `${values.name} fue creado exitosamente! Es necesario que inicies sesión nuevamente para ver los cambios.`,
+      });
 
-      nav("/dashboard");
+      localStorage.clear();
+      nav("/login");
     } catch (error) {
       console.log("error Creating Enterprise : ", error);
     } finally {
@@ -61,12 +62,26 @@ export function CreateBusinessPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="mx-auto flex justify-center items-center h-full">
+        <div className="absolute left-0 ">
+          <BackgroundMark />
+        </div>
+        <div className="h-[70%] w-full max-w-lg bg-white text-gray-600  border flex flex-col justify-center items-center text-xl font-semibold  p-6 z-10">
+          <Clock className="size-32  animate-pulse" />
+          <p>Creando negocio</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto flex justify-center items-center h-full">
       <div className="absolute left-0 ">
         <BackgroundMark />
       </div>
-      <div className="w-full max-w-lg bg-white shadow-md rounded-lg p-6 z-10">
+      <div className="w-full max-w-lg bg-white border rounded-lg p-6 z-10">
         {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold">Crear Negocio</h1>
@@ -102,6 +117,19 @@ export function CreateBusinessPage() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input placeholder="example@mail.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="company_count"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cantidad de sucursales</FormLabel>
+                  <FormControl>
+                    <Input placeholder="0" {...field} type="number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

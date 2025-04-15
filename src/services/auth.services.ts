@@ -1,7 +1,7 @@
 import { axiosInstance, BASE_URL } from "@/config/axios.config";
 import { UserZod } from "@/interfaces";
 import { ILoginResponse } from "@/interfaces/auth.interface";
-import { ICreateTentant, ITentant } from "@/interfaces/member.iterface";
+import { ITentant, IUserRegister } from "@/interfaces/member.iterface";
 import axios from "axios";
 
 export class AuthServices {
@@ -10,7 +10,7 @@ export class AuthServices {
 
     return response.data;
   }
-  static async register(data: ICreateTentant): Promise<ITentant> {
+  static async register(data: IUserRegister): Promise<ITentant> {
     const response = await axios.post(`${BASE_URL}/auth/register`, data);
 
     return response.data;

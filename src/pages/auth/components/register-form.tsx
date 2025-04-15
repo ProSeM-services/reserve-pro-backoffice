@@ -13,23 +13,20 @@ import {
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  CreateTenantZodSchema,
-  ICreateTentant,
+  IUserRegister,
+  RegisterUserSchmea,
 } from "@/interfaces/member.iterface";
 import { AuthServices } from "@/services/auth.services";
 import { useToast } from "@/components/ui/use-toast";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import { useNavigate } from "react-router";
-const EMPTY_TENANT_DATA: ICreateTentant = {
+const EMPTY_TENANT_DATA: IUserRegister = {
   email: "",
   lastName: "",
   name: "",
   password: "",
   confirmPassword: "",
-  role: "ADMIN",
-  companyName: "",
   userName: "",
-  image: "",
   phone: "",
 };
 
@@ -38,8 +35,8 @@ export function RegisterForm() {
   const [open, setOpen] = useState(false);
 
   const nav = useNavigate();
-  const form = useForm<ICreateTentant>({
-    resolver: zodResolver(CreateTenantZodSchema),
+  const form = useForm<IUserRegister>({
+    resolver: zodResolver(RegisterUserSchmea),
     defaultValues: EMPTY_TENANT_DATA,
   });
 
@@ -51,7 +48,7 @@ export function RegisterForm() {
   };
   const { toast } = useToast();
 
-  const onSubmit = async (values: ICreateTentant) => {
+  const onSubmit = async (values: IUserRegister) => {
     setLoading(true);
     try {
       await AuthServices.register(values);
@@ -87,13 +84,16 @@ export function RegisterForm() {
                     <FormItem className="w-1/2">
                       <Label htmlFor="email">Nombre</Label>
                       <div className="relative ">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 "
-                          {...field}
-                          placeholder="Enter your first name"
-                        />
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 "
+                            {...field}
+                            placeholder="Enter your first name"
+                          />
+                        </FormControl>
                         <User2Icon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                       </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -104,13 +104,16 @@ export function RegisterForm() {
                     <FormItem className="w-1/2">
                       <Label htmlFor="email">Apellido</Label>
                       <div className="relative">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                          {...field}
-                          placeholder="Enter your last name"
-                        />
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            {...field}
+                            placeholder="Enter your last name"
+                          />
+                        </FormControl>
                         <User2Icon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                       </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -123,13 +126,16 @@ export function RegisterForm() {
                     <FormItem className="w-1/2">
                       <Label htmlFor="email">Email</Label>
                       <div className="relative">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                          {...field}
-                          placeholder="example@email.com"
-                        />
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            {...field}
+                            placeholder="example@email.com"
+                          />
+                        </FormControl>
                         <Mail className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                       </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -140,13 +146,16 @@ export function RegisterForm() {
                     <FormItem className="w-1/2">
                       <Label htmlFor="phone">Numero de celular</Label>
                       <div className="relative">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                          {...field}
-                          placeholder="+1 1111 111"
-                        />
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            {...field}
+                            placeholder="+1 1111 111"
+                          />
+                        </FormControl>
                         <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                       </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -160,13 +169,16 @@ export function RegisterForm() {
                     <FormItem>
                       <Label htmlFor="password">Nombre de Usuario</Label>
                       <div className="relative">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                          {...field}
-                          placeholder="Nombre de Usuario"
-                        />
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            {...field}
+                            placeholder="Nombre de Usuario"
+                          />
+                        </FormControl>
                         <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                       </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -178,12 +190,14 @@ export function RegisterForm() {
                       <FormItem className="w-1/2">
                         <Label htmlFor="password">Contraseña</Label>
                         <div className="relative">
-                          <Input
-                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                            {...field}
-                            placeholder="******"
-                            type="password"
-                          />
+                          <FormControl>
+                            <Input
+                              className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                              {...field}
+                              placeholder="******"
+                              type="password"
+                            />
+                          </FormControl>
                           <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                         </div>
                       </FormItem>
