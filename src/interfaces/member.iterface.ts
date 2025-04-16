@@ -54,6 +54,7 @@ export type IUserRegister = z.infer<typeof RegisterUserSchmea>;
 export const MemberZodSchema = ZodTenantSchema.omit({
   tenantName: true,
 }).extend({
+  EnterpriseId: z.string(),
   phone: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
   CompanyId: z.string().optional(),

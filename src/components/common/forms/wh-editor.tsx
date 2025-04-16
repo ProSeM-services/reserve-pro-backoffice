@@ -249,7 +249,8 @@ export const WorkhoursEditor: React.FC<{
   };
   const { member } = useSession();
 
-  const selectIsDisabled = !hasPermission(member, Permission.UPDATE_WORKHOURS);
+  const selectIsDisabled =
+    member && !hasPermission(member, Permission.UPDATE_WORKHOURS);
 
   return (
     <div className="flex flex-col items-start  w-full h-full justify-between gap-2  ">
