@@ -32,7 +32,7 @@ export const ZodTenantSchema = z.object({
   tenantName: z.string().optional(),
   companyName: z.string(),
   image: z.string().optional(),
-  EnterpriseId: z.string().optional(),
+  EnterpriseId: z.string(),
 });
 export const CreateTenantZodSchema = ZodTenantSchema.omit({
   id: true,
@@ -54,7 +54,6 @@ export type IUserRegister = z.infer<typeof RegisterUserSchmea>;
 export const MemberZodSchema = ZodTenantSchema.omit({
   tenantName: true,
 }).extend({
-  EnterpriseId: z.string(),
   phone: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
   CompanyId: z.string().optional(),

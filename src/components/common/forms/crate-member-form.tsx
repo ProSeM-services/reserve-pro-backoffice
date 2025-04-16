@@ -38,6 +38,7 @@ const INITIAL_MEMBER_DATA: ICreateMember = {
   image: "",
   phone: "",
   workhours: [],
+  EnterpriseId: "",
 };
 export function MemberForm() {
   const { toast } = useToast();

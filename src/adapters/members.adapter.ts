@@ -19,6 +19,7 @@ export function memberAdpater(member: IAPIMember): IMember {
     phone: member.phone,
     workhours: member.workhours,
     membership_status: member.membership_status,
+    EnterpriseId: member.EnterpriseId,
   };
 }
 export function memberListAdpater(members: IAPIMember[]): IMember[] {
