@@ -8,6 +8,7 @@ import statsReducer from "./feature/stats/statsSlices";
 import mainReducer from "./feature/main/mainSlice";
 import bookingReducer from "./feature/booking/bookingSlice";
 import sessionReducer from "./feature/session/sessionSlice";
+import enterpriseReducer from "./feature/enterprise/enterpriseSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -21,6 +22,7 @@ export const makeStore = () => {
       main: mainReducer,
       booking: bookingReducer,
       session: sessionReducer,
+      enterprise: enterpriseReducer,
     },
   });
 };

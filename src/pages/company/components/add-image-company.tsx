@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import useFetchData from "@/hooks/useFetchData";
@@ -15,7 +16,9 @@ export function AddImageCompany({ company }: { company: ICompany }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(
-    typeof company.image === "string" ? getS3Url(company.image) : null
+    company.image && typeof company.image === "string"
+      ? getS3Url(company.image)
+      : null
   );
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -29,6 +32,7 @@ export function AddImageCompany({ company }: { company: ICompany }) {
     },
   });
 
+  console.log("company.image", company);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files?.[0];
     if (!selectedFiles) return;
@@ -84,53 +88,67 @@ export function AddImageCompany({ company }: { company: ICompany }) {
   };
 
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className=" space-y-4  overflow-auto max-h-[80vh]   "
-    >
-      {preview && (
-        <div className="relative">
-          <button type="button" className="absolute bg-red-600 rounded-md p-1">
-            <Trash className="w-4 h-4 text-white" />
-          </button>
-          <img
-            src={preview}
-            alt="Preview"
-            className="w-32 h-32 rounded-lg object-cover border"
-          />
-        </div>
-      )}
-      <div className="flex flex-col space-y-2">
-        <Button
-          onClick={handleButtonClick}
-          variant="ghost"
-          type="button"
-          className="space-x-2 border"
-        >
-          <span>Agregar Imagenes</span>
-          <Paperclip className="size-4 text-primary" />
-        </Button>
-        <Input
-          type="file"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-          accept="image/*"
-        />
-
-        <div className="flex gap-2 ">
-          <Button type="button" variant={"outline"} className="w-1/4">
-            Cancelar
-          </Button>
-          <Button
-            type="submit"
-            className="flex-grow text-white"
-            disabled={loading}
-          >
-            {loading ? "Cargando..." : "Actualizar"}
-          </Button>
-        </div>
+    <div className=" flex flex-col items-start gap-2">
+      <div className="font-semibold">
+        <Label>Imagen Principal</Label>
       </div>
-    </form>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className=" space-y-4  overflow-auto max-h-[80vh]   "
+      >
+        {preview && (
+          <div className="relative">
+            <button
+              type="button"
+              className="absolute bg-red-600 rounded-md p-1"
+              onClick={() => {
+                setPreview(null);
+                setFiles(null);
+              }}
+            >
+              <Trash className="w-4 h-4 text-white" />
+            </button>
+            <img
+              src={preview}
+              alt="Preview"
+              className="w-32 h-32 rounded-lg object-cover border"
+            />
+          </div>
+        )}
+        <div className="flex flex-col space-y-2">
+          <Button
+            onClick={handleButtonClick}
+            variant="ghost"
+            type="button"
+            className="space-x-2 border"
+          >
+            <span>Agregar Imagenes</span>
+            <Paperclip className="size-4 text-primary" />
+          </Button>
+          <Input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={handleFileChange}
+            accept="image/*"
+          />
+
+          {preview && (
+            <div className="flex gap-2 ">
+              <Button type="button" variant={"outline"} className="w-1/4">
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                className="flex-grow text-white"
+                disabled={loading}
+              >
+                {loading ? "Cargando..." : "Actualizar"}
+              </Button>
+            </div>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }

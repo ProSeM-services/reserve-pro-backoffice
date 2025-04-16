@@ -1,5 +1,6 @@
 import { z } from "zod";
 export const EnterpriseSchema = z.object({
+  id: z.string(),
   name: z.string(),
   email: z.string().email("Invalid email format").optional(),
   address: z.string(),

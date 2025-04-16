@@ -7,6 +7,10 @@ export class EnterpiseServices {
     const res = await axiosInstance.get(`${BASE_URL}/enterprise`);
     return res.data;
   }
+  static async getById(id: string): Promise<IEnterprise> {
+    const res = await axiosInstance.get(`${BASE_URL}/enterprise/${id}`);
+    return res.data;
+  }
 
   static async create(data: IEnterprise) {
     const res = await axiosInstance.post(`${BASE_URL}/enterprise`, data);

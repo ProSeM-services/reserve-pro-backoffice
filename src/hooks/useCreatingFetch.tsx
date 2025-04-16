@@ -31,6 +31,7 @@ export default function useCreatingFetch() {
       //   dispatch(toggleCompanyLoading(true));
       const newCompany = await CompanyServices.createcompany(data);
       dispatch(addCompany(newCompany));
+      return newCompany;
     } catch (error) {
       console.log("Error creating Companies", error);
     } finally {
