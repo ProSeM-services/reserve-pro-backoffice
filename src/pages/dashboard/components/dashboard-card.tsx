@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Permission } from "@/lib/constants/permissions";
 import { FromatedDate } from "@/lib/format-date";
 import { useAppSelector } from "@/store/hooks";
-import { CircleStop, UserIcon } from "lucide-react";
+import { CircleStop, HouseIcon, UserIcon } from "lucide-react";
 
 type Type = "member" | "company" | "services" | "appointments";
 interface IConfig {
@@ -113,7 +113,9 @@ export function DashboardCard({ type }: DashboardCardProps) {
         <>
           {companies.map((company) => (
             <div key={company.id} className="flex gap-2 items-start ">
-              <div>asd</div>
+              <div>
+                <HouseIcon />
+              </div>
 
               <div>
                 <Label>{company.name}</Label>
@@ -129,17 +131,19 @@ export function DashboardCard({ type }: DashboardCardProps) {
   const { Component, label, count, permission } = Config[type];
   return (
     <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] ">
-      <section className="   flex flex-col  gap-4 ">
+      <section className="   flex flex-col  gap-4 relative ">
         <div className="flex flex-col items-center ">
           <Label className="text-3xl">{count}</Label>
           <p>{label}</p>
         </div>
 
-        {type !== "appointments" && (
-          <AuthorizationWrapper permission={permission}>
-            <AddButton type={type} />
-          </AuthorizationWrapper>
-        )}
+        <div className="absolute right-0 top-0 ">
+          {type !== "appointments" && (
+            <AuthorizationWrapper permission={permission}>
+              <AddButton type={type} size="sm" />
+            </AuthorizationWrapper>
+          )}
+        </div>
       </section>
       <section className=" space-y-2 flex-grow  h-full max-h-full overflow-auto">
         <Component />
