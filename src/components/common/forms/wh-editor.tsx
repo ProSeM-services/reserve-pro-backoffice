@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { IWorkhour, Segment } from "@/interfaces";
 import { Button } from "@/components/ui/button";
-import { CircleCheck, CircleDot, Copy, Minus, PlusIcon } from "lucide-react";
+import {
+  CircleCheck,
+  CircleDot,
+  Copy,
+  Edit,
+  Minus,
+  PlusIcon,
+} from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import {
@@ -16,7 +23,14 @@ import { Permission } from "@/lib/constants/permissions";
 import { Label } from "@/components/ui/label";
 import { hasPermission } from "@/lib/auth/has-permission";
 import useSession from "@/hooks/useSession";
-
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 interface IDay {
   short: string;
   long: string;
@@ -234,19 +248,29 @@ export const WorkhoursEditor: React.FC<{
     }
   };
 
-  // const handleSelectDay = (e: string) => {
-  //   const newSelectedDay = week.find((w) => w.long === e);
-  //   if (!newSelectedDay) return;
-  //   setSelectedDay(newSelectedDay);
-  // };
   const { member } = useSession();
-
   const selectIsDisabled = !hasPermission(member, Permission.UPDATE_WORKHOURS);
-
-  console.log(week);
 
   return (
     <div className="flex flex-col items-start  w-full h-full justify-between gap-2  ">
+      <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
+        <Sheet>
+          <SheetTrigger className="flex items-center gap-2 text-[14px]  font-medium bg-accent rounded px-4 p-2">
+            <p>Editar</p>
+            <Edit className="size-4" />
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Modificar Horarios</SheetTitle>
+              <SheetDescription>
+                Puedes definir un bloque de horarios para cada dia de la semana.
+                Si deseas replicar un bloque de horarios en varios dias,
+                selecciona los dias y luego presiona "Replicar".
+              </SheetDescription>
+            </SheetHeader>
+          </SheetContent>
+        </Sheet>
+      </AuthorizationWrapper>
       <div className="grid grid-cols-7  w-full h-full">
         {week.map((weekItem) => (
           <div key={weekItem.long}>
@@ -346,7 +370,7 @@ export const WorkhoursEditor: React.FC<{
                 </div>
               ))}
               {!weekItem.selected && (
-                <>
+                <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
                   <Button
                     onClick={() => handleAddSegment(weekItem.workhour.day)}
                     variant="secondary"
@@ -363,7 +387,7 @@ export const WorkhoursEditor: React.FC<{
                     <p>Replicar</p>
                     <Copy className="  size-4" />
                   </Button>
-                </>
+                </AuthorizationWrapper>
               )}
             </div>
           </div>

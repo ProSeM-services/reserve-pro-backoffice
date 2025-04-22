@@ -28,6 +28,7 @@ export function NavMain({
     items?: {
       title: string;
       url: string;
+      icon?: LucideIcon;
       permission?: Permission;
     }[];
   }[];
@@ -42,6 +43,7 @@ export function NavMain({
     items?: {
       title: string;
       url: string;
+      icon?: LucideIcon;
       permission?: Permission;
     }[];
   }) => {
@@ -78,15 +80,18 @@ export function NavMain({
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <section className="pl-4">
+                    <section className="pl-2">
                       {item.items?.map((subItem) =>
                         subItem.permission ? (
-                          <AuthorizationWrapper permission={subItem.permission}>
+                          <AuthorizationWrapper
+                            permission={subItem.permission}
+                            key={subItem.title}
+                          >
                             <div key={subItem.title}>
                               <div>
                                 <Link
                                   to={subItem.url}
-                                  className={`flex max-sm:flex-col max-sm:justify-center text-sm border-blue-500  px-2  ${
+                                  className={`flex gap-2 max-sm:flex-col max-sm:justify-center text-sm border-blue-500  px-2  ${
                                     location.pathname === subItem.url
                                       ? "sm:border-l-4 max-sm:border-t-4"
                                       : ""
@@ -96,6 +101,9 @@ export function NavMain({
                                       : " text-primary/50"
                                   } $`}
                                 >
+                                  {subItem.icon && (
+                                    <subItem.icon className="size-4" />
+                                  )}
                                   <span>{subItem.title}</span>
                                 </Link>
                               </div>
@@ -106,7 +114,7 @@ export function NavMain({
                             <div>
                               <Link
                                 to={subItem.url}
-                                className={`flex max-sm:flex-col max-sm:justify-center text-md border-blue-500  items-center h-12   max-sm:h-full transition-all duration-200 px-2 ${
+                                className={`flex gap-2 max-sm:flex-col max-sm:justify-center text-md border-blue-500  items-center h-12   max-sm:h-full transition-all duration-200 px-2 ${
                                   location.pathname === subItem.url
                                     ? "sm:border-l-4 max-sm:border-t-4"
                                     : ""
@@ -116,6 +124,9 @@ export function NavMain({
                                     : " text-primary/50"
                                 } $`}
                               >
+                                {subItem.icon && (
+                                  <subItem.icon className="size-4" />
+                                )}
                                 <span>{subItem.title}</span>
                               </Link>
                             </div>

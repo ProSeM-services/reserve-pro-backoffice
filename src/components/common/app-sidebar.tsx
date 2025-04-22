@@ -1,5 +1,17 @@
 import * as React from "react";
-import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
+import {
+  BookOpen,
+  BookPlus,
+  Bot,
+  Building,
+  CalendarCheck,
+  CalendarDays,
+  LayoutDashboard,
+  Settings2,
+  SquareTerminal,
+  SquareUser,
+  Users,
+} from "lucide-react";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import { CompanySwitcher } from "./company-switcher";
@@ -28,6 +40,7 @@ const data = {
         {
           title: "Dashboard",
           url: "/dashboard",
+          icon: LayoutDashboard,
         },
       ],
     },
@@ -40,16 +53,19 @@ const data = {
           title: "Sucursales",
           url: "/company",
           permission: Permission.VIEW_COMPANY,
+          icon: Building,
         },
         {
           title: "Miembros",
           url: "/members",
           permission: Permission.VIEW_MEMBERS,
+          icon: Users,
         },
         {
           title: "Servicios",
           url: "/services",
           permission: Permission.VIEW_SERVICES,
+          icon: BookPlus,
         },
       ],
     },
@@ -62,16 +78,19 @@ const data = {
           title: "Turnos",
           url: "/appointment",
           permission: Permission.VIEW_APPOINTMENTS,
+          icon: CalendarCheck,
         },
         {
           title: "Clientes",
           url: "/customers",
           permission: Permission.VIEW_CUSTOMERS,
+          icon: SquareUser,
         },
         {
           title: "Calendario",
           url: "/calendar",
           permission: Permission.VIEW_APPOINTMENTS,
+          icon: CalendarDays,
         },
       ],
     },
