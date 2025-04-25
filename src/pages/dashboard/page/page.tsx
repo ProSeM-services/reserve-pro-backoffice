@@ -8,12 +8,14 @@ export function DashboardPage() {
   return (
     <div className="size-full   ">
       <Tabs defaultValue="stats" className=" h-[80vh] ">
-        {member.role !== "BASIC" && (
-          <TabsList>
-            <TabsTrigger value="stats">Estadísticas</TabsTrigger>
-            <TabsTrigger value="we">Nosotros</TabsTrigger>
-          </TabsList>
-        )}
+        <div>
+          {member.role !== "BASIC" && (
+            <TabsList>
+              <TabsTrigger value="stats">Estadísticas</TabsTrigger>
+              <TabsTrigger value="we">Nosotros</TabsTrigger>
+            </TabsList>
+          )}
+        </div>
         <TabsContent value="stats" className="h-full ">
           <DashboardStats />
         </TabsContent>
