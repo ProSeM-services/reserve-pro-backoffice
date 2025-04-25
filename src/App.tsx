@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/routes/route-protecter";
 import { ConfrimationPage } from "./pages/confirmation-email/page/confirmation-email-page";
 import { AccountDefinitionPage } from "./pages/account-definition/page/account-definition-page";
 import { CreateBusinessPage } from "./pages/create-business/page/create-business-page";
+import { CreateProfessionalPage } from "./pages/create-professional/page/create-professional-page";
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
         />
         <Route path="/account-definition" element={<AccountDefinitionPage />} />
         <Route path="/create-business" element={<CreateBusinessPage />} />
+        <Route
+          path="/create-professional"
+          element={<CreateProfessionalPage />}
+        />
         <Route path="/login" element={<AuthPage type="login" />} />
         <Route path="/register" element={<AuthPage type="register" />} />
         <Route path="/confirmation" element={<ConfrimationPage />} />

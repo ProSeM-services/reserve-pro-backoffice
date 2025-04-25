@@ -22,7 +22,7 @@ import { useState } from "react";
 import { EnterpiseServices } from "@/services/enterprise.services";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router";
-import { Clock } from "lucide-react";
+import { LoaderMain } from "@/components/common/loader-main";
 
 export function CreateBusinessPage() {
   const [loading, setLoading] = useState(false);
@@ -65,22 +65,15 @@ export function CreateBusinessPage() {
   if (loading) {
     return (
       <div className="mx-auto flex justify-center items-center h-full">
-        <div className="absolute left-0 ">
-          <BackgroundMark />
-        </div>
-        <div className="h-[70%] w-full max-w-lg bg-white text-gray-600  border flex flex-col justify-center items-center text-xl font-semibold  p-6 z-10">
-          <Clock className="size-32  animate-pulse" />
-          <p>Creando negocio</p>
-        </div>
+        <BackgroundMark />
+        <LoaderMain />
       </div>
     );
   }
 
   return (
     <div className="mx-auto flex justify-center items-center h-full">
-      <div className="absolute left-0 ">
-        <BackgroundMark />
-      </div>
+      <BackgroundMark />
       <div className="w-full max-w-lg bg-white border rounded-lg p-6 z-10">
         {/* Header */}
         <div className="text-center mb-6">
