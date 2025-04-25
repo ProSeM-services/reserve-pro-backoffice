@@ -43,6 +43,7 @@ export default function useFetchData() {
   const setMainLoaderStatus = (status: boolean) => {
     dispatch(setMainFetched(status));
   };
+
   const fetchCompanies = async () => {
     try {
       dispatch(toggleCompanyLoading(true));

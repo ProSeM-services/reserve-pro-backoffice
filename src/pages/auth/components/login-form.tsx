@@ -47,6 +47,10 @@ export function LoginForm() {
       localStorage.setItem("accessToken", res.backendTokens.accessToken);
       localStorage.setItem("userLogged", JSON.stringify(res.user));
 
+      if (!res.user.account_type) {
+        location.replace("/account-definition");
+        return;
+      }
       location.replace("/dashboard"); // This is forcing a reload at the navigatin page!
     } catch (error) {
       return toast({

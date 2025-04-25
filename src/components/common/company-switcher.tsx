@@ -28,7 +28,8 @@ export function CompanySwitcher() {
   const { isMobile } = useSidebar();
   const { member } = useSession();
   const { inmutablesCompanies, loading } = useAppSelector((s) => s.company);
-  const [activeTeam, setActiveTeam] = React.useState(member?.companyName);
+  const { enterprise } = useAppSelector((s) => s.enterprise);
+  const [activeTeam, setActiveTeam] = React.useState(enterprise?.name || "");
   const { toast } = useToast();
   const dispatch = useAppDispatch();
   const handleSelectCompany = (company: ICompany | string) => {
@@ -52,6 +53,7 @@ export function CompanySwitcher() {
   if (member.role === "BASIC" && member.CompanyId) {
     return <CompanyDetailCell companyId={member.CompanyId} />;
   }
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>

@@ -3,17 +3,36 @@ import { WorkhourZodSchema } from "./workhour.interface";
 import { Permission } from "@/lib/constants/permissions";
 import { ROLES_VALUES } from "@/lib/constants/role";
 
+export const RegisterUserSchmea = z
+  .object({
+    name: z.string().min(1),
+    lastName: z.string().min(1),
+    email: z.string().email(),
+    phone: z.string().min(1),
+    userName: z.string().min(1),
+    password: z.string().min(1),
+    confirmPassword: z.string(),
+  })
+  .refine(
+    (data) => data.password === data.confirmPassword, // Comparación entre las contraseñas
+    {
+      path: ["confirmPassword"], // El campo al que se asignará el error si falla la validación
+      message: "Las contraseñas no coinciden", // Mensaje de error
+    }
+  );
 export const ZodTenantSchema = z.object({
   id: z.string(),
-  name: z.string(),
-  lastName: z.string(),
+  name: z.string().min(1),
+  lastName: z.string().min(1),
   email: z.string().email(),
   role: z.enum(ROLES_VALUES),
-  userName: z.string(),
-  password: z.string(),
+  userName: z.string().min(1),
+  password: z.string().min(1),
+  phone: z.string().min(1),
   tenantName: z.string().optional(),
   companyName: z.string(),
   image: z.string().optional(),
+  EnterpriseId: z.string(),
 });
 export const CreateTenantZodSchema = ZodTenantSchema.omit({
   id: true,
@@ -30,6 +49,7 @@ export const CreateTenantZodSchema = ZodTenantSchema.omit({
   );
 export type ITentant = z.infer<typeof ZodTenantSchema>;
 export type ICreateTentant = z.infer<typeof CreateTenantZodSchema>;
+export type IUserRegister = z.infer<typeof RegisterUserSchmea>;
 
 export const MemberZodSchema = ZodTenantSchema.omit({
   tenantName: true,

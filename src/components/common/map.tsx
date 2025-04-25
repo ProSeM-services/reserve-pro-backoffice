@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Map, useMap, AdvancedMarker, Pin } from "@vis.gl/react-google-maps";
 import MapProvider from "../providers/map-provider";
 
@@ -32,6 +32,10 @@ const PoiMarkers = ({ pois }: { pois: Poi }) => {
 // ------------------------------------------
 const MapComponent = ({ lat, lng }: { lat: number; lng: number }) => {
   const [center, setCenter] = useState({ lat, lng });
+  useEffect(() => {
+    setCenter({ lat, lng });
+  }, [lat, lng]);
+
   return (
     <MapProvider>
       <div className="w-full border bg-gray-300 h-full">

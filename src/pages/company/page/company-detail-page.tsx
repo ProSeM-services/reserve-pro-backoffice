@@ -113,15 +113,8 @@ export function CompanyDetailPage() {
       </section>
 
       {/* ---------------------------- IMAGES SECTION ---------------------------- */}
-      <section className="">
-        <div className="flex  justify-between p-2">
-          <div className="font-semibold">
-            <Label>Imagen Principal</Label>
-          </div>
-        </div>
-        <AddImageCompany company={company} key={company.id} />
-      </section>
-
+      <AddImageCompany company={company} key={company.id} />
+      <section className=""></section>
     </div>
   );
 }

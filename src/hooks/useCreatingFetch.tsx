@@ -26,11 +26,14 @@ import { useAppDispatch } from "@/store/hooks";
 
 export default function useCreatingFetch() {
   const dispatch = useAppDispatch();
-  const createCompany = async (data: ICreateCompany) => {
+  const createCompany = async (
+    data: ICreateCompany & { usersIds?: string[] }
+  ) => {
     try {
       //   dispatch(toggleCompanyLoading(true));
       const newCompany = await CompanyServices.createcompany(data);
       dispatch(addCompany(newCompany));
+      return newCompany;
     } catch (error) {
       console.log("Error creating Companies", error);
     } finally {
