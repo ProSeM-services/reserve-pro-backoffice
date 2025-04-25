@@ -100,21 +100,9 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
-        },
-        {
           title: "Horarios",
           url: "/set-hours",
           permission: Permission.VIEW_WORKHOURS,
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
         },
       ],
     },
