@@ -43,7 +43,7 @@ export function AuthPage({ type }: AuthPageProps) {
       <div className="    -z-0 ">
         <BackgroundMark />
       </div>
-      <div className=" flex flex-col items-center justify-center gap-8  h-full max-w-sm mx-auto ">
+      <div className=" flex flex-col items-center justify-center gap-8  h-full max-w-md mx-auto  ">
         <div className="  w-full max-w-sm flex justify-center items-center ">
           <img
             src="/images/reserve-pro-high-resolution-logo-transparent.png"
@@ -51,7 +51,7 @@ export function AuthPage({ type }: AuthPageProps) {
           />
         </div>
 
-        <div className="flex flex-col w-full gap-4 z-10">
+        <div className="flex flex-col  w-full gap-4 z-10">
           <div className=" w-full  z-10 ">
             {type === "login" && <LoginForm />}
             {type === "register" && <RegisterForm />}

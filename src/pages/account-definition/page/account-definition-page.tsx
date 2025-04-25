@@ -12,6 +12,10 @@ export function AccountDefinitionPage() {
       nav("/create-business");
       return;
     }
+    if (type === "PROFESSIONAL") {
+      nav("/create-professional");
+      return;
+    }
   };
   return (
     <div className="w-full min-h-screen h-screen     overflow-hidden  flex flex-col gap-4 justify-center items-center  ">
