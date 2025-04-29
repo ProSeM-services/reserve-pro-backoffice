@@ -41,6 +41,7 @@ export function LoginForm() {
       }
       await setAuthInterceptor(res.backendTokens.accessToken);
 
+      console.log("USER LOGGED", res.user);
       dispatch(setSession(res.user));
       dispatch(setAccesToken(res.backendTokens.accessToken));
 
@@ -49,6 +50,11 @@ export function LoginForm() {
 
       if (!res.user.account_type) {
         location.replace("/account-definition");
+        return;
+      }
+
+      if (res.user.account_type === "PROFESSIONAL" && !res.user.EnterpriseId) {
+        location.replace("/pool");
         return;
       }
       location.replace("/dashboard"); // This is forcing a reload at the navigatin page!
