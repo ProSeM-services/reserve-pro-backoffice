@@ -7,6 +7,7 @@ import { ConfrimationPage } from "./pages/confirmation-email/page/confirmation-e
 import { AccountDefinitionPage } from "./pages/account-definition/page/account-definition-page";
 import { CreateBusinessPage } from "./pages/create-business/page/create-business-page";
 import { CreateProfessionalPage } from "./pages/create-professional/page/create-professional-page";
+import { PoolPage } from "./pages/pool/page/pool-page";
 
 function App() {
   return (
@@ -18,6 +19,15 @@ function App() {
             <ProtectedRoute>
               {" "}
               <MainPage />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pool"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <PoolPage />{" "}
             </ProtectedRoute>
           }
         />

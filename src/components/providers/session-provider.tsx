@@ -30,6 +30,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
           return;
         }
 
+        if (res.account_type === "PROFESSIONAL" && !res.EnterpriseId) {
+          nav("/pool");
+          return;
+        }
         const enterprise = await EnterpiseServices.getById(res.EnterpriseId);
 
         if (!enterprise) {
@@ -42,6 +46,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
         setLoading(false);
         localStorage.clear();
         nav("/login");
+      } finally {
+        setLoading(false);
       }
     };
 

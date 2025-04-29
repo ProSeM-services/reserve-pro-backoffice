@@ -18,5 +18,13 @@ export const UserZodSchema = z.object({
     .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })
     .optional(),
 });
+export const UpdateUserSchema = UserZodSchema.omit({
+  id: true,
+  EnterpriseId: true,
+  role: true,
+  companyName: true,
+  tenantName: true,
+}).optional();
 
 export type UserZod = z.infer<typeof UserZodSchema>;
+export type IUpdateUser = z.infer<typeof UpdateUserSchema>;

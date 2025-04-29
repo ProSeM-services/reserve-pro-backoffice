@@ -32,9 +32,7 @@ export function AccountDefinitionPage() {
           </Button>
         ))}
       </div>
-      <div className="    -z-10- absolute left-0 ">
-        <BackgroundMark />
-      </div>
+      <BackgroundMark />
     </div>
   );
 }

@@ -13,7 +13,7 @@ export function CreateProfessionalPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading;
+        setLoading(true);
         const accessToken = localStorage.getItem("accessToken");
         await setAuthInterceptor(accessToken);
         const response = await AuthServices.me();
