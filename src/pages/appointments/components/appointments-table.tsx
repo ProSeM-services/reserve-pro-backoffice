@@ -124,7 +124,9 @@ export function AppointmentsTable() {
   return (
     <LoaderWrapper loading={loading && !fetched} type="appointments">
       {data.length === 0 ? (
-        <EmptyList type="appointments" />
+        <div className="size-full flex justify-center items-center">
+          <EmptyList type="appointments" />
+        </div>
       ) : (
         <RootTable columns={columns} data={data} tableType="appoitnemnts" />
       )}

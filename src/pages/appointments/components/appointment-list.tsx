@@ -8,6 +8,7 @@ export function AppointmentList() {
   const { appointmentsTable } = useAppSelector((s) => s.appointments);
   const { members } = useAppSelector((s) => s.member);
 
+  console.log("appointmentsTable", appointmentsTable);
   return (
     <div className="flex flex-col border rounded-md p-2 flex-wrap   h-full ">
       {appointmentsTable.map((app) => (
