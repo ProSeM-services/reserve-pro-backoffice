@@ -8,6 +8,7 @@ import {
   LucideProps,
   UserRoundX,
   Users2Icon,
+  UserSquare,
 } from "lucide-react";
 
 export function EmptyList({
@@ -17,6 +18,7 @@ export function EmptyList({
     | "member"
     | "company"
     | "service"
+    | "customer"
     | "no-members-to-add"
     | "appointments"
     | "no-services-to-add"
@@ -26,6 +28,7 @@ export function EmptyList({
     | "member"
     | "company"
     | "service"
+    | "customer"
     | "no-members-to-add"
     | "appointments"
     | "no-services-to-add"
@@ -57,6 +60,11 @@ export function EmptyList({
       title: "Vacio",
       description: "No hay turnos para mostrar.",
       Icon: CalendarX,
+    },
+    customer: {
+      title: "Sin clientes",
+      description: "No tienes clientes creados todavía",
+      Icon: UserSquare,
     },
     "no-members-to-add": {
       title: "Equipo vacío",

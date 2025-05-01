@@ -19,7 +19,7 @@ function Filters() {
   const dispatch = useAppDispatch();
   return (
     <div className="flex max-md:flex-col  gap-4 ">
-      <div className="w-[300px] max-md:w-full">
+      <div className="w-[350px] max-md:w-full">
         <MemberSelector />
       </div>
       <AuthorizationWrapper permission={Permission.VIEW_COMPANY}>

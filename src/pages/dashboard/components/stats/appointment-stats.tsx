@@ -69,12 +69,13 @@ export function AppointmentStats() {
       return;
     }
 
-    if (!session.session || !session.accessToken) return;
+    if (!session || !session) return;
     const fetch = async () => {
+      const accessToken = localStorage.getItem("accessToken");
       try {
         setLoading(true);
         setFetched(false);
-        await setAuthInterceptor(session.accessToken);
+        await setAuthInterceptor(accessToken);
         const res = await StatsServices.getAppointmentStats(
           dateLimits.start,
           dateLimits.end,
@@ -93,16 +94,13 @@ export function AppointmentStats() {
     };
 
     fetch();
-  }, [session.session, dateLimits]);
+  }, [session, dateLimits]);
 
-  if (!session.session) {
+  if (!session) {
     return null; // Evitar renderizado hasta que la sesión esté disponible
   }
-  if (fetched && data.length === 0) {
-    return <div>No data</div>;
-  }
 
-  if (appointments.length === 0 && allAppointmentFetched)
+  if (appointments.length === 0 && allAppointmentFetched && fetched)
     return (
       <Card className="size-full ">
         <div className="bg-card rounded h-full w-full  p-4 flex flex-col  ">

@@ -1,16 +1,9 @@
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  Sparkles,
-} from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -36,10 +29,11 @@ export function NavUser({
   };
 }) {
   const { isMobile } = useSidebar();
-  const session = useSession();
+  const { session } = useSession();
 
-  if (!session.member) return;
-  const { email, lastName, name, image } = session.member;
+  if (!session) return;
+
+  const { email, lastName, name, image } = session;
 
   return (
     <SidebarMenu>
@@ -78,7 +72,7 @@ export function NavUser({
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={image ? image : user.avatar}
+                    src={image ? getS3Url(image) : user.avatar}
                     alt={`image ${name}'s profile`}
                     className="aspect-square object-cover"
                   />
@@ -93,28 +87,6 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
               <LogOutButton />
