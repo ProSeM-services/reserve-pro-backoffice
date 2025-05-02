@@ -21,7 +21,6 @@ export function CompanySelector() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log("crossCompanyId", crossCompanyId);
     if (crossCompanyId) {
       if (crossCompanyId === "all") {
         setAbleToSelect(true);
