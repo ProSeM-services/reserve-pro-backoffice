@@ -120,7 +120,6 @@ export function AppointmentsTable() {
   const data =
     appointmentsFilterDate === "today" ? todayAppointments : appointmentsTable;
 
-  console.log("appointmentsTable", appointmentsTable);
   return (
     <LoaderWrapper loading={loading && !fetched} type="appointments">
       {data.length === 0 ? (

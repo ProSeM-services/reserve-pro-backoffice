@@ -1,6 +1,13 @@
 import useSession from "@/hooks/useSession";
 import { IAppointment } from "@/interfaces/appointments.interface";
-import { addDays, isWithinInterval, parseISO, format } from "date-fns";
+import {
+  addDays,
+  isWithinInterval,
+  parseISO,
+  format,
+  startOfDay,
+  endOfDay,
+} from "date-fns";
 import { useState } from "react";
 import { es } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
@@ -19,7 +26,7 @@ export function CalendarAppointments({
 }: {
   appointments: IAppointment[];
 }) {
-  const [start, setStart] = useState<Date>(new Date());
+  const [start, setStart] = useState<Date>(startOfDay(new Date()));
   const [direction, setDirection] = useState<number>(0);
 
   const moveForward = () => {
@@ -32,7 +39,7 @@ export function CalendarAppointments({
     setStart((s) => addDays(s, -1));
   };
 
-  const end = addDays(start, 4);
+  const end = endOfDay(addDays(start, 4));
   const daysInRange: Date[] = [];
   let currentDate = start;
   while (currentDate <= end) {
@@ -43,14 +50,16 @@ export function CalendarAppointments({
   const { member } = useSession();
   if (!member) return;
 
-  //   const userAppointments = appointments.filter(
-  //     (app) => app.UserId === member.id
-  //   );
-
   const appointmentsByDay: Record<string, IAppointment[]> = appointments.reduce(
     (acc, appointment) => {
       const appointmentDate = parseISO(appointment.date);
-      if (isWithinInterval(appointmentDate, { start, end })) {
+
+      if (
+        isWithinInterval(appointmentDate, {
+          start: startOfDay(start),
+          end: endOfDay(end),
+        })
+      ) {
         const dayKey = format(appointmentDate, "yyyy-MM-dd");
         if (!acc[dayKey]) acc[dayKey] = [];
         acc[dayKey].push(appointment);
@@ -62,6 +71,7 @@ export function CalendarAppointments({
 
   const finalData: IWeekData[] = daysInRange.map((day) => {
     const dayKey = format(day, "yyyy-MM-dd");
+    // console.log("dayKey", dayKey);
     return {
       labelDay: format(day, "EEEE", { locale: es }),
       dd_mm: format(day, "dd/MM", { locale: es }),
