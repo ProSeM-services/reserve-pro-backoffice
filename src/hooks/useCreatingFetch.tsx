@@ -3,11 +3,11 @@ import {
   ICompany,
   ICreateCompany,
   ICreateService,
+  ICreateUser,
   IService,
   IUser,
 } from "@/interfaces";
 import { IAppointment } from "@/interfaces/appointments.interface";
-import { ICreateMember } from "@/interfaces/member.iterface";
 import { AppointmentServices } from "@/services/appointment.services";
 import { CompanyServices } from "@/services/company.services";
 import { MemberServices } from "@/services/member.services";
@@ -73,7 +73,7 @@ export default function useCreatingFetch() {
       //   dispatch(toggleCompanyLoading(false));
     }
   };
-  const createMember = async (data: ICreateMember) => {
+  const createMember = async (data: ICreateUser) => {
     try {
       //   dispatch(toggleMembersLoading(true));
       const newMember = await MemberServices.createMember(data);

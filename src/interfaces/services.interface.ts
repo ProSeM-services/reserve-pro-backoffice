@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MemberZodSchema } from "./member.iterface";
+import { UserSchema } from "./user.interface";
 
 export const PROVISION_VALUES = [
   "Presencial",
@@ -16,7 +16,7 @@ export const ServiceZodSchema = z.object({
   duration: z.number(),
   images: z.array(z.string()).default([]).nullable(),
   provision: z.enum(PROVISION_VALUES),
-  Users: z.array(MemberZodSchema),
+  Users: z.array(UserSchema),
   companyId: z.string().optional(),
 });
 

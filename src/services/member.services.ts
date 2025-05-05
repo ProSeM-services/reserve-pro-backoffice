@@ -1,7 +1,6 @@
 import { axiosInstance, BASE_URL } from "@/config/axios.config";
-import { IAddMember, IUser } from "@/interfaces";
+import { IAddMember, ICreateUser, IUser } from "@/interfaces";
 import { IAPIUser } from "@/interfaces/api";
-import { ICreateMember } from "@/interfaces/member.iterface";
 
 export class MemberServices {
   static async getMembers(): Promise<IUser[]> {
@@ -37,7 +36,7 @@ export class MemberServices {
     return res.data;
   }
 
-  static async createMember(data: ICreateMember): Promise<IAPIUser> {
+  static async createMember(data: ICreateUser): Promise<IAPIUser> {
     const res = await axiosInstance.post(`${BASE_URL}/user`, data);
 
     return res.data;

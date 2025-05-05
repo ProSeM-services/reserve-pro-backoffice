@@ -30,7 +30,17 @@ export const UserSchema = z.object({
     .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })
     .optional(),
 });
-
+export const CreatUserSchema = UserSchema.omit({
+  id: true,
+  createdAt: true,
+  emailConfirmed: true,
+  confirmationToken: true,
+  confirmationTokenExpiresAt: true,
+  membership_status: true,
+  permissions: true,
+  tenantName: true,
+  fullName: true,
+});
 export const UpdateUserSchema = UserSchema.omit({
   id: true,
 });
@@ -53,5 +63,6 @@ export const RegisterUserSchmea = z
     }
   );
 export type IUser = z.infer<typeof UserSchema>;
+export type ICreateUser = z.infer<typeof CreatUserSchema>;
 export type IUpdateUser = z.infer<typeof UpdateUserSchema>;
 export type IUserRegister = z.infer<typeof RegisterUserSchmea>;

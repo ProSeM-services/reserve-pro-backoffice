@@ -1,7 +1,7 @@
 import { axiosInstance, BASE_URL } from "@/config/axios.config";
 import { IUser } from "@/interfaces";
 import { ILoginResponse } from "@/interfaces/auth.interface";
-import { IUserRegister } from "@/interfaces/member.iterface";
+import { IUserRegister } from "@/interfaces/user.interface";
 import axios from "axios";
 
 export class AuthServices {
