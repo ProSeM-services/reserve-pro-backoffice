@@ -9,10 +9,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
-import {
-  CreateMemberZodSchema,
-  ICreateMember,
-} from "@/interfaces/member.iterface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,7 +23,8 @@ import { BaselineIcon, ShieldCheck } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { ROLES_VALUES } from "@/lib/constants/role";
-const INITIAL_MEMBER_DATA: ICreateMember = {
+import { CreatUserSchema, ICreateUser } from "@/interfaces";
+const INITIAL_MEMBER_DATA: ICreateUser = {
   email: "",
   lastName: "",
   name: "",
@@ -44,11 +41,11 @@ export function MemberForm() {
   const { toast } = useToast();
   const { createMember } = useCreatingFetch();
   const [loading, setLoading] = useState(false);
-  const form = useForm<ICreateMember>({
-    resolver: zodResolver(CreateMemberZodSchema),
+  const form = useForm<ICreateUser>({
+    resolver: zodResolver(CreatUserSchema),
     defaultValues: INITIAL_MEMBER_DATA,
   });
-  const onSubmit = async (values: ICreateMember) => {
+  const onSubmit = async (values: ICreateUser) => {
     try {
       setLoading(true);
       await createMember(values);

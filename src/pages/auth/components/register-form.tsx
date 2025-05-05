@@ -12,10 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  IUserRegister,
-  RegisterUserSchmea,
-} from "@/interfaces/member.iterface";
+import { IUserRegister, RegisterUserSchmea } from "@/interfaces/user.interface";
 import { AuthServices } from "@/services/auth.services";
 import { useToast } from "@/components/ui/use-toast";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";

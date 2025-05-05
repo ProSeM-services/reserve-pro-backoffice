@@ -10,10 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { IMember } from "@/interfaces/member.iterface";
 import { Label } from "@/components/ui/label";
+import { IUser } from "@/interfaces";
 
-export function SendInviteUser({ member }: { member: IMember }) {
+export function SendInviteUser({ member }: { member: IUser }) {
   const [isInvited, setIsInvited] = useState(false);
   const [loading, setIsLoading] = useState(false);
   const handleInvite = async () => {

@@ -1,10 +1,10 @@
-import { UserZod } from "@/interfaces";
+import { IUser } from "@/interfaces";
 import { IStoreState } from "@/store/interface/state.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface SessionState extends IStoreState {
-  session?: UserZod;
+  session?: IUser;
   accessToken: string;
 }
 
@@ -21,7 +21,7 @@ export const sessionSlice = createSlice({
   name: "session",
   initialState,
   reducers: {
-    setSession: (state, action: PayloadAction<UserZod>) => {
+    setSession: (state, action: PayloadAction<IUser>) => {
       state.session = action.payload;
       state.fetched = true;
     },

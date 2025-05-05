@@ -6,12 +6,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { IMember } from "@/interfaces/member.iterface";
 import { EllipsisVertical, XIcon } from "lucide-react";
 import { MemberAsideDetails } from "./aside/member-aside-details";
+import { IUser } from "@/interfaces";
 
 interface OpenMemberDetailsProps {
-  member: IMember;
+  member: IUser;
 }
 export function OpenMemberDetails({ member }: OpenMemberDetailsProps) {
   return (

@@ -34,7 +34,7 @@ export function CompanySwitcher() {
   const dispatch = useAppDispatch();
   const handleSelectCompany = (company: ICompany | string) => {
     if (typeof company === "string") {
-      setActiveTeam(member?.companyName);
+      setActiveTeam(member?.companyName || "");
       dispatch(setCrossMainCompany("all"));
       toast({
         title: "Atencion",
@@ -85,7 +85,7 @@ export function CompanySwitcher() {
             <LoaderWrapper loading={loading} type="company">
               <DropdownMenuItem
                 key={"todas"}
-                onClick={() => handleSelectCompany(member?.companyName)}
+                onClick={() => handleSelectCompany(member?.companyName || "")}
                 className="gap-2 p-2 border rounded-none bg-gray-800 text-white cursor-pointer"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">

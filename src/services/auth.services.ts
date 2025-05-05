@@ -1,7 +1,7 @@
 import { axiosInstance, BASE_URL } from "@/config/axios.config";
-import { UserZod } from "@/interfaces";
+import { IUser } from "@/interfaces";
 import { ILoginResponse } from "@/interfaces/auth.interface";
-import { ITentant, IUserRegister } from "@/interfaces/member.iterface";
+import { IUserRegister } from "@/interfaces/user.interface";
 import axios from "axios";
 
 export class AuthServices {
@@ -10,17 +10,17 @@ export class AuthServices {
 
     return response.data;
   }
-  static async register(data: IUserRegister): Promise<ITentant> {
+  static async register(data: IUserRegister): Promise<IUser> {
     const response = await axios.post(`${BASE_URL}/auth/register`, data);
 
     return response.data;
   }
-  static async confirmEmail(data: { token: string }): Promise<ITentant> {
+  static async confirmEmail(data: { token: string }): Promise<IUser> {
     const response = await axios.post(`${BASE_URL}/auth/confirmation`, data);
 
     return response.data;
   }
-  static async getUserByToken(data: { token: string }): Promise<ITentant> {
+  static async getUserByToken(data: { token: string }): Promise<IUser> {
     const response = await axios.post(
       `${BASE_URL}/auth/get-user-by-token`,
       data
@@ -28,7 +28,7 @@ export class AuthServices {
 
     return response.data;
   }
-  static async me(): Promise<UserZod> {
+  static async me(): Promise<IUser> {
     const response = await axiosInstance.post(`${BASE_URL}/auth/me`);
 
     return response.data;

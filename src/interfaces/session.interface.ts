@@ -1,7 +1,7 @@
-import { UserZod } from "./user.interface";
+import { IUser } from "./user.interface";
 
 export interface ISession {
-  user: UserZod;
+  user: IUser;
   backendTokens: {
     accessToken: string;
     refreshToken: string;

@@ -1,6 +1,5 @@
 import { BASE_URL } from "@/config/axios.config";
-import { ICompany, IService } from "@/interfaces";
-import { IMember } from "@/interfaces/member.iterface";
+import { ICompany, IService, IUser } from "@/interfaces";
 import axios from "axios";
 
 export class ClientServices {
@@ -28,7 +27,7 @@ export class ClientServices {
     const res = await axios.get(`${BASE_URL}/services/clients/${id}`);
     return res.data;
   }
-  static async getMemberById(id: string): Promise<IMember> {
+  static async getMemberById(id: string): Promise<IUser> {
     const res = await axios.get(`${BASE_URL}/user/clients/${id}`);
     return res.data;
   }
@@ -38,13 +37,13 @@ export class ClientServices {
     );
     return res.data;
   }
-  static async getCompanyMembers(companyId: string): Promise<IMember[]> {
+  static async getCompanyMembers(companyId: string): Promise<IUser[]> {
     const res = await axios.get(
       `${BASE_URL}/client/companies/${companyId}/members`
     );
     return res.data;
   }
-  static async getServiceMembers(serviceId: string): Promise<IMember[]> {
+  static async getServiceMembers(serviceId: string): Promise<IUser[]> {
     const res = await axios.get(
       `${BASE_URL}/client/services/${serviceId}/members`
     );

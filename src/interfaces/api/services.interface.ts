@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MemberZodSchema } from "./member.iterface";
+import { UserApiSchema } from "./user.interface";
 
 export const PROVISION_VALUES = [
   "Presencial",
@@ -16,7 +16,7 @@ export const ServiceZodSchema = z.object({
   duration: z.number(),
   images: z.array(z.string()).nullable(),
   provision: z.enum(PROVISION_VALUES),
-  Users: z.array(MemberZodSchema),
+  Users: z.array(UserApiSchema),
   companyId: z.string().optional(),
 });
 
@@ -31,20 +31,3 @@ export const UpdateServiceZodSchema = ServiceZodSchema.omit({
 }).partial();
 
 export type IAPIService = z.infer<typeof ServiceZodSchema>;
-export type ICreateService = z.infer<typeof CreateServiceZodSchema>;
-export type IUpdateService = z.infer<typeof UpdateServiceZodSchema>;
-export const AddServiceToCompanySchema = z.object({
-  companyId: z.string().min(1),
-  serviceId: z.string().min(1),
-});
-
-export const AddServiceSchema = z.object({
-  companyId: z.string(),
-  serviceId: z.string(),
-});
-export const AddMemberToService = z.object({
-  serviceId: z.string(),
-  userId: z.string(),
-});
-export type IAddMemberToService = z.infer<typeof AddMemberToService>;
-export type IAddService = z.infer<typeof AddServiceSchema>;

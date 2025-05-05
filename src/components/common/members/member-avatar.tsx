@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { IMember } from "@/interfaces/member.iterface";
+import { IUser } from "@/interfaces";
 import { getS3Url } from "@/lib/utils/s3-image";
 
 export function MemberAvatar({
@@ -7,7 +7,7 @@ export function MemberAvatar({
   size = "lg",
   className,
 }: {
-  member: IMember;
+  member: IUser;
   className?: string;
   size?: "xs" | "sm" | "md" | "lg";
 }) {

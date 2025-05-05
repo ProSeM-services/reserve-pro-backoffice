@@ -7,7 +7,7 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import useSession from "@/hooks/useSession";
-import { IMember } from "@/interfaces/member.iterface";
+import { IUser } from "@/interfaces";
 import { setSelectedMemberForAppointments } from "@/store/feature/appointnments/appointmentsSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { UsersRound } from "lucide-react";
@@ -30,7 +30,7 @@ export function MemberSelector() {
       return;
     }
     if (!member) return;
-    dispatch(setSelectedMemberForAppointments(member as IMember));
+    dispatch(setSelectedMemberForAppointments(member as IUser));
     setAbleToSelect(false);
   }, []);
 

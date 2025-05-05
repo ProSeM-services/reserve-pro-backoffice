@@ -2,8 +2,8 @@ import { z } from "zod";
 import { WorkhourZodSchema } from "./workhour.interface";
 import { CATEGORY_VALUES } from "./categeory.interface";
 import { LocationZodSchema } from "./location.interface";
-import { MemberZodSchema } from "./member.iterface";
 import { ServiceZodSchema } from "./services.interface";
+import { UserSchema } from "./user.interface";
 
 export const CompanyZodSchema = z.object({
   id: z.string(),
@@ -21,7 +21,7 @@ export const CompanyZodSchema = z.object({
   workhours: z.array(WorkhourZodSchema).optional(),
   members: z.array(z.string()).optional(),
   services: z.array(z.string()).optional(),
-  Users: z.array(MemberZodSchema).optional(),
+  Users: z.array(UserSchema).optional(),
   Services: z.array(ServiceZodSchema).optional(),
 });
 export const CreateCompanyZodSchema = z.object({
@@ -39,7 +39,7 @@ export const CreateCompanyZodSchema = z.object({
 });
 
 export type ICompany = z.infer<typeof CompanyZodSchema>;
-export const CompanyEditSchema = CompanyZodSchema.omit({id: true}).partial(); //deleter optional and add omit and partial
+export const CompanyEditSchema = CompanyZodSchema.omit({ id: true }).partial(); //deleter optional and add omit and partial
 export type IEditCompany = z.infer<typeof CompanyEditSchema>;
 
 export type ICreateCompany = z.infer<typeof CreateCompanyZodSchema>;

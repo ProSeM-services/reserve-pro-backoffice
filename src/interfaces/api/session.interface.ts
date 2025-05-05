@@ -1,7 +1,7 @@
-import { UserZod } from "./user.interface";
+import { IAPIUser } from "./user.interface";
 
 export interface ISession {
-  user: UserZod;
+  user: IAPIUser;
   backendTokens: {
     accessToken: string;
     refreshToken: string;

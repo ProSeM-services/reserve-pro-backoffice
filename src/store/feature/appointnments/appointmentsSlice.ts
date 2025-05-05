@@ -1,6 +1,5 @@
-import { ICompany } from "@/interfaces";
+import { ICompany, IUser } from "@/interfaces";
 import { IAppointment } from "@/interfaces/appointments.interface";
-import { IMember } from "@/interfaces/member.iterface";
 import { IStoreState } from "@/store/interface/state.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
@@ -15,7 +14,7 @@ export interface AppointmentState extends IStoreState {
   selectedAppointment?: IAppointment;
   inmutablesAppointments: IAppointment[];
   appointmentsFilterDate: IAppointmentsFilterDate;
-  selectedMemberForAppointments?: IMember | "all";
+  selectedMemberForAppointments?: IUser | "all";
   selectedCompanyForAppointments?: ICompany | "all";
 }
 
@@ -79,7 +78,7 @@ export const appointmentSlice = createSlice({
     },
     setSelectedMemberForAppointments: (
       state,
-      action: PayloadAction<IMember | "all">
+      action: PayloadAction<IUser | "all">
     ) => {
       state.selectedMemberForAppointments = action.payload;
       if (action.payload === "all") {
@@ -87,7 +86,7 @@ export const appointmentSlice = createSlice({
         return;
       }
 
-      const member = action.payload as IMember;
+      const member = action.payload as IUser;
 
       const filterState = state.inmutablesAppointments.filter(
         (e) => e.UserId === member.id
@@ -110,7 +109,7 @@ export const appointmentSlice = createSlice({
       state.selectedCompanyForAppointments = action.payload;
       if (action.payload === "all") {
         if (state.selectedMemberForAppointments !== "all") {
-          const member = state.selectedMemberForAppointments as IMember;
+          const member = state.selectedMemberForAppointments as IUser;
           const filterState = state.inmutablesAppointments.filter(
             (e) => e.UserId === member.id
           );
@@ -124,7 +123,7 @@ export const appointmentSlice = createSlice({
       }
       const company = action.payload as ICompany;
       if (state.selectedMemberForAppointments !== "all") {
-        const member = state.selectedMemberForAppointments as IMember;
+        const member = state.selectedMemberForAppointments as IUser;
         const filterState = state.inmutablesAppointments.filter(
           (e) => e.UserId === member.id
         );

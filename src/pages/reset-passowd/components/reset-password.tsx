@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { UserZod } from "@/interfaces";
+import { IUser } from "@/interfaces";
 import { useNavigate, useSearchParams } from "react-router";
 import { AuthServices } from "@/services/auth.services";
 import { MemberServices } from "@/services/member.services";
@@ -17,7 +17,7 @@ interface ResetPasswordFormValues {
 export const ResetPassword: React.FC = () => {
   const [validating, setValidating] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [user, setUser] = useState<UserZod>();
+  const [user, setUser] = useState<IUser>();
   const [params] = useSearchParams();
   useEffect(() => {
     const token = params.get("token");

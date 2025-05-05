@@ -1,13 +1,13 @@
-import { IMember } from "@/interfaces/member.iterface";
+import { IUser } from "@/interfaces";
 import { IStoreState } from "@/store/interface/state.interface";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface MemberState extends IStoreState {
   value: number;
-  members: IMember[];
-  memberLogged?: IMember;
-  inmutableMembers: IMember[];
+  members: IUser[];
+  memberLogged?: IUser;
+  inmutableMembers: IUser[];
 }
 
 const initialState: MemberState = {
@@ -27,19 +27,19 @@ export const memberSlice = createSlice({
     toggleMembersLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setMemberLogged: (state, action: PayloadAction<IMember>) => {
+    setMemberLogged: (state, action: PayloadAction<IUser>) => {
       state.memberLogged = action.payload;
     },
     setMembers: (
       state,
-      action: PayloadAction<{ members: IMember[]; fromServer?: boolean }>
+      action: PayloadAction<{ members: IUser[]; fromServer?: boolean }>
     ) => {
       const { members, fromServer } = action.payload;
       state.fetched = true;
       state.members = members;
       if (fromServer) state.inmutableMembers = members;
     },
-    addMember: (state, action: PayloadAction<IMember>) => {
+    addMember: (state, action: PayloadAction<IUser>) => {
       state.members.push(action.payload);
       state.inmutableMembers.push(action.payload);
     },
@@ -48,7 +48,7 @@ export const memberSlice = createSlice({
     },
     updateMember: (
       state,
-      action: PayloadAction<{ id: string; changes: Partial<IMember> }>
+      action: PayloadAction<{ id: string; changes: Partial<IUser> }>
     ) => {
       const { id, changes } = action.payload;
 
