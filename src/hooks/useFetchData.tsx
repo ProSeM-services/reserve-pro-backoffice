@@ -32,12 +32,11 @@ import { memberListAdpater } from "@/adapters/members.adapter";
 import { appointmentListAdpater } from "@/adapters/appointments.adpater";
 import { customersListAdpater } from "@/adapters/customers.adapter";
 import { IAPICustomer } from "@/interfaces/api/customer.interface";
-import { IMember } from "@/interfaces/member.iterface";
-import { UserZod } from "@/interfaces";
+import { IUser } from "@/interfaces";
 
 export default function useFetchData() {
   const storageMember = localStorage.getItem("userLogged");
-  const member = storageMember ? (JSON.parse(storageMember) as IMember) : null;
+  const member = storageMember ? (JSON.parse(storageMember) as IUser) : null;
 
   const dispatch = useAppDispatch();
   const setMainLoaderStatus = (status: boolean) => {
@@ -159,7 +158,7 @@ export default function useFetchData() {
       dispatch(toggleAppointmentsLoading(false));
     }
   };
-  const fetchMemberLogged = (member: UserZod) => {
+  const fetchMemberLogged = (member: IUser) => {
     dispatch(setSession(member));
   };
   const { inmutablesCompanies } = useAppSelector((s) => s.company);

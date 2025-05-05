@@ -1,13 +1,13 @@
 import { Input } from "@/components/ui/input";
-import { IMember } from "@/interfaces/member.iterface";
 import { MemberServices } from "@/services/member.services";
 import { useState } from "react";
 import { MemberCard } from "./member-card";
 import LoaderWrapper from "@/components/common/loader-wrapper";
 import { UserRoundX, UserSearch } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
+import { IUser } from "@/interfaces";
 export function SearchMembers() {
-  const [members, setMembers] = useState<IMember[]>([]);
+  const [members, setMembers] = useState<IUser[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [searching, setSearching] = useState(false);
   const [isResponseEmpty, setIsResponseEmpty] = useState(false);

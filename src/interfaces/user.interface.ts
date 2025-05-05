@@ -2,29 +2,56 @@ import { ACCOUNT_TYPE_VALUES } from "@/lib/constants/accout-type";
 import { Permission } from "@/lib/constants/permissions";
 import { ROLES_VALUES } from "@/lib/constants/role";
 import { z } from "zod";
-export const UserZodSchema = z.object({
+import { WorkhourZodSchema } from "./workhour.interface";
+
+export const UserSchema = z.object({
   id: z.string(),
-  name: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  EnterpriseId: z.string(),
+  name: z.string().min(1),
+  lastName: z.string().min(1),
+  userName: z.string().min(1),
+  password: z.string().min(1),
+  fullName: z.string(),
+  email: z.string().min(1),
   role: z.enum(ROLES_VALUES),
-  image: z.string().optional(),
-  tenantName: z.string().optional(),
   companyName: z.string().optional(),
-  account_type: z.enum(ACCOUNT_TYPE_VALUES).optional(),
+  tenantName: z.string().optional(),
+  phone: z.string().optional(),
+  image: z.string().optional(),
+  emailConfirmed: z.boolean().optional(),
   membership_status: z.boolean().optional(),
+  confirmationToken: z.string().optional(),
+  confirmationTokenExpiresAt: z.date().optional(),
+  EnterpriseId: z.string(),
+  workhours: z.array(WorkhourZodSchema).optional(),
+  account_type: z.enum(ACCOUNT_TYPE_VALUES).optional(),
+  CompanyId: z.string().optional(),
+  createdAt: z.string().optional(),
   permissions: z
     .array(z.nativeEnum(Permission), { message: "El permiso no es válido" })
     .optional(),
 });
-export const UpdateUserSchema = UserZodSchema.omit({
-  id: true,
-  EnterpriseId: true,
-  role: true,
-  companyName: true,
-  tenantName: true,
-}).optional();
 
-export type UserZod = z.infer<typeof UserZodSchema>;
+export const UpdateUserSchema = UserSchema.omit({
+  id: true,
+});
+
+export const RegisterUserSchmea = z
+  .object({
+    name: z.string().min(1),
+    lastName: z.string().min(1),
+    userName: z.string().min(1),
+    password: z.string().min(1),
+    email: z.string().min(1),
+    phone: z.string().optional(),
+    confirmPassword: z.string(),
+  })
+  .refine(
+    (data) => data.password === data.confirmPassword, // Comparación entre las contraseñas
+    {
+      path: ["confirmPassword"], // El campo al que se asignará el error si falla la validación
+      message: "Las contraseñas no coinciden", // Mensaje de error
+    }
+  );
+export type IUser = z.infer<typeof UserSchema>;
 export type IUpdateUser = z.infer<typeof UpdateUserSchema>;
+export type IUserRegister = z.infer<typeof RegisterUserSchmea>;

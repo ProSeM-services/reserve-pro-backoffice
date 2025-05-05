@@ -87,6 +87,5 @@ export const EditMemberZodSchema = MemberZodSchema.omit({
       .optional(),
   });
 
-export type IMember = z.infer<typeof MemberZodSchema>;
 export type ICreateMember = z.infer<typeof CreateMemberZodSchema>;
 export type IEditMember = z.infer<typeof EditMemberZodSchema>;

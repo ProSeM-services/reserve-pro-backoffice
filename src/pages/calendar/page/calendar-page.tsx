@@ -10,13 +10,13 @@ import {
 import { MemberAvatar } from "@/components/common/members/member-avatar";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
-import { IMember } from "@/interfaces/member.iterface";
+import { IUser } from "@/interfaces";
 
 export function CalendarPage() {
   const { appointments } = useAppSelector((s) => s.appointments);
   const { members } = useAppSelector((s) => s.member);
 
-  const [selectedMember, setSelectedMember] = useState<IMember>();
+  const [selectedMember, setSelectedMember] = useState<IUser>();
 
   const handleSelectMember = (id: string) => {
     const member = members.find((m) => m.id === id);

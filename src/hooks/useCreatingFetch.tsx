@@ -4,9 +4,10 @@ import {
   ICreateCompany,
   ICreateService,
   IService,
+  IUser,
 } from "@/interfaces";
 import { IAppointment } from "@/interfaces/appointments.interface";
-import { ICreateMember, IMember } from "@/interfaces/member.iterface";
+import { ICreateMember } from "@/interfaces/member.iterface";
 import { AppointmentServices } from "@/services/appointment.services";
 import { CompanyServices } from "@/services/company.services";
 import { MemberServices } from "@/services/member.services";
@@ -85,7 +86,7 @@ export default function useCreatingFetch() {
     }
   };
 
-  const editMember = async (id: string, data: Partial<IMember>) => {
+  const editMember = async (id: string, data: Partial<IUser>) => {
     try {
       await MemberServices.update(id, data);
       dispatch(updateMember({ id, changes: data }));

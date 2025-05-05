@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { ICompany } from "@/interfaces";
-import { IMember } from "@/interfaces/member.iterface";
+import { ICompany, IUser } from "@/interfaces";
 import { CircleMinus } from "lucide-react";
 import { useState } from "react";
 import {
@@ -17,7 +16,7 @@ export function RemoveMember({
   member,
   company,
 }: {
-  member: IMember;
+  member: IUser;
   company: ICompany;
 }) {
   const [deleting, setDeleting] = useState(false);

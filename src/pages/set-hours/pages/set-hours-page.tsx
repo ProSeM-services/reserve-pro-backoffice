@@ -13,13 +13,13 @@ import { MemberCard } from "@/pages/members/components/member-card";
 import { hasPermission } from "@/lib/auth/has-permission";
 import { Permission } from "@/lib/constants/permissions";
 import { useState } from "react";
-import { IMember } from "@/interfaces/member.iterface";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { IUser } from "@/interfaces";
 export function SetHoursPage() {
   const { members } = useAppSelector((s) => s.member);
   const { companies } = useAppSelector((s) => s.company);
   const { member } = useSession();
-  const [selectedMember, setSelectedMember] = useState<IMember>(member);
+  const [selectedMember, setSelectedMember] = useState<IUser>(member);
   const [selectedCompany, setSelectedCompany] = useState(companies[0]);
 
   if (!member) return;

@@ -1,9 +1,8 @@
-import { IAPIMember } from "@/interfaces/api/member.iterface";
-import { IMember } from "@/interfaces/member.iterface";
+import { IUser } from "@/interfaces";
+import { IAPIUser } from "@/interfaces/api";
 
-export function memberAdpater(member: IAPIMember): IMember {
+export function memberAdpater(member: IAPIUser): IUser {
   return {
-    companyName: member?.companyName,
     email: member.email,
     id: member.id,
     lastName: member.lastName,
@@ -18,10 +17,11 @@ export function memberAdpater(member: IAPIMember): IMember {
     permissions: member.permissions,
     phone: member.phone,
     workhours: member.workhours,
+    companyName: member.companyName,
     membership_status: member.membership_status,
     EnterpriseId: member.EnterpriseId,
   };
 }
-export function memberListAdpater(members: IAPIMember[]): IMember[] {
+export function memberListAdpater(members: IAPIUser[]): IUser[] {
   return members.map((member) => memberAdpater(member));
 }

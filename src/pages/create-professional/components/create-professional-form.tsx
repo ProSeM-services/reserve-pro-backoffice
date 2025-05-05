@@ -1,4 +1,4 @@
-import { UpdateUserSchema, UserZod } from "@/interfaces";
+import { UpdateUserSchema, IUser } from "@/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import { MemberServices } from "@/services/member.services";
 import { Label } from "@/components/ui/label";
 
 interface CreateProfessionalFormProps {
-  user: UserZod;
+  user: IUser;
 }
 
 export function CreateProfessionalForm({ user }: CreateProfessionalFormProps) {
@@ -31,7 +31,7 @@ export function CreateProfessionalForm({ user }: CreateProfessionalFormProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const form = useForm<UserZod>({
+  const form = useForm<IUser>({
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
       ...user,
@@ -43,7 +43,7 @@ export function CreateProfessionalForm({ user }: CreateProfessionalFormProps) {
   const { toast } = useToast();
   const nav = useNavigate();
 
-  const onSubmit = async (values: UserZod) => {
+  const onSubmit = async (values: IUser) => {
     const accessToken = localStorage.getItem("accessToken");
     let data = values;
     try {

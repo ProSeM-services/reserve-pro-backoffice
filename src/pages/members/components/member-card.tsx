@@ -1,15 +1,14 @@
 import { Card } from "@/components/ui/card";
-import { IMember } from "@/interfaces/member.iterface";
 import { OpenMemberDetails } from "./open-member-details";
 import { MemberAvatar } from "@/components/common/members/member-avatar";
 import { SendInviteUser } from "./send-invite-user";
+import { IUser } from "@/interfaces";
 
 interface MemberCardProps {
-  member: IMember;
+  member: IUser;
   type?: "details" | "invite" | "read";
 }
 export function MemberCard({ member, type = "details" }: MemberCardProps) {
-  console.log("MemberCard", member);
   return (
     <Card
       className={`flex flex-col gap-4 p-2  min-w-[300px] w-full max-md:text-xs  hover:shadow-md transition-all duration-200 `}

@@ -2,12 +2,12 @@ import { BackgroundMark } from "@/components/common/BackgroundMark";
 import { setAuthInterceptor } from "@/config/axios.config";
 import { useEffect, useState } from "react";
 import { LoaderMain } from "@/components/common/loader-main";
-import { UserZod } from "@/interfaces";
+import { IUser } from "@/interfaces";
 import { AuthServices } from "@/services/auth.services";
 import { CreateProfessionalForm } from "../components/create-professional-form";
 
 export function CreateProfessionalPage() {
-  const [user, setUser] = useState<UserZod>();
+  const [user, setUser] = useState<IUser>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

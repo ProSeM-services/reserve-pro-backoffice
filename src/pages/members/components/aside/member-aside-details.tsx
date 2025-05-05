@@ -7,11 +7,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  EditMemberZodSchema,
-  IEditMember,
-  IMember,
-} from "@/interfaces/member.iterface";
+import { EditMemberZodSchema, IEditMember } from "@/interfaces/member.iterface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -41,7 +37,8 @@ import { Permission } from "@/lib/constants/permissions";
 import { Role, ROLES_VALUES } from "@/lib/constants/role";
 import { getS3Url } from "@/lib/utils/s3-image";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
-export function MemberAsideDetails({ member }: { member: IMember }) {
+import { IUser } from "@/interfaces";
+export function MemberAsideDetails({ member }: { member: IUser }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [selectedPermissions, setSelectedPermissions] = useState<Permission[]>(

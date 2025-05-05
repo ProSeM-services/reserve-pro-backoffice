@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { IMember } from "@/interfaces/member.iterface";
 import { Button } from "@/components/ui/button";
-import { ICompany } from "@/interfaces";
+import { ICompany, IUser } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { BarLoader } from "@/components/common/bar-loader";
 import { MemberServices } from "@/services/member.services";
@@ -12,7 +11,7 @@ import useCreatingFetch from "@/hooks/useCreatingFetch";
 export function AddMemberAside({ company }: { company: ICompany }) {
   const [loading, setLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
-  const [members, setMembers] = useState<IMember[]>([]);
+  const [members, setMembers] = useState<IUser[]>([]);
   const [selecetedMembers, setSelectedMembers] = useState<string[]>([]);
   useEffect(() => {
     const fetchMembers = async () => {

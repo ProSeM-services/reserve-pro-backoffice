@@ -1,9 +1,9 @@
-import { UserZod } from "@/interfaces";
+import { IUser } from "@/interfaces";
 import { Permission } from "@/lib/constants/permissions";
 import { ROLES } from "@/lib/constants/role";
 
 export function hasPermission(
-  user: UserZod,
+  user: IUser,
   requiredPermission: Permission
 ): boolean {
   const { role, permissions: userPermissions = [] } = user;
