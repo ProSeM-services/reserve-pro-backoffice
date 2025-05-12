@@ -67,7 +67,7 @@ export function SetHoursPage() {
             </SelectContent>
           </Select>
         )}
-        <section className=" flex-grow  ">
+        <section className=" flex-grow   ">
           <WorkhoursEditor
             id={selectedMember.id}
             type={"member"}
