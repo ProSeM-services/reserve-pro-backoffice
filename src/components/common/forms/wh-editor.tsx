@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IWorkhour, Segment } from "@/interfaces";
 import { Button } from "@/components/ui/button";
-import {
-  CircleCheck,
-  CircleDot,
-  Copy,
-  Edit,
-  Minus,
-  PlusIcon,
-} from "lucide-react";
+import { Edit, Minus, PlusIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import {
@@ -134,6 +127,7 @@ export const WorkhoursEditor: React.FC<{
     segmentIndex: number,
     updatedSegment: Partial<Segment>
   ) => {
+    console.log("handleSegmentChange", { day, segmentIndex, updatedSegment });
     const updatedWeek = week.map((entry) =>
       entry.workhour?.day === day
         ? {
@@ -284,13 +278,15 @@ export const WorkhoursEditor: React.FC<{
 
               <div className="flex  flex-col w-full border ">
                 {HOURS_VALUES.map((time, i) => (
-                  <div className="h-10 ">
+                  <div className="h-10  ">
                     {weekItem.workhour.segments.map((segment) => {
+                      const isActive =
+                        i >= HOURS_VALUES.indexOf(segment.startime) &&
+                        i <= HOURS_VALUES.indexOf(segment.endTime);
                       return (
                         <div
                           className={`${
-                            i >= HOURS_VALUES.indexOf(segment.startime) &&
-                            i <= HOURS_VALUES.indexOf(segment.endTime)
+                            isActive
                               ? `bg-sky-500 h-10 text-white flex items-center px-2  ${
                                   i === HOURS_VALUES.indexOf(segment.startime)
                                     ? "rounded-t"
@@ -345,11 +341,9 @@ interface EditWorkHourAsideProps {
 function EditWorkHourAside({
   week,
   selectIsDisabled,
-  handleDaySelection,
   handleSegmentChange,
   handleRemoveSegment,
   handleAddSegment,
-  handleReplicate,
   handleSave,
   updating,
 }: EditWorkHourAsideProps) {
@@ -365,34 +359,20 @@ function EditWorkHourAside({
             <SheetTitle>Modificar Horarios</SheetTitle>
             <SheetDescription>
               Puedes definir un bloque de horarios para cada dia de la semana.
-              Si deseas replicar un bloque de horarios en varios dias,
-              selecciona los dias y luego presiona "Replicar".
+              {/* Si deseas replicar un bloque de horarios en varios dias,
+              selecciona los dias y luego presiona "Replicar". */}
             </SheetDescription>
           </SheetHeader>
 
-          <div className="w-full flex flex-col gap-4 overflow-auto h-[90%] max-h-[90%]">
+          <div className="grid grid-cols-2 w-full  gap-4 overflow-auto h-[90%] max-h-[90%] p-4">
             {week.map((weekItem) => (
-              <div key={weekItem.long} className="border border-black">
+              <div key={weekItem.long}>
                 <div
                   className={`flex gap-2 items-center justify-center p-2 border text-center ${
                     weekItem.selected && "bg-primary text-white"
                   }`}
                 >
                   <Label className="uppercase">{weekItem.long}</Label>
-                  <AuthorizationWrapper
-                    permission={Permission.UPDATE_WORKHOURS}
-                  >
-                    <Button
-                      variant={weekItem.selected ? "default" : "ghost"}
-                      onClick={() => handleDaySelection(weekItem.long)}
-                    >
-                      {weekItem.selected ? (
-                        <CircleCheck className="size-4" />
-                      ) : (
-                        <CircleDot className="size-4" />
-                      )}
-                    </Button>
-                  </AuthorizationWrapper>
                 </div>
                 <div className="border flex flex-col gap-2 p-2">
                   {weekItem.workhour.segments.map((segment, segmentIndex) => (
@@ -480,14 +460,6 @@ function EditWorkHourAside({
                       >
                         <p>Agregar</p>
                         <PlusIcon className="size-4" />
-                      </Button>
-                      <Button
-                        variant="secondary"
-                        onClick={() => handleReplicate(weekItem.workhour.day)}
-                        className="flex gap-2"
-                      >
-                        <p>Replicar</p>
-                        <Copy className="size-4" />
                       </Button>
                     </AuthorizationWrapper>
                   )}
