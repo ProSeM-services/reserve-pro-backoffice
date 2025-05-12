@@ -1,4 +1,4 @@
-import { Clock2Icon, HomeIcon } from "lucide-react";
+import { Clock2Icon } from "lucide-react";
 import { CategoryCard } from "@/components/common/category-card";
 import { NeedReladcompanyPage } from "../components/need-reload-company";
 import { EditCompany } from "../components/edit-company";
@@ -25,15 +25,16 @@ export function CompanyDetailPage() {
       <div className="flex max-md:flex-col  gap-2 md:items-center justify-between  ">
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <HomeIcon className="size-5" />
-              <p className="text-lg font-semibold ">{company?.name}</p>
+            <div className="flex  gap-2">
+              <AddImageCompany company={company} key={company.id} />
+              <div className="flex flex-col items-star gap-2  ">
+                <p className="text-lg font-semibold ">{company?.name}</p>
+                <div className="text-gray-500 space-y-1">
+                  <p>{company.address.value}</p>
+                  <p>{company.email}</p>
+                </div>
+              </div>
             </div>
-
-            <div className="flex items-center gap-2  ">
-              <p>{company.address.value}</p>
-            </div>
-            <p>{company.email}</p>
           </div>
           <NeedReladcompanyPage />
         </div>
@@ -111,10 +112,6 @@ export function CompanyDetailPage() {
           </div>
         )}
       </section>
-
-      {/* ---------------------------- IMAGES SECTION ---------------------------- */}
-      <AddImageCompany company={company} key={company.id} />
-      <section className=""></section>
     </div>
   );
 }

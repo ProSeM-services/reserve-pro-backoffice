@@ -23,6 +23,7 @@ import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { useAppSelector } from "@/store/hooks";
 import { Paperclip, TrashIcon } from "lucide-react";
 import { FilesServices } from "@/services/files.services";
+import { getS3Url } from "@/lib/utils/s3-image";
 
 export function EditServicesForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -239,7 +240,7 @@ export function EditServicesForm() {
                   {originalImages.map((src) => (
                     <div className="relative">
                       <img
-                        src={src}
+                        src={getS3Url(src)}
                         alt="algo"
                         className="size-32 object-cover"
                       />

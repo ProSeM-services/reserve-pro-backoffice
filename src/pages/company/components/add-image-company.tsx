@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import useFetchData from "@/hooks/useFetchData";
@@ -8,10 +7,17 @@ import { CompanyEditSchema, ICompany, IEditCompany } from "@/interfaces";
 import { getS3Url } from "@/lib/utils/s3-image";
 import { FilesServices } from "@/services/files.services";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Paperclip, Trash } from "lucide-react";
+import { HomeIcon, Paperclip } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 export function AddImageCompany({ company }: { company: ICompany }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [files, setFiles] = useState<File | null>(null);
@@ -32,7 +38,6 @@ export function AddImageCompany({ company }: { company: ICompany }) {
     },
   });
 
-  console.log("company.image", company);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = event.target.files?.[0];
     if (!selectedFiles) return;
@@ -59,7 +64,6 @@ export function AddImageCompany({ company }: { company: ICompany }) {
   };
 
   const onSubmit = async (values: IEditCompany) => {
-    console.log("VALUES : ", values);
     try {
       setLoading(true);
       let data = { ...values };
@@ -73,7 +77,6 @@ export function AddImageCompany({ company }: { company: ICompany }) {
       await fetchCompanyData(company.id);
       toast({
         title: "Imagen(es) actualizada(s)!",
-        variant: "success",
       });
       form.reset();
     } catch (error) {
@@ -87,68 +90,102 @@ export function AddImageCompany({ company }: { company: ICompany }) {
     }
   };
 
+  const handleResetImages = () => {
+    setPreview(company.image ? getS3Url(company.image) : null);
+    setFiles(null);
+  };
+  const isOriginalImage =
+    company.image && preview === getS3Url(company.image) ? true : false;
   return (
-    <div className=" flex flex-col items-start gap-2">
-      <div className="font-semibold">
-        <Label>Imagen Principal</Label>
-      </div>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className=" space-y-4  overflow-auto max-h-[80vh]   "
-      >
-        {preview && (
-          <div className="relative">
-            <button
-              type="button"
-              className="absolute bg-red-600 rounded-md p-1"
-              onClick={() => {
-                setPreview(null);
-                setFiles(null);
-              }}
-            >
-              <Trash className="w-4 h-4 text-white" />
-            </button>
+    <div className="">
+      <Dialog>
+        <DialogTrigger>
+          {preview ? (
             <img
               src={preview}
               alt="Preview"
-              className="w-32 h-32 rounded-lg object-cover border"
+              className="size-24 rounded-lg object-cover border"
             />
-          </div>
-        )}
-        <div className="flex flex-col space-y-2">
-          <Button
-            onClick={handleButtonClick}
-            variant="ghost"
-            type="button"
-            className="space-x-2 border"
-          >
-            <span>Agregar Imagenes</span>
-            <Paperclip className="size-4 text-primary" />
-          </Button>
-          <Input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-            accept="image/*"
-          />
-
-          {preview && (
-            <div className="flex gap-2 ">
-              <Button type="button" variant={"outline"} className="w-1/4">
-                Cancelar
-              </Button>
-              <Button
-                type="submit"
-                className="flex-grow text-white"
-                disabled={loading}
-              >
-                {loading ? "Cargando..." : "Actualizar"}
-              </Button>
-            </div>
+          ) : (
+            <HomeIcon className="size-24" />
           )}
-        </div>
-      </form>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Imagen de la sucursal: {company.name}</DialogTitle>
+            <p className="text-gray-600 text-sm">
+              Esta será la imágen principal de la sucursal.
+            </p>
+            <DialogDescription>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex flex-col gap-2 items-center"
+              >
+                <div className="size-[450px] ">
+                  {preview ? (
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      className="size-full rounded-lg object-cover border"
+                    />
+                  ) : (
+                    <Button
+                      onClick={handleButtonClick}
+                      variant="ghost"
+                      type="button"
+                      className="space-x-2 size-full border-dashed border-2"
+                    >
+                      <p>cargar imgaen</p>
+                      <Paperclip className="size-4 text-primary" />
+                    </Button>
+                  )}
+                </div>
+                <div className="flex flex-col space-y-2">
+                  <Input
+                    type="file"
+                    ref={fileInputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                    accept="image/*"
+                  />
+
+                  {preview && !isOriginalImage ? (
+                    <div className="flex gap-2 ">
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        className="w-1/4"
+                        onClick={handleResetImages}
+                      >
+                        x
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="flex-grow text-white"
+                        disabled={loading}
+                      >
+                        {loading ? "Cargando..." : "Guardar"}
+                      </Button>
+                    </div>
+                  ) : preview ? (
+                    <>
+                      <Button
+                        onClick={handleButtonClick}
+                        variant="ghost"
+                        type="button"
+                        className="space-x-2 border"
+                      >
+                        <p>Cambiar imagen</p>
+                        <Paperclip className="size-4 text-primary" />
+                      </Button>
+                    </>
+                  ) : null}
+                </div>
+              </form>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
