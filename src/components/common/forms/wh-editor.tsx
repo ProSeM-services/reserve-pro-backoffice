@@ -24,61 +24,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { WorkHourCalendar } from "../work-hour-calendar";
+import { HOURS_VALUES } from "@/constants/work-hours/hour-values";
 interface IDay {
   short: string;
   long: string;
 }
-const HOURS_VALUES = [
-  // "00:00",
-  // "00:30",
-  // "01:00",
-  // "01:30",
-  // "02:00",
-  // "02:30",
-  // "03:00",
-  // "03:30",
-  // "04:00",
-  // "04:30",
-  // "05:00",
-  // "05:30",
-  // "06:00",
-  // "06:30",
-  "07:00",
-  "07:30",
-  "08:00",
-  "08:30",
-  "09:00",
-  "09:30",
-  "10:00",
-  "10:30",
-  "11:00",
-  "11:30",
-  "12:00",
-  "12:30",
-  "13:00",
-  "13:30",
-  "14:00",
-  "14:30",
-  "15:00",
-  "15:30",
-  "16:00",
-  "16:30",
-  "17:00",
-  "17:30",
-  "18:00",
-  "18:30",
-  "19:00",
-  "19:30",
-  "20:00",
-  "20:30",
-  "21:00",
-  "21:30",
-  "22:00",
-  "22:30",
-  "23:00",
-  "23:30",
-  "24:00",
-];
 
 const DAYS: IDay[] = [
   { short: "dom", long: "domingo" },
@@ -127,7 +78,6 @@ export const WorkhoursEditor: React.FC<{
     segmentIndex: number,
     updatedSegment: Partial<Segment>
   ) => {
-    console.log("handleSegmentChange", { day, segmentIndex, updatedSegment });
     const updatedWeek = week.map((entry) =>
       entry.workhour?.day === day
         ? {
@@ -259,58 +209,7 @@ export const WorkhoursEditor: React.FC<{
         updating={updating}
       />
 
-      <section className="flex w-full">
-        <div className="flex flex-col mt-10">
-          {HOURS_VALUES.map((time) => (
-            <div className=" flex items-center h-10">{time}</div>
-          ))}
-        </div>
-        <div className="grid grid-cols-7  w-full h-full gap-1 mx-1">
-          {week.map((weekItem) => (
-            <div key={weekItem.long}>
-              <div
-                className={`flex gap-2 items-center  justify-center p-2 border text-center h-10 ${
-                  weekItem.selected && "bg-primary text-white"
-                }`}
-              >
-                <Label className="uppercase">{weekItem.long}</Label>
-              </div>
-
-              <div className="flex  flex-col w-full border ">
-                {HOURS_VALUES.map((time, i) => (
-                  <div className="h-10  ">
-                    {weekItem.workhour.segments.map((segment) => {
-                      const isActive =
-                        i >= HOURS_VALUES.indexOf(segment.startime) &&
-                        i <= HOURS_VALUES.indexOf(segment.endTime);
-                      return (
-                        <div
-                          className={`${
-                            isActive
-                              ? `bg-sky-500 h-10 text-white flex items-center px-2  ${
-                                  i === HOURS_VALUES.indexOf(segment.startime)
-                                    ? "rounded-t"
-                                    : i ===
-                                      HOURS_VALUES.indexOf(segment.endTime)
-                                    ? "rounded-b"
-                                    : ""
-                                }`
-                              : "hidden "
-                          }`}
-                        >
-                          {time === segment.startime || time === segment.endTime
-                            ? time
-                            : null}
-                        </div>
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <WorkHourCalendar workhours={workhours ? workhours : []} />
     </div>
   );
 };
