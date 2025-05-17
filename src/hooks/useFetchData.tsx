@@ -33,6 +33,11 @@ import { appointmentListAdpater } from "@/adapters/appointments.adpater";
 import { customersListAdpater } from "@/adapters/customers.adapter";
 import { IAPICustomer } from "@/interfaces/api/customer.interface";
 import { IUser } from "@/interfaces";
+import {
+  setPayments,
+  togglePaymentsLoading,
+} from "@/store/feature/payments/paymentSlice";
+import { PaymentServices } from "@/services/payment.services";
 
 export default function useFetchData() {
   const storageMember = localStorage.getItem("userLogged");
@@ -43,6 +48,17 @@ export default function useFetchData() {
     dispatch(setMainFetched(status));
   };
 
+  const fetchPayments = async () => {
+    try {
+      dispatch(togglePaymentsLoading(true));
+      const payments = await PaymentServices.getPayments();
+      dispatch(setPayments({ payments, fromServer: true }));
+    } catch (error) {
+      console.log("Error fetching Paymetns", error);
+    } finally {
+      dispatch(togglePaymentsLoading(false));
+    }
+  };
   const fetchCompanies = async () => {
     try {
       dispatch(toggleCompanyLoading(true));
@@ -226,5 +242,6 @@ export default function useFetchData() {
     fetchCompanyData,
     fetchMemberLogged,
     setCrossCompanyData,
+    fetchPayments,
   };
 }

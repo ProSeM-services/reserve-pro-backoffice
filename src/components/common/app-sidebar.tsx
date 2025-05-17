@@ -104,6 +104,11 @@ const data = {
           url: "/set-hours",
           permission: Permission.VIEW_WORKHOURS,
         },
+        {
+          title: "Subscripcion",
+          url: "/payments",
+          permission: Permission.VIEW_PAYMENTS,
+        },
       ],
     },
   ],

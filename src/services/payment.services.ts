@@ -1,0 +1,15 @@
+import { axiosInstance, BASE_URL } from "@/config/axios.config";
+import { ICreatePayment, IPayment } from "@/interfaces/payment.interface";
+
+export class PaymentServices {
+  static async getPayments(): Promise<IPayment[]> {
+    const res = await axiosInstance.get(`${BASE_URL}/payments`);
+
+    return res.data;
+  }
+  static async createPayment(body: ICreatePayment): Promise<IPayment[]> {
+    const res = await axiosInstance.post(`${BASE_URL}/payments`, body);
+
+    return res.data;
+  }
+}
