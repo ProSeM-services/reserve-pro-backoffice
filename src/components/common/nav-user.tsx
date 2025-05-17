@@ -19,15 +19,7 @@ import useSession from "@/hooks/useSession";
 import { LogOutButton } from "./log-out-button";
 import { getS3Url } from "@/lib/utils/s3-image";
 
-export function NavUser({
-  user,
-}: {
-  user?: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const { session } = useSession();
 
