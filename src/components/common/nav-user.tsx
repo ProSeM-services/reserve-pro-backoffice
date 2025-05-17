@@ -19,15 +19,7 @@ import useSession from "@/hooks/useSession";
 import { LogOutButton } from "./log-out-button";
 import { getS3Url } from "@/lib/utils/s3-image";
 
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}) {
+export function NavUser() {
   const { isMobile } = useSidebar();
   const { session } = useSession();
 
@@ -45,11 +37,13 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
-                  src={image ? getS3Url(image) : user.avatar}
-                  alt={`image ${name}'s profile`}
-                  className="aspect-square object-cover"
-                />
+                {image && (
+                  <AvatarImage
+                    src={getS3Url(image)}
+                    alt={`image ${name}'s profile`}
+                    className="aspect-square object-cover"
+                  />
+                )}
                 <AvatarFallback className="rounded-lg uppercase">
                   {name && name[0]}
                   {lastName && lastName[0]}
@@ -71,11 +65,13 @@ export function NavUser({
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={image ? getS3Url(image) : user.avatar}
-                    alt={`image ${name}'s profile`}
-                    className="aspect-square object-cover"
-                  />
+                  {image && (
+                    <AvatarImage
+                      src={getS3Url(image)}
+                      alt={`image ${name}'s profile`}
+                      className="aspect-square object-cover"
+                    />
+                  )}
                   <AvatarFallback className="rounded-lg uppercase">
                     {name && name[0]}
                     {lastName && lastName[0]}

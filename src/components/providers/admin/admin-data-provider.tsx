@@ -2,48 +2,45 @@ import { setAuthInterceptor } from "@/config/axios.config";
 import { Fragment, PropsWithChildren, useEffect } from "react";
 import { useAppSelector } from "@/store/hooks";
 import useFetchData from "@/hooks/useFetchData";
-import { LoaderMain } from "../common/loader-main";
+import { LoaderMain } from "@/components/common/loader-main";
+import { useFetchAdminData } from "@/hooks/admin/fetchAdminData";
 
-export default function DataProvider({ children }: PropsWithChildren) {
+export default function AdminDataProvider({ children }: PropsWithChildren) {
+  const { setMainLoaderStatus } = useFetchData();
+
   const {
-    fetchCompanies,
-    fetchMembers,
-    fetchCustomers,
-    fetchServices,
-    fetchAppointments,
-    setMainLoaderStatus,
-    setCrossCompanyData,
+    fetchAccounts,
+    fetchEnterprises,
+    fetchNotifications,
     fetchPayments,
-  } = useFetchData();
+    fetchCompanies,
+  } = useFetchAdminData();
 
-  const { fetched: companyFetched } = useAppSelector((s) => s.company);
   const { fetched: membersFetched, memberLogged } = useAppSelector(
     (s) => s.member
   );
-  const { fetched: customerFetched } = useAppSelector((s) => s.customers);
-  const { fetched: servicesFetched } = useAppSelector((s) => s.service);
-  const { fetched: mainFetched, crossCompanyId } = useAppSelector(
-    (s) => s.main
-  );
+  const { fetched: mainFetched } = useAppSelector((s) => s.main);
+  const { fetched: companyFetched } = useAppSelector((s) => s.company);
 
-  const { fetched: appointmentsFetched } = useAppSelector(
-    (s) => s.appointments
-  );
   const { fetched: paymentsFetched } = useAppSelector((s) => s.payments);
-
+  const { fetched: enterpriseFetched } = useAppSelector((s) => s.enterprise);
   const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
-    console.log("<--------- CUSTOMER DATA PROVIDER  ------------->");
+    console.log("<--------- ADMIN DATA PROVIDER  ------------->");
     if (!accessToken) return;
     const fetchData = async () => {
       try {
         setMainLoaderStatus(false);
         await setAuthInterceptor(accessToken);
-        !membersFetched && (await fetchMembers());
+        await fetchNotifications();
+        // await fetchAccounts();
+        // await fetchEnterprises();
+        // await fetchUsers();
+        // await fetchCompanies();
+
+        !membersFetched && (await fetchAccounts());
         !companyFetched && (await fetchCompanies());
-        !customerFetched && (await fetchCustomers());
-        !servicesFetched && (await fetchServices());
-        !appointmentsFetched && (await fetchAppointments());
+        !enterpriseFetched && (await fetchEnterprises());
         !paymentsFetched && (await fetchPayments());
       } catch (error) {
         console.log("error fetching data", error);
@@ -53,10 +50,7 @@ export default function DataProvider({ children }: PropsWithChildren) {
     };
     fetchData();
   }, [memberLogged]);
-  useEffect(() => {
-    if (!crossCompanyId) return;
-    setCrossCompanyData(crossCompanyId);
-  }, [crossCompanyId]);
+
   if (!mainFetched)
     return (
       // THIS IS THE LOADER DISPLAYED WHEN THE DATA IS COMING FROM THE SERVER AT THE FIRST LOAD OF THE WEB APP

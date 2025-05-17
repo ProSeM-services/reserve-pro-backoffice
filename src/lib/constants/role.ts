@@ -1,9 +1,12 @@
 import { Permission } from "./permissions";
-export const ROLES_VALUES = ["BASIC", "ADMIN", "OWNER"] as const;
+export const ROLES_VALUES = ["BASIC", "ADMIN", "OWNER", "MASTER"] as const;
 
 export type Role = (typeof ROLES_VALUES)[number];
 
 export const ROLES: Record<Role, { permissions: Permission[] }> = {
+  MASTER: {
+    permissions: Object.values(Permission), // Tiene acceso a todo
+  },
   OWNER: {
     permissions: Object.values(Permission), // Tiene acceso a todo
   },

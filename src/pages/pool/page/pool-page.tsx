@@ -7,18 +7,13 @@ import {
 } from "@/components/ui/sidebar";
 
 export function PoolPage() {
-  const user = {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  };
   return (
     <div className="h-full w-full  flex flex-col  overflow-hidden    text-xs ">
       <SessionProvider>
         <SidebarProvider>
           <Sidebar collapsible="icon" className="h-full ">
             <SidebarFooter>
-              <NavUser user={user} />
+              <NavUser />
             </SidebarFooter>
           </Sidebar>
           <div className=" h-full w-full flex flex-col  items-center justify-center bg-accent">

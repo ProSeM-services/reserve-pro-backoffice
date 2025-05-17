@@ -12,4 +12,12 @@ export class PaymentServices {
 
     return res.data;
   }
+  static async updatePayment(
+    id: string,
+    body: Partial<IPayment>
+  ): Promise<IPayment[]> {
+    const res = await axiosInstance.patch(`${BASE_URL}/payments/${id}`, body);
+
+    return res.data;
+  }
 }

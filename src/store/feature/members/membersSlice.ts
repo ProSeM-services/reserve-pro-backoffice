@@ -6,6 +6,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 export interface MemberState extends IStoreState {
   value: number;
   members: IUser[];
+  accounts: IUser[];
   memberLogged?: IUser;
   inmutableMembers: IUser[];
 }
@@ -13,6 +14,7 @@ export interface MemberState extends IStoreState {
 const initialState: MemberState = {
   value: 0,
   members: [],
+  accounts: [],
   inmutableMembers: [],
   loading: true,
   memberLogged: undefined,
@@ -29,6 +31,15 @@ export const memberSlice = createSlice({
     },
     setMemberLogged: (state, action: PayloadAction<IUser>) => {
       state.memberLogged = action.payload;
+    },
+    setAccounts: (
+      state,
+      action: PayloadAction<{ members: IUser[]; fromServer?: boolean }>
+    ) => {
+      const { members, fromServer } = action.payload;
+      state.fetched = true;
+      state.accounts = members;
+      if (fromServer) state.inmutableMembers = members;
     },
     setMembers: (
       state,
@@ -82,6 +93,7 @@ export const {
   setMemberLogged,
   setMemberUpdated,
   updateMember,
+  setAccounts,
 } = memberSlice.actions;
 
 export default memberSlice.reducer;
