@@ -13,8 +13,11 @@ import {
   CreatePaymentSchema,
   ICreatePayment,
 } from "@/interfaces/payment.interface";
+import { FromatedDate } from "@/lib/format-date";
 import { FilesServices } from "@/services/files.services";
 import { PaymentServices } from "@/services/payment.services";
+import { addPayment } from "@/store/feature/payments/paymentSlice";
+import { useAppDispatch } from "@/store/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Paperclip } from "lucide-react";
 import { useRef, useState } from "react";
@@ -25,11 +28,11 @@ export function CreatePaymentForm() {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const membership_price = 100; // Cambia esto por el valor real de membership_price
   const form = useForm<ICreatePayment>({
     resolver: zodResolver(CreatePaymentSchema),
     defaultValues: {
-      amount: 0,
+      amount: membership_price,
       date: new Date().toISOString(),
       image: "",
       notes: "",
@@ -38,6 +41,7 @@ export function CreatePaymentForm() {
     },
   });
   const { toast } = useToast();
+  const dispatch = useAppDispatch();
   const onSubmit = async (values: ICreatePayment) => {
     try {
       setLoading(true);
@@ -54,12 +58,14 @@ export function CreatePaymentForm() {
         const imageData = await FilesServices.upload(file);
         data = { ...values, image: imageData.fileName };
       }
-      await PaymentServices.createPayment(data);
+      const payment = await PaymentServices.createPayment(data);
       toast({
         title: "Pago realizado!",
         description: `Se notificó a su proveedor, aguarde a ser confirmado!  `,
         variant: "default",
       });
+      dispatch(addPayment(payment));
+
       form.reset();
       setPreview(null);
       setFile(null);
@@ -97,41 +103,22 @@ export function CreatePaymentForm() {
     setFile(null);
   };
 
-  const handleAmount = (value: string) => {
-    if (!value) return;
-    console.log({ value });
-    form.setValue("amount", parseInt(value));
-  };
-
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col items-center   gap-2  "
+        className="flex flex-col justify-between items-center   gap-2  h-full  "
       >
-        <section className="space-y-4 flex-grow border p-4 rounded">
-          <FormField
-            name="amount"
-            render={({ field }) => (
-              <FormItem className="w-full  items-center gap-2">
-                <FormLabel>Monto</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Monto"
-                    {...field}
-                    type="number"
-                    onChange={(e) => handleAmount(e.target.value)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        {" "}
+        <section className=" p-4 w-full space-y-4 rounded-md flex-grow">
           <div className=" flex justify-center">
-            <div className="w-[500px]">
+            <div className="size-[500px] max-md:size-[250px]  max-md:aspect-square">
               {preview ? (
-                <div className="flex flex-col  items-center  justify-between py-2 gap-1 bg-accent p-2 size-full">
-                  <img src={preview} className="w-full " />
+                <div className="flex flex-col  items-center  justify-between py-2 gap-1  p-2 size-full ">
+                  <img
+                    src={preview}
+                    className="h-[90%] object-contain shadow-lg rounded-md"
+                  />
                   <div className="flex items-center gap-2">
                     <Button
                       onClick={handleButtonClick}
@@ -157,7 +144,7 @@ export function CreatePaymentForm() {
                   onClick={handleButtonClick}
                   variant={"ghost"}
                   type="button"
-                  className="size-[350px] border-dashed border mx-auto text-gray-500 flex gap-2"
+                  className="size-full l border-dashed border mx-auto text-gray-500 flex gap-2"
                 >
                   <span>Cargar Comporbante</span>
                   <Paperclip className="size-4 " />
@@ -171,8 +158,61 @@ export function CreatePaymentForm() {
               onChange={handleFileChange}
             />
           </div>
-        </section>
+          <hr />
+          <div className="text-center">
+            <p className="text-3xl"> ${membership_price.toFixed(2)}</p>
+          </div>
+          <div className="text-sm flex flex-col gap-4">
+            <div className="text-gray-500 flex justify-between font-light ">
+              <p>Servicio</p>
+              <span className="font-medium">Reserve Pro System - PRO</span>
+            </div>
+            <div className="text-gray-500 flex justify-between font-light ">
+              <p>Fecha</p>
+              <span className="font-medium">
+                <FromatedDate date={new Date().toISOString()} />
+              </span>
+            </div>
+            <hr />
+            <div className="text-gray-500 flex justify-between font-light ">
+              <p>Descuento</p>
+              <span className="font-medium">-</span>
+            </div>
+            <div className="text-gray-500 flex justify-between font-light ">
+              <p>Subtotal</p>
+              <span className="font-medium">
+                ${membership_price.toFixed(2)}
+              </span>
+            </div>
+            <hr />
 
+            <div className="text-gray-500 flex justify-between font-light ">
+              <p>Total</p>
+              <span className="font-medium text-green-500">
+                ${membership_price.toFixed(2)}
+              </span>
+            </div>
+
+            <hr />
+            <FormField
+              control={form.control}
+              name="notes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Notas (opcional)</FormLabel>
+                  <FormControl>
+                    <textarea
+                      {...field}
+                      placeholder="Podés escribir cualquier comentario adicional sobre el pago..."
+                      className="w-full border border-input rounded-md p-2 text-sm resize-none min-h-[100px] focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </section>
         <Button isLoading={loading}>Cargar Pago</Button>
       </form>
     </Form>
