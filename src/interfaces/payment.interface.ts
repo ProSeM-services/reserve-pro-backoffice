@@ -42,6 +42,7 @@ export const PaymentSchema = z.object({
     }),
   payment_method: z.string().optional(),
   notes: z.string().optional(),
+  membership_price: z.number().optional(),
 });
 export type IPayment = z.infer<typeof PaymentSchema>;
 
@@ -55,6 +56,7 @@ export const CreatePaymentSchema = z.object({
     }),
   amount: z.number().min(1),
   image: z.string(),
+  membership_price: z.number().optional(),
   start_date: z
     .string()
     .trim()

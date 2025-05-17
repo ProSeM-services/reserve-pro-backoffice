@@ -91,11 +91,11 @@ export function NavMain({
                               <div>
                                 <Link
                                   to={subItem.url}
-                                  className={`flex gap-2 max-sm:flex-col max-sm:justify-center text-sm border-blue-500  px-2  ${
+                                  className={`flex gap-2 max-md:p-2 text-md border-blue-500  items-center h-12   max-sm:h-full transition-all duration-200 px-2 ${
                                     location.pathname === subItem.url
-                                      ? "sm:border-l-4 max-sm:border-t-4"
+                                      ? "border-l-4"
                                       : ""
-                                  }  items-center h-12   max-sm:h-full transition-all duration-200 ${
+                                  }  ${
                                     location.pathname === subItem.url
                                       ? "text-primary bg-background/75 "
                                       : " text-primary/50"
@@ -114,9 +114,9 @@ export function NavMain({
                             <div>
                               <Link
                                 to={subItem.url}
-                                className={`flex gap-2 max-sm:flex-col max-sm:justify-center text-md border-blue-500  items-center h-12   max-sm:h-full transition-all duration-200 px-2 ${
+                                className={`flex gap-2 max-md:p-2 text-md border-blue-500  items-center h-12   max-sm:h-full transition-all duration-200 px-2 ${
                                   location.pathname === subItem.url
-                                    ? "sm:border-l-4 max-sm:border-t-4"
+                                    ? "border-l-4"
                                     : ""
                                 }  ${
                                   location.pathname === subItem.url

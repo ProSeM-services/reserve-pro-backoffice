@@ -7,7 +7,7 @@ export class PaymentServices {
 
     return res.data;
   }
-  static async createPayment(body: ICreatePayment): Promise<IPayment[]> {
+  static async createPayment(body: ICreatePayment): Promise<IPayment> {
     const res = await axiosInstance.post(`${BASE_URL}/payments`, body);
 
     return res.data;

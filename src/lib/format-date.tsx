@@ -25,10 +25,11 @@ export function FromatedDate({ date }: { date: string }) {
 
   const weekDay = DAYS[new Date(date).getDay()]?.long;
   const number = new Date(date).getDate();
+  const year = new Date(date).getFullYear();
   const month = MONTHS[new Date(date).getMonth()];
   return (
     <p>
-      {weekDay}, {number} de {month}
+      {weekDay}, {number} de {month}, {year}
     </p>
   );
 }

@@ -1,5 +1,4 @@
 import { IPayment } from "@/interfaces/payment.interface";
-import { CreatePaymentForm } from "./create-payment-form";
 import { PaymentDetailCard } from "./payment-detail-card";
 
 interface PaymentListProps {
@@ -10,15 +9,13 @@ export function PaymentList({ payments }: PaymentListProps) {
   if (payments.length === 0) {
     return (
       <div>
-        <CreatePaymentForm />
         <p className="text-muted-foreground">No hay pagos registrados.</p>
       </div>
     );
   }
 
   return (
-    <div className="grid gap-4">
-      <CreatePaymentForm />
+    <div className="flex flex-col gap-4">
       {payments.map((payment) => (
         <PaymentDetailCard payment={payment} key={payment.id} />
       ))}
