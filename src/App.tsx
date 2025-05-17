@@ -33,7 +33,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* <Route
+        <Route
           path="/admin"
           element={
             <MasterRouteProtector>
@@ -41,8 +41,7 @@ function App() {
               <AdminPage />{" "}
             </MasterRouteProtector>
           }
-        /> */}
-        <Route path="/admin" element={<AdminPage />} />
+        />
         <Route path="/account-definition" element={<AccountDefinitionPage />} />
         <Route path="/create-business" element={<CreateBusinessPage />} />
         <Route
