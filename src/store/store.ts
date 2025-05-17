@@ -9,6 +9,7 @@ import mainReducer from "./feature/main/mainSlice";
 import bookingReducer from "./feature/booking/bookingSlice";
 import sessionReducer from "./feature/session/sessionSlice";
 import enterpriseReducer from "./feature/enterprise/enterpriseSlice";
+import paymentsReducer from "./feature/payments/paymentSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -23,6 +24,7 @@ export const makeStore = () => {
       booking: bookingReducer,
       session: sessionReducer,
       enterprise: enterpriseReducer,
+      payments: paymentsReducer,
     },
   });
 };

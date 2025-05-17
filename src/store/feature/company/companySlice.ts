@@ -77,12 +77,6 @@ export const companySlice = createSlice({
           };
         }
       }
-      //     if (state.asideService?.id === id) {
-      //   state.asideService = {
-      //     ...state.asideService,
-      //     ...changes,
-      //   };
-      // }
     },
   },
 });

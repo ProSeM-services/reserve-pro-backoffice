@@ -21,6 +21,7 @@ import { Route, Routes } from "react-router";
 import { ContentWrapper } from "../components/content-wrapper";
 import { CalendarPage } from "@/pages/calendar/page/calendar-page";
 import { SessionProvider } from "@/components/providers/session-provider";
+import { PaymentPage } from "@/pages/payments/page/payment-page";
 
 export default function MainPage() {
   return (
@@ -111,6 +112,16 @@ export default function MainPage() {
                           permission={Permission.VIEW_APPOINTMENTS}
                         >
                           <CalendarPage />
+                        </RouteAuthorizationWrapper>
+                      }
+                    />
+                    <Route
+                      path="/payments"
+                      element={
+                        <RouteAuthorizationWrapper
+                          permission={Permission.VIEW_APPOINTMENTS}
+                        >
+                          <PaymentPage />
                         </RouteAuthorizationWrapper>
                       }
                     />
