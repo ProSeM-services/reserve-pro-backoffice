@@ -8,6 +8,8 @@ import { AccountDefinitionPage } from "./pages/account-definition/page/account-d
 import { CreateBusinessPage } from "./pages/create-business/page/create-business-page";
 import { CreateProfessionalPage } from "./pages/create-professional/page/create-professional-page";
 import { PoolPage } from "./pages/pool/page/pool-page";
+import { MasterRouteProtector } from "./components/routes/master-route";
+import { AdminPage } from "./pages/admin/pages/admin-page";
 
 function App() {
   return (
@@ -31,6 +33,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* <Route
+          path="/admin"
+          element={
+            <MasterRouteProtector>
+              {" "}
+              <AdminPage />{" "}
+            </MasterRouteProtector>
+          }
+        /> */}
+        <Route path="/admin" element={<AdminPage />} />
         <Route path="/account-definition" element={<AccountDefinitionPage />} />
         <Route path="/create-business" element={<CreateBusinessPage />} />
         <Route

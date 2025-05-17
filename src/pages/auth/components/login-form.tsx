@@ -41,13 +41,16 @@ export function LoginForm() {
       }
       await setAuthInterceptor(res.backendTokens.accessToken);
 
-      console.log("USER LOGGED", res.user);
       dispatch(setSession(res.user));
       dispatch(setAccesToken(res.backendTokens.accessToken));
 
       localStorage.setItem("accessToken", res.backendTokens.accessToken);
       localStorage.setItem("userLogged", JSON.stringify(res.user));
 
+      if (res.user.role === "MASTER") {
+        location.replace("/admin");
+        return;
+      }
       if (!res.user.account_type) {
         location.replace("/account-definition");
         return;
