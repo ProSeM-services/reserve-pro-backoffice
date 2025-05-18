@@ -10,4 +10,17 @@ export class NotificationServices {
     const res = await axiosInstance.get(`${BASE_URL}/notifications?${read}`);
     return res.data;
   }
+  static async update({
+    id,
+    data,
+  }: {
+    id: string;
+    data: Partial<INotification>;
+  }): Promise<INotification[]> {
+    const res = await axiosInstance.patch(
+      `${BASE_URL}/notifications/${id}`,
+      data
+    );
+    return res.data;
+  }
 }
