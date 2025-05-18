@@ -5,11 +5,14 @@ import { Button } from "@/components/ui/button";
 import {
   Sidebar,
   SidebarFooter,
+  SidebarHeader,
   SidebarProvider,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import { useAppSelector } from "@/store/hooks";
 import { PaymentsTable } from "../components/payments/payment-table";
 
+import { NotificationsButton } from "../components/payments/Notifications-button";
 export function AdminPage() {
   const { companies } = useAppSelector((s) => s.company);
   const { members } = useAppSelector((s) => s.member);
@@ -20,17 +23,31 @@ export function AdminPage() {
     <div className="h-full w-full  flex flex-col  overflow-hidden     ">
       <SessionProvider>
         <SidebarProvider>
-          <Sidebar collapsible="icon" className="h-full ">
+          <Sidebar collapsible="icon" className="h-full  ">
+            <SidebarHeader
+              className="flex justify-center items-center p-4
+            "
+            >
+              <div className=" size-[100px] flex items-center justify-center">
+                <img
+                  src="/images/reserve-pro-high-resolution-logo-transparent.png"
+                  className="w-[100%] object-cover"
+                />
+              </div>
+            </SidebarHeader>
+
             <SidebarFooter>
               <NavUser />
             </SidebarFooter>
+            <SidebarRail />
           </Sidebar>
           <AdminDataProvider>
             <div className=" h-full w-full p-6   flex flex-col gap-4">
-              <section className="h-[5vh] flex justify-between gap-4  ">
-                <div className="flex-grow  rounded-md aspect-square border p-4">
+              <section className="h-[5vh] flex justify-between items-center gap-4 border rounded-md  p-4 ">
+                <div className="flex-grow  ">
                   Notificaiones {notifications.length}
                 </div>
+                <NotificationsButton />
               </section>
               <section className="h-[30vh] flex justify-between gap-4 ">
                 <div className="flex-grow  rounded-md aspect-square border  p-4 flex flex-col">
