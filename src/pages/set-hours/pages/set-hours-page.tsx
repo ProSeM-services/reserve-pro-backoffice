@@ -15,12 +15,15 @@ import { Permission } from "@/lib/constants/permissions";
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IUser } from "@/interfaces";
+import { EmptyList } from "@/components/common/emty-list";
 export function SetHoursPage() {
   const { members } = useAppSelector((s) => s.member);
   const { companies } = useAppSelector((s) => s.company);
   const { member } = useSession();
   const [selectedMember, setSelectedMember] = useState<IUser>(member);
-  const [selectedCompany, setSelectedCompany] = useState(companies[0]);
+  const [selectedCompany, setSelectedCompany] = useState(
+    companies.length ? companies[0] : null
+  );
 
   if (!member) return;
 
@@ -34,12 +37,25 @@ export function SetHoursPage() {
     if (selectedCompany) setSelectedCompany(selectedCompany);
   };
 
+  if (members.length === 0 && companies.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <EmptyList type="no-members-to-add" />
+        No hay sucursales o miembros
+      </div>
+    );
+  }
+
   return (
     <Tabs defaultValue="members" className="  ">
       {(member.role === "OWNER" || member.role === "ADMIN") && (
         <TabsList>
-          <TabsTrigger value="members">Miembros</TabsTrigger>
-          <TabsTrigger value="company">Sucursales</TabsTrigger>
+          {members.length > 0 && (
+            <TabsTrigger value="members">Miembros</TabsTrigger>
+          )}
+          {companies.length > 0 && (
+            <TabsTrigger value="company">Sucursales</TabsTrigger>
+          )}
         </TabsList>
       )}
       <TabsContent value="members" className="flex flex-col gap-2 h-[90%] ">
@@ -75,30 +91,35 @@ export function SetHoursPage() {
           />
         </section>
       </TabsContent>
-      <TabsContent
-        value="company"
-        className="flex flex-col gap-2 h-[90%] -mt-1"
-      >
-        <Select value={selectedCompany.id} onValueChange={handleSelectCompany}>
-          <SelectTrigger>
-            <SelectValue placeholder="Selecciona una sucursal" />
-          </SelectTrigger>
-          <SelectContent>
-            {companies.map((s) => (
-              <SelectItem value={s.id} key={s.id}>
-                {s.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <section className="flex-grow ">
-          <WorkhoursEditor
-            id={selectedCompany.id}
-            type="company"
-            workhours={selectedCompany.workhours}
-          />
-        </section>
-      </TabsContent>
+      {companies.length && selectedCompany && (
+        <TabsContent
+          value="company"
+          className="flex flex-col gap-2 h-[90%] -mt-1"
+        >
+          <Select
+            value={selectedCompany.id}
+            onValueChange={handleSelectCompany}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecciona una sucursal" />
+            </SelectTrigger>
+            <SelectContent>
+              {companies.map((s) => (
+                <SelectItem value={s.id} key={s.id}>
+                  {s.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <section className="flex-grow ">
+            <WorkhoursEditor
+              id={selectedCompany.id}
+              type="company"
+              workhours={selectedCompany.workhours}
+            />
+          </section>
+        </TabsContent>
+      )}
     </Tabs>
   );
 }
