@@ -9,5 +9,6 @@ export const NotificationsSchema = z.object({
   type: z.enum(["payment", "appointment", "system"]),
   adminId: z.string().optional(),
   EnterpriseId: z.string().optional(),
+  createdAt: z.string(),
 });
 export type INotification = z.infer<typeof NotificationsSchema>;
