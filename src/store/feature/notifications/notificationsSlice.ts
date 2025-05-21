@@ -23,11 +23,29 @@ export const enterpriseSlice = createSlice({
     toggleNotificationsLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    updateNotification: (
+      state,
+      action: PayloadAction<{ id: string; changes: Partial<INotification> }>
+    ) => {
+      const { id, changes } = action.payload;
+
+      const index = state.notifications.findIndex((m) => m.id === id);
+
+      if (index !== -1) {
+        state.notifications[index] = {
+          ...state.notifications[index],
+          ...changes,
+        };
+      }
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setNotifications, toggleNotificationsLoading } =
-  enterpriseSlice.actions;
+export const {
+  setNotifications,
+  toggleNotificationsLoading,
+  updateNotification,
+} = enterpriseSlice.actions;
 
 export default enterpriseSlice.reducer;

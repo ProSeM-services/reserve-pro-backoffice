@@ -10,20 +10,27 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
+import { NotificationCard } from "./notification-card";
+import { useState } from "react";
 
 export function NotificationsButton() {
   const { notifications } = useAppSelector((s) => s.notifications);
 
+  const [allNotifications, setShowAllNotifications] = useState(false);
+  const notReadNotifications = notifications.filter((n) => !n.read);
+
+  const notificationsToShow = allNotifications
+    ? notifications
+    : notReadNotifications;
   return (
     <Sheet>
       <SheetTrigger>
         {" "}
         <Button variant="ghost" className="relative p-2">
           <Bell className="w-5 h-5" />
-          {notifications.length > 0 && (
+          {notReadNotifications.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-              {notifications.length}
+              {notReadNotifications.length}
             </span>
           )}
         </Button>
@@ -43,31 +50,27 @@ export function NotificationsButton() {
           </SheetClose>
         </SheetHeader>
 
-        <div className="flex flex-col gap-3 mt-4 max-h-[calc(100vh-150px)] overflow-y-auto pr-2">
-          {notifications.length > 0 ? (
-            notifications.map((notification) => (
-              <div
+        <div className="flex flex-col gap-3 mt-4 max-h-[calc(100vh-150px)] overflow-y-auto pr-2 ">
+          <div className="flex gap-2">
+            <Button
+              variant={allNotifications ? "default" : "secondary"}
+              onClick={() => setShowAllNotifications(true)}
+            >
+              Todos
+            </Button>
+            <Button
+              variant={!allNotifications ? "default" : "secondary"}
+              onClick={() => setShowAllNotifications(false)}
+            >
+              No Leidos
+            </Button>
+          </div>
+          {notificationsToShow.length > 0 ? (
+            notificationsToShow.map((notification) => (
+              <NotificationCard
+                notification={notification}
                 key={notification.id}
-                className="flex items-start justify-between p-4 bg-muted rounded-lg shadow-sm border"
-              >
-                <div className="space-y-1">
-                  <p className="text-sm font-semibold">{notification.title}</p>
-                  <p className="text-sm text-muted-foreground leading-snug">
-                    {notification.message}
-                  </p>
-                  <Badge variant={"outline"} className="m-0">
-                    {notification.type}
-                  </Badge>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-destructive"
-                  aria-label="Eliminar notificación"
-                >
-                  <XIcon className="w-4 h-4" />
-                </Button>
-              </div>
+              />
             ))
           ) : (
             <p className="text-sm text-muted-foreground">

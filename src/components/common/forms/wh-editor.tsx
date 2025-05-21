@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IWorkhour, Segment } from "@/interfaces";
 import { Button } from "@/components/ui/button";
-import { Edit, Minus, PlusIcon } from "lucide-react";
+import { CopyCheck, Edit, Minus, PlusIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import {
@@ -26,6 +26,12 @@ import {
 } from "@/components/ui/sheet";
 import { WorkHourCalendar } from "../work-hour-calendar";
 import { HOURS_VALUES } from "@/constants/work-hours/hour-values";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 interface IDay {
   short: string;
   long: string;
@@ -154,6 +160,7 @@ export const WorkhoursEditor: React.FC<{
         entry.selected && entry.workhour.day !== sourceDay
           ? {
               ...entry,
+              selected: false,
               workhour: {
                 ...entry.workhour,
                 segments: [...sourceWorkhour.segments],
@@ -182,7 +189,6 @@ export const WorkhoursEditor: React.FC<{
       }
       toast({
         title: "Horarios actualizados",
-        variant: "success",
       });
     } catch (error) {
       console.log("Error actualizando workhours:", error);
@@ -245,10 +251,13 @@ function EditWorkHourAside({
   handleAddSegment,
   handleSave,
   updating,
+  handleReplicate,
+  handleDaySelection,
 }: EditWorkHourAsideProps) {
   return (
     <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
       <Sheet>
+        <Popover></Popover>
         <SheetTrigger className="flex items-center gap-2 text-[14px] font-medium bg-accent rounded px-4 p-2">
           <p>Editar</p>
           <Edit className="size-4" />
@@ -258,8 +267,9 @@ function EditWorkHourAside({
             <SheetTitle>Modificar Horarios</SheetTitle>
             <SheetDescription>
               Puedes definir un bloque de horarios para cada dia de la semana.
-              {/* Si deseas replicar un bloque de horarios en varios dias,
-              selecciona los dias y luego presiona "Replicar". */}
+              <br />
+              Si deseas replicar un bloque de horarios en varios dias,
+              selecciona los dias y luego presiona "Replicar".
             </SheetDescription>
           </SheetHeader>
 
@@ -352,14 +362,72 @@ function EditWorkHourAside({
                     <AuthorizationWrapper
                       permission={Permission.UPDATE_WORKHOURS}
                     >
-                      <Button
-                        onClick={() => handleAddSegment(weekItem.workhour.day)}
-                        variant="secondary"
-                        className="flex gap-2"
-                      >
-                        <p>Agregar</p>
-                        <PlusIcon className="size-4" />
-                      </Button>
+                      <div className="flex gap-2 ">
+                        <Button
+                          onClick={() =>
+                            handleAddSegment(weekItem.workhour.day)
+                          }
+                          variant="secondary"
+                          className="flex gap-2 flex-grow"
+                        >
+                          <PlusIcon className="size-4" />
+                          <p>Bloque</p>
+                        </Button>
+
+                        <Popover>
+                          <PopoverTrigger
+                            disabled={weekItem.workhour.segments.length === 0}
+                          >
+                            <Button
+                              variant="secondary"
+                              className="flex gap-2 flex-grow"
+                              disabled={weekItem.workhour.segments.length === 0}
+                            >
+                              <CopyCheck className="size-4" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent>
+                            <div className="flex flex-col gap-2 text-start">
+                              <p className="text-[12px]  text-center font-medium">
+                                Selecciona los dias donde quieras replicar los
+                                bloques creados
+                              </p>
+                              <hr />
+                              {week
+                                .filter((e) => e.long !== weekItem.long)
+                                .map((w) => (
+                                  <Button
+                                    onClick={() => handleDaySelection(w.long)}
+                                    variant="secondary"
+                                    className={`flex gap-2 justify-start ${
+                                      !w.selected ? "opacity-15" : ""
+                                    }`}
+                                    // disabled={!w.selected}
+                                  >
+                                    <p>{w.long}</p>
+                                    {/* <CopyCheck className="size-4" /> */}
+                                  </Button>
+                                ))}
+
+                              <hr />
+
+                              <Button
+                                variant="secondary"
+                                className="flex gap-2 flex-grow"
+                                disabled={
+                                  weekItem.workhour.segments.length === 0
+                                }
+                                onClick={() =>
+                                  handleReplicate(weekItem.workhour.day)
+                                }
+                              >
+                                <p>Replicar</p>
+                                <CopyCheck className="size-4" />
+                              </Button>
+                            </div>
+                          </PopoverContent>
+                        </Popover>
+                      </div>
                     </AuthorizationWrapper>
                   )}
                 </div>
@@ -373,7 +441,7 @@ function EditWorkHourAside({
                 isLoading={updating}
                 className="w-full"
               >
-                Actualizar Horarios
+                Guardar Horarios
               </Button>
             </div>
           </AuthorizationWrapper>

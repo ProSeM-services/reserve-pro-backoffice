@@ -217,8 +217,8 @@ export function CompanyForm() {
                         key={member.id}
                         className={`flex items-center gap-4 p-2   border rounded cursor-pointer transition-all duration-300 ${
                           usersToAdd.includes(member.id)
-                            ? " bg-accent opacity-100"
-                            : "opacity-65 hover:opacity-100"
+                            ? "  opacity-100 border-l-8 border-l-primary"
+                            : "opacity-50 hover:opacity-100"
                         }`}
                         onClick={() => handleAddUsers(member.id)}
                       >
@@ -247,8 +247,8 @@ export function CompanyForm() {
                       key={service.id}
                       className={`flex items-center gap-4 p-2   border rounded cursor-pointer transition-all duration-300 ${
                         servicesToAdd.includes(service.id)
-                          ? " bg-accent opacity-100"
-                          : "opacity-65 hover:opacity-100"
+                          ? " border-l-8 border-l-primary opacity-100 font-medium"
+                          : "opacity-50 hover:opacity-100 font-light"
                       }`}
                       onClick={() => handleAddService(service.id)}
                     >
