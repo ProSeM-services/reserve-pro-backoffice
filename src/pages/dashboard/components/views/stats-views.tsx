@@ -15,14 +15,14 @@ export function DashboardStats() {
   const { member } = useSession();
   return (
     <div className=" size-full flex flex-col gap-4  ">
-      <div className="flex gap-2   text-gray-800 max-md:hidden">
+      <div className="max-md:hidden flex  gap-2   text-gray-800 ">
         <RevenueCard type="appointments" />
         <RevenueCard type="customers" />
         <RevenueCard type="sales" />
       </div>
-      <div className="md:hidden   w-[300px] mx-auto ">
-        <Carousel className="mx-auto ">
-          <CarouselContent>
+      <div className="md:hidden   mx-auto w-[75%]  ">
+        <Carousel className="w-full  ">
+          <CarouselContent className="w-full">
             <CarouselItem>
               <RevenueCard type="appointments" />
             </CarouselItem>
