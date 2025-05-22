@@ -15,6 +15,7 @@ import { PaymentCard } from "@/components/common/payment-card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { AddImageCompany } from "../components/add-image-company";
+import { CompanyImages } from "../components/company-images";
 export function CompanyDetailPage() {
   const { selectedCompany, companies } = useAppSelector((s) => s.company);
   const company = companies.find((comp) => comp.id === selectedCompany);
@@ -111,6 +112,10 @@ export function CompanyDetailPage() {
             </p>
           </div>
         )}
+      </section>
+      {/* ---------------------------- WORKHOURS SECTION ---------------------------- */}
+      <section className="max-md:w-[90%]">
+        <CompanyImages company={company} />
       </section>
     </div>
   );
