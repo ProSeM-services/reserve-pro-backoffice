@@ -12,6 +12,18 @@ export class PaymentServices {
 
     return res.data;
   }
+  static async subscribe(body: {
+    email: string;
+    amount: number;
+    frequency: number;
+  }): Promise<{ init_point: string }> {
+    const res = await axiosInstance.post(
+      `${BASE_URL}/payments/subscribe`,
+      body
+    );
+
+    return res.data;
+  }
   static async updatePayment(
     id: string,
     body: Partial<IPayment>

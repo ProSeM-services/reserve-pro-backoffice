@@ -5,6 +5,7 @@ import { CalendarIcon } from "lucide-react";
 import { PaymentStatusCell } from "@/pages/admin/components/payments/payment-status-cell";
 import { PaymentByCell } from "@/pages/admin/components/payments/payment-by-cell";
 import { PaymentVoucher } from "./payment-voucher";
+import { formatCurrency } from "@/lib/utils/format-currency";
 
 interface PaymentDetailCardProps {
   payment: IPayment;
@@ -23,15 +24,11 @@ export function PaymentDetailCard({ payment }: PaymentDetailCardProps) {
             <PaymentStatusCell paymentStatus={payment.status} />
             <PaymentVoucher payment={payment} />
           </div>
-          <p className="text-sm mb-1 flex items-center gap-1 text-gray-500 max-md:hidden">
-            <strong>Vencimiento:</strong>
-            <FromatedDate date={payment.end_date} />
-          </p>
         </section>
       </CardHeader>
       <CardContent className=" py-0 pb-2">
         <p className="text-3xl max-md:text-xl mb-1">
-          ${payment.amount.toFixed(2)}
+          {formatCurrency(payment.amount)}
         </p>
         <div className="text-sm max-md:text-xs">
           <p className=" mb-1">
@@ -49,6 +46,10 @@ export function PaymentDetailCard({ payment }: PaymentDetailCardProps) {
               <strong>Notas:</strong> {payment.notes}
             </p>
           )}
+          <p className="flex gap-2">
+            <strong>Vencimiento:</strong>
+            <FromatedDate date={payment.end_date} />
+          </p>
         </div>
       </CardContent>
     </Card>

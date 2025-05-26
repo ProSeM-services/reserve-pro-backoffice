@@ -6,8 +6,8 @@ import useSession from "@/hooks/useSession";
 export function DashboardPage() {
   const { member } = useSession();
   return (
-    <div className="size-full   ">
-      <Tabs defaultValue="stats" className=" h-[80vh] ">
+    <div className="md:size-full max-md:w-full   ">
+      <Tabs defaultValue="stats" className=" md:h-[80vh] ">
         <div>
           {member.role !== "BASIC" && (
             <TabsList>
@@ -16,7 +16,7 @@ export function DashboardPage() {
             </TabsList>
           )}
         </div>
-        <TabsContent value="stats" className="h-full ">
+        <TabsContent value="stats" className="h-full  ">
           <DashboardStats />
         </TabsContent>
         <TabsContent value="we" className=" ">

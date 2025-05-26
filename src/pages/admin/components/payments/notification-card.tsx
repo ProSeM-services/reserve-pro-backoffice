@@ -5,7 +5,13 @@ import { INotification } from "@/interfaces/notifications.interface";
 import { NotificationServices } from "@/services/notification.service";
 import { updateNotification } from "@/store/feature/notifications/notificationsSlice";
 import { useAppDispatch } from "@/store/hooks";
-import { XIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 
@@ -67,16 +73,32 @@ export function NotificationCard({ notification }: NotificationCardProps) {
           })}
         </p>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-muted-foreground hover:text-destructive"
-          aria-label="Eliminar notificación"
-          onClick={handleReadNotification}
-          isLoading={loading}
-        >
-          {loading ? <LoaderSpinner /> : <XIcon className="w-4 h-4" />}
-        </Button>
+        {!notification.read && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger>
+                {" "}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:text-destructive "
+                  aria-label="Eliminar notificación"
+                  onClick={handleReadNotification}
+                  isLoading={loading}
+                >
+                  {loading ? (
+                    <LoaderSpinner />
+                  ) : (
+                    <div className="bg-blue-500 rounded-full size-[15px] aspect-square" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Marcar como leido</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ const MapComponent = ({ lat, lng }: { lat: number; lng: number }) => {
 
   return (
     <MapProvider>
-      <div className="w-full border bg-gray-300 h-full">
+      <div className="w-full h-full border  ">
         <Map
           defaultZoom={14}
           defaultCenter={center}

@@ -3,8 +3,9 @@ import { IPayment } from "@/interfaces/payment.interface";
 import { useAppSelector } from "@/store/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { PaymentStatusCell } from "./payment-status-cell";
-import { PaymentVoucher } from "@/pages/payments/components/payment-voucher";
 import { FromatedDate } from "@/lib/format-date";
+import { PaymentByCell } from "./payment-by-cell";
+import { formatCurrency } from "@/lib/utils/format-currency";
 
 const columns: ColumnDef<IPayment>[] = [
   {
@@ -12,7 +13,7 @@ const columns: ColumnDef<IPayment>[] = [
     header: "Monto",
     size: 100,
     cell: (info) => (
-      <p className="text-lg ">$ {info.getValue<number>().toFixed(2)}</p>
+      <p className="text-lg ">{formatCurrency(info.getValue<number>())}</p>
     ),
   },
   {
@@ -20,27 +21,35 @@ const columns: ColumnDef<IPayment>[] = [
     header: "Estado",
     size: 100,
     cell: (info) => (
-      <PaymentStatusCell paymentStatus={info.getValue<IPayment["status"]>()} />
+      <div className="flex justify-center">
+        <PaymentStatusCell
+          paymentStatus={info.getValue<IPayment["status"]>()}
+        />
+      </div>
     ),
   },
   {
     accessorKey: "date",
     header: "Fecha",
-    size: 200,
+    size: 150,
     cell: (info) => <FromatedDate date={info.getValue<string>()} />,
   },
 
   {
-    accessorKey: "notes",
-    header: "Notas",
-    size: 200,
-    cell: (info) => <p className="text-xs ">{info.getValue<string>()}</p>,
+    accessorKey: "end_date",
+    header: "Vencimiento",
+    size: 150,
+    cell: (info) => <FromatedDate date={info.getValue<string>()} />,
   },
   {
-    accessorKey: "image",
-    header: "",
-    size: 20,
-    cell: (info) => <PaymentVoucher payment={info.row.original} />,
+    accessorKey: "payment_by",
+    header: "Pagado Por",
+    size: 200,
+    cell: (info) => (
+      <div className="flex justify-center">
+        <PaymentByCell payment_by={info.getValue<string>()} />
+      </div>
+    ),
   },
 ];
 export function PaymentsTable() {

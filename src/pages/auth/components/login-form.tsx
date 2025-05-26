@@ -172,7 +172,7 @@ export function LoginForm() {
               </Button>
               <Button
                 variant="link"
-                className="w-full"
+                className="w-full underline italic  "
                 onClick={openResetPasswordDialog}
               >
                 Olvidé mi contraseña
