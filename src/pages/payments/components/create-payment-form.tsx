@@ -44,7 +44,7 @@ export function CreatePaymentForm() {
           <hr />
         </div>
       </section>
-      <SubscribeButton />
+      <SubscribeButton amount={20000} frequency={1} />
     </div>
   );
 }
