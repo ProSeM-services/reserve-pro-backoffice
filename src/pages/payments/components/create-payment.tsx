@@ -33,7 +33,7 @@ export function CreatePaymentSheet() {
             <XIcon />
           </SheetClose>
         </SheetHeader>
-        <div className="p-2  flex-grow max-h-[80vh] overflow-auto">
+        <div className="p-2  flex-grow max-h-[90vh] overflow-auto">
           <CreatePaymentForm />
         </div>
       </SheetContent>

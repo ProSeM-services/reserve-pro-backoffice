@@ -3,6 +3,7 @@ import AdminDataProvider from "@/components/providers/admin/admin-data-provider"
 import { SessionProvider } from "@/components/providers/session-provider";
 import {
   Sidebar,
+  SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarProvider,
@@ -53,7 +54,7 @@ export function AdminPage() {
                 />
               </div>
             </SidebarHeader>
-
+            <SidebarContent></SidebarContent>
             <SidebarFooter>
               <NavUser />
             </SidebarFooter>
@@ -65,50 +66,17 @@ export function AdminPage() {
                 <SidebarTrigger className="-ml-1" />
                 <NotificationsButton />
               </section>
-              <section className="h-[30vh] flex justify-between gap-4 ">
-                <div
-                  onClick={() => setPageTpye("enterprise")}
-                  className={`${
-                    pageType === "enterprise" ? "bg-primary text-white" : ""
-                  } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer hover:bg-accent transition-all duration-300`}
-                >
-                  <span className="">Total Negocios</span>
-                  <div className="w-full flex-grow flex items-center justify-center">
-                    <p className="text-6xl font-semibold">
-                      {enterprises.length}
-                    </p>
-                  </div>
-                </div>
-                <div
-                  onClick={() => setPageTpye("companies")}
-                  className={`${
-                    pageType === "companies" ? "bg-primary text-white" : ""
-                  } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer hover:bg-accent transition-all duration-300`}
-                >
-                  <span className="">Total Sucursales</span>
-                  <div className="w-full flex-grow flex items-center justify-center">
-                    <p className="text-6xl font-semibold">{companies.length}</p>
-                  </div>
-                </div>
-                <div
-                  onClick={() => setPageTpye("accounts")}
-                  className={`${
-                    pageType === "accounts" ? "bg-primary text-white" : ""
-                  } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer hover:bg-accent transition-all duration-300`}
-                >
-                  <span className="">Total Cuentas</span>
-                  <div className="w-full flex-grow flex items-center justify-center">
-                    <p className="text-6xl font-semibold">{members.length}</p>
-                  </div>
-                </div>
+              <section className="h-[30dvh] flex justify-between gap-4 ">
                 <div
                   onClick={() => setPageTpye("payments")}
                   className={`${
-                    pageType === "payments" ? "bg-primary text-white" : ""
-                  }    rounded-md  border  p-4 flex flex-col cursor-pointer hover:bg-accent transition-all duration-300`}
+                    pageType === "payments"
+                      ? "bg-primary text-white"
+                      : "hover:bg-accent"
+                  }    rounded-md  border   p-4 flex flex-col cursor-pointer  transition-all duration-300`}
                 >
-                  <span className="">Estado de pagos</span>
-                  <div className="w-full  flex flex-col flex-grow items-start justify-center gap-2">
+                  <span className=" ">Estado de pagos</span>
+                  <div className="w-full  flex flex-col flex-grow items-start justify-center gap-2 px-8">
                     <div className="flex  justify-between w-full gap-2">
                       <PaymentStatusCell paymentStatus="paid" />
                       <p className=" font-semibold">${total_paid.toFixed(2)}</p>
@@ -125,6 +93,47 @@ export function AdminPage() {
                         ${total_failled.toFixed(2)}
                       </p>
                     </div>
+                  </div>
+                </div>
+                <div
+                  onClick={() => setPageTpye("enterprise")}
+                  className={`${
+                    pageType === "enterprise"
+                      ? "bg-primary text-white"
+                      : "hover:bg-accent"
+                  } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer  transition-all duration-300`}
+                >
+                  <span className="">Total Negocios</span>
+                  <div className="w-full flex-grow flex items-center justify-center">
+                    <p className="text-6xl font-semibold">
+                      {enterprises.length}
+                    </p>
+                  </div>
+                </div>
+                <div
+                  onClick={() => setPageTpye("companies")}
+                  className={`${
+                    pageType === "companies"
+                      ? "bg-primary text-white"
+                      : "hover:bg-accent"
+                  } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer  transition-all duration-300`}
+                >
+                  <span className="">Total Sucursales</span>
+                  <div className="w-full flex-grow flex items-center justify-center">
+                    <p className="text-6xl font-semibold">{companies.length}</p>
+                  </div>
+                </div>
+                <div
+                  onClick={() => setPageTpye("accounts")}
+                  className={`${
+                    pageType === "accounts"
+                      ? "bg-primary text-white"
+                      : "hover:bg-accent"
+                  } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer  transition-all duration-300`}
+                >
+                  <span className="">Total Cuentas</span>
+                  <div className="w-full flex-grow flex items-center justify-center">
+                    <p className="text-6xl font-semibold">{members.length}</p>
                   </div>
                 </div>
               </section>

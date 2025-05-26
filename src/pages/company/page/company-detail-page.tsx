@@ -62,7 +62,7 @@ export function CompanyDetailPage() {
       </div>
 
       {/* ---------------------------- MAP SECTION ---------------------------- */}
-      <div className="h-[40vh] w-full  ">
+      <div className="min-h-[40dvh] h-[40dvh]  w-full  ">
         {company.address.lat && company.address.lng ? (
           <MapComponent lat={company.address.lat} lng={company.address.lng} />
         ) : null}
