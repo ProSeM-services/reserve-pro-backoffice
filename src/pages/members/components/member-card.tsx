@@ -1,8 +1,9 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { OpenMemberDetails } from "./open-member-details";
 import { MemberAvatar } from "@/components/common/members/member-avatar";
 import { SendInviteUser } from "./send-invite-user";
 import { IUser } from "@/interfaces";
+import { CalendarCheck, MailCheck } from "lucide-react";
 
 interface MemberCardProps {
   member: IUser;
@@ -10,42 +11,50 @@ interface MemberCardProps {
 }
 export function MemberCard({ member, type = "details" }: MemberCardProps) {
   return (
-    <Card
-      className={`flex flex-col gap-4 p-2  min-w-[300px] w-full max-md:text-xs  hover:shadow-md transition-all duration-200 `}
-    >
-      <div className="flex gap-4 ">
-        <div className=" flex justify-center items-center  ">
-          <MemberAvatar member={member} size="md" />
-        </div>
-        <div className="flex flex-col w-full justify-start text-md ">
-          <header className="flex w-full  justify-between items-center  ">
-            <div className="flex gap-2 items-center">
-              <div className="flex items-center gap-1 text-lg max-md:text-[15px] font-semibold ">
-                {member.name}, {member.lastName}
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle>
+          <div className="flex gap-4 ">
+            <div className=" flex justify-center items-start  ">
+              <MemberAvatar member={member} size="md" />
+            </div>
+            <div className="flex flex-col  items-start flex-grow">
+              <div className=" w-full flex  items-center justify-between ">
+                <div className="flex items-center gap-1 text-lg max-md:text-[15px] font-semibold ">
+                  {member.name}, {member.lastName}
+                </div>
+                {type === "read" ? null : (
+                  <>
+                    {type === "details" && (
+                      <OpenMemberDetails member={member} />
+                    )}
+                    {type === "invite" && <SendInviteUser member={member} />}
+                  </>
+                )}
               </div>
-              <div className="flex items-center gap-1 text-[10px]  text-gray-500">
-                {member.role}
+              <div className="bg-indigo-200 text-indigo-500 p-1 px-4 rounded-xl text-xs">
+                <p>{member.role}</p>
               </div>
             </div>
-            {type === "read" ? null : (
-              <>
-                {type === "details" && <OpenMemberDetails member={member} />}
-                {type === "invite" && <SendInviteUser member={member} />}
-              </>
-            )}
-          </header>
-
-          <div className="text-xs text-gray-600">
-            <span className="font-normal">{member.email || ""} </span>
-            {member.createdAt && (
-              <div className="flex items-center gap-2 ">
-                <span className="font-medium">Fecha de ingreso: </span>
-                <span>{new Date(member.createdAt).toLocaleDateString()}</span>
-              </div>
-            )}
           </div>
+        </CardTitle>
+      </CardHeader>
+      <hr className="w-5/6 mx-auto mb-4" />
+      <CardContent>
+        <div className="flex flex-col w-full justify-start text-[14px] gap-4 ">
+          <div className="flex items-center gap-2">
+            <MailCheck className="size-4" />
+            <span className="font-normal">{member.email || ""} </span>
+          </div>
+          {member.createdAt && (
+            <div className="flex items-center gap-2 ">
+              <CalendarCheck className="size-4" />
+              <span>Fecha de ingreso: </span>
+              <span>{new Date(member.createdAt).toLocaleDateString()}</span>
+            </div>
+          )}
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 }

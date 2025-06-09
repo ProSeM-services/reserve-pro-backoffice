@@ -15,7 +15,7 @@ export function CreatePaymentSheet() {
   return (
     <Sheet>
       <SheetTrigger>
-        <Button className="flex items-center gap-2">
+        <Button className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg hover:brightness-110 ">
           <p> Cargar pago</p> <FileUp className="size-4" />
         </Button>
       </SheetTrigger>

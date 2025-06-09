@@ -11,7 +11,7 @@ export function ServicesList() {
       {services.length > 0 ? (
         <div className="flex max-md:flex-col gap-4 flex-wrap ">
           {services.map((service) => (
-            <div className=" w-1/3 min-w-[50px]   lg:flex-grow    max-lg:w-full">
+            <div className=" flex  flex-grow  ">
               <ServiceCard service={service} key={service.id} showMembers />
             </div>
           ))}

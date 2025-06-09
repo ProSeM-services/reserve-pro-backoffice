@@ -148,7 +148,7 @@ export function AppointmentStats() {
                 <SelectGroup>
                   <SelectLabel>Mes</SelectLabel>
                   {MONTHS.map((month, value) => (
-                    <SelectItem value={`${value + 1}`} key={value}>
+                    <SelectItem value={`${value}`} key={value}>
                       {month}
                     </SelectItem>
                   ))}
@@ -176,8 +176,8 @@ export function AppointmentStats() {
                   {MONTHS.map((month, value) => (
                     <SelectItem
                       key={value}
-                      value={`${value + 1}`}
-                      disabled={value + 1 <= start}
+                      value={`${value}`}
+                      disabled={value <= start}
                     >
                       {month}
                     </SelectItem>
@@ -205,7 +205,7 @@ export function AppointmentStats() {
                 tickLine={false}
                 tickMargin={2}
                 axisLine={false}
-                tickFormatter={(value) => value.slice(0, 3)}
+                tickFormatter={(_, i) => MONTHS[i].slice(0, 3)}
               />
               <ChartTooltip
                 cursor={false}
@@ -225,12 +225,12 @@ export function AppointmentStats() {
         )}
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        {/* <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+        <div className="flex gap-2 font-medium leading-none">
+          Visualiza en cada mes tus serivicos
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
-        </div> */}
+          Desde {MONTHS[start]} - {MONTHS[end]}
+        </div>
       </CardFooter>
     </Card>
   );

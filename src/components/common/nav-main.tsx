@@ -73,14 +73,17 @@ export function NavMain({
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
-                    <SidebarMenuButton tooltip={item.title}>
+                    <SidebarMenuButton
+                      tooltip={item.title}
+                      className="h-14 rounded-none border-b"
+                    >
                       {item.icon && <item.icon />}
                       <span>{item.title}</span>
                       <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <section className="pl-2">
+                    <section className=" space-y-1 py-1">
                       {item.items?.map((subItem) =>
                         subItem.permission ? (
                           <AuthorizationWrapper
@@ -91,14 +94,10 @@ export function NavMain({
                               <div>
                                 <Link
                                   to={subItem.url}
-                                  className={`flex gap-2 max-md:p-2 text-md border-blue-500  items-center h-12   max-sm:h-full transition-all duration-200 px-2 ${
+                                  className={`flex gap-2 max-md:p-2 text-md   items-center h-12  rounded-xl  max-sm:h-full  transition-all duration-300  px-2  ${
                                     location.pathname === subItem.url
-                                      ? "border-l-4"
-                                      : ""
-                                  }  ${
-                                    location.pathname === subItem.url
-                                      ? "text-primary bg-background/75 "
-                                      : " text-primary/50"
+                                      ? "bg-indigo-500 text-white "
+                                      : " text-gray-700 border border-transparent hover:border-indigo-200"
                                   } $`}
                                 >
                                   {subItem.icon && (
@@ -114,14 +113,10 @@ export function NavMain({
                             <div>
                               <Link
                                 to={subItem.url}
-                                className={`flex gap-2 max-md:p-2 text-md border-blue-500  items-center h-12   max-sm:h-full transition-all duration-200 px-2 ${
+                                className={`flex gap-2 max-md:p-2 text-md   items-center h-12  rounded-xl  max-sm:h-full  transition-all duration-300  px-2  ${
                                   location.pathname === subItem.url
-                                    ? "border-l-4"
-                                    : ""
-                                }  ${
-                                  location.pathname === subItem.url
-                                    ? "text-primary bg-background/75 "
-                                    : " text-primary/50"
+                                    ? "bg-indigo-500 text-white "
+                                    : " text-gray-700 border border-transparent hover:border-indigo-200"
                                 } $`}
                               >
                                 {subItem.icon && (

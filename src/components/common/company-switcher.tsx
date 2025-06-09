@@ -85,13 +85,13 @@ export function CompanySwitcher() {
             <LoaderWrapper loading={loading} type="company">
               <DropdownMenuItem
                 key={"todas"}
-                onClick={() => handleSelectCompany(member?.companyName || "")}
-                className="gap-2 p-2 border rounded-none bg-gray-800 text-white cursor-pointer"
+                onClick={() => handleSelectCompany(enterprise?.name || "")}
+                className="gap-2 p-2     cursor-pointer"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <AudioWaveform className="size-4 shrink-0" />
                 </div>
-                {member?.companyName}
+                {enterprise?.name}
                 <DropdownMenuShortcut>⌘{0}</DropdownMenuShortcut>
               </DropdownMenuItem>
               {inmutablesCompanies.map((option, index) => (

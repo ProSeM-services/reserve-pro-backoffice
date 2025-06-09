@@ -1,5 +1,5 @@
 import { Payment } from "@/lib/constants/payments";
-import { Banknote, Landmark, LucideProps, QrCode, Wallet } from "lucide-react";
+import { Banknote, Landmark, QrCode, Wallet } from "lucide-react";
 interface CategoryCardProps {
   paymentMethod: Payment | string;
   selected?: boolean;
@@ -9,22 +9,38 @@ interface CategoryCardProps {
 const IconConfig: Record<
   Payment,
   {
-    icon: React.ForwardRefExoticComponent<
-      Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
-    >;
+    icon: () => JSX.Element;
   }
 > = {
   "Tarjeta Débito/Crédito": {
-    icon: Wallet,
+    icon: () => (
+      <div className="text-green-500 bg-green-200 p-2 rounded-xl">
+        <Wallet />
+      </div>
+    ),
   },
   Efectivo: {
-    icon: Banknote,
+    icon: () => (
+      <div className="text-purple-500 bg-purple-200 p-2 rounded-xl">
+        {" "}
+        <Banknote />
+      </div>
+    ),
   },
   QR: {
-    icon: QrCode,
+    icon: () => (
+      <div className="text-blue-500 bg-blue-200 p-2 rounded-xl">
+        <QrCode />{" "}
+      </div>
+    ),
   },
   Transferencia: {
-    icon: Landmark,
+    icon: () => (
+      <div className="text-orange-500 bg-orange-200 p-2 rounded-xl">
+        {" "}
+        <Landmark />
+      </div>
+    ),
   },
 };
 export function PaymentCard({
@@ -37,10 +53,10 @@ export function PaymentCard({
     <div className="relative">
       <div
         className={`${
-          selected ? "bg-primary text-white" : "bg-muted"
-        } text-foreground p-2 rounded-md transition-all duration-200 cursor-pointer  flex  items-center gap-2 text-nowrap `}
+          selected ? " text-white" : ""
+        } flex items-center gap-2 shadow-md  rounded-2xl pr-4 bg-slate-50`}
       >
-        <Icon className="size-4" strokeWidth={size === "sm" ? 2 : 1} />
+        <Icon />
         {size === "lg" && paymentMethod}
       </div>
     </div>

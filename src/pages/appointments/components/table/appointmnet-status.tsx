@@ -15,11 +15,11 @@ export function AppointmentStatusComponent({
       <p
         className={`${
           canceled
-            ? "bg-red-700"
+            ? "bg-red-200 text-red-600"
             : confirmed
-            ? "bg-green-700 "
-            : "bg-yellow-500 "
-        } font-light  rounded-full mx-auto size-6 text-white flex justify-center items-center`}
+            ? "bg-green-200 text-green-600 "
+            : "bg-yellow-200 text-yellow-600 "
+        } font-light  rounded-full mx-auto size-6  flex justify-center items-center`}
       >
         {canceled ? (
           <CalendarX className="size-3" />
@@ -45,11 +45,11 @@ export function AppointmentStatusCell({
       <p
         className={`${
           canceled
-            ? "bg-red-700"
+            ? "bg-red-200 text-red-600"
             : confirmed
-            ? "bg-green-700 "
-            : "bg-yellow-500 "
-        } font-light  rounded-full mx-auto size-6 text-white flex justify-center items-center`}
+            ? "bg-green-200 text-green-600 "
+            : "bg-yellow-200 text-yellow-600 "
+        } font-light  rounded-full mx-auto size-6  flex justify-center items-center`}
       >
         {canceled ? (
           <CalendarX className="size-3" />
