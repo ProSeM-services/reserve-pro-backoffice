@@ -44,7 +44,6 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
       <SheetTrigger>
         <Button
           size={size === "lg" ? "default" : "icon"}
-          variant={"secondary"}
           className={` flex items-center gap-2 ${
             size === "lg" ? " w-full px-4" : "size-8 rounded-full"
           }`}

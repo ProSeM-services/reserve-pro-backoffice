@@ -26,7 +26,11 @@ export function SubscribeButton({ amount, frequency }: SubscribeButtonProps) {
   };
 
   return (
-    <Button onClick={hanldleSubscribe} isLoading={loading}>
+    <Button
+      onClick={hanldleSubscribe}
+      isLoading={loading}
+      className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg hover:brightness-110"
+    >
       Ir a Pagar
     </Button>
   );

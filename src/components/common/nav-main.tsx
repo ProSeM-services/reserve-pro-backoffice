@@ -94,10 +94,10 @@ export function NavMain({
                               <div>
                                 <Link
                                   to={subItem.url}
-                                  className={`flex gap-2 max-md:p-2 text-md border-blue-500  items-center h-12  rounded-xl  max-sm:h-full  transition-all duration-300  px-2  ${
+                                  className={`flex gap-2 max-md:p-2 text-md   items-center h-12  rounded-xl  max-sm:h-full  transition-all duration-300  px-2  ${
                                     location.pathname === subItem.url
-                                      ? "bg-blue-500 text-white "
-                                      : " text-gray-700 border border-transparent hover:border-muted"
+                                      ? "bg-indigo-500 text-white "
+                                      : " text-gray-700 border border-transparent hover:border-indigo-200"
                                   } $`}
                                 >
                                   {subItem.icon && (
@@ -113,10 +113,10 @@ export function NavMain({
                             <div>
                               <Link
                                 to={subItem.url}
-                                className={`flex gap-2 max-md:p-2 text-md border-blue-500  items-center h-12  rounded-xl  max-sm:h-full  transition-all duration-300  px-2  ${
+                                className={`flex gap-2 max-md:p-2 text-md   items-center h-12  rounded-xl  max-sm:h-full  transition-all duration-300  px-2  ${
                                   location.pathname === subItem.url
-                                    ? "bg-blue-500 text-white "
-                                    : " text-gray-700 border border-transparent hover:border-muted"
+                                    ? "bg-indigo-500 text-white "
+                                    : " text-gray-700 border border-transparent hover:border-indigo-200"
                                 } $`}
                               >
                                 {subItem.icon && (
