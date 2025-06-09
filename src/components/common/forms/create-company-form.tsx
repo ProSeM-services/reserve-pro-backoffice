@@ -22,6 +22,7 @@ import { PAYMENTS_VALUES } from "@/lib/constants/payments";
 import { PaymentCard } from "../payment-card";
 import { useAppSelector } from "@/store/hooks";
 import { MemberAvatar } from "../members/member-avatar";
+import { Check } from "lucide-react";
 
 const INITIAL_COMPANY_DATA: ICreateCompany = {
   address: "",
@@ -211,19 +212,32 @@ export function CompanyForm() {
                 </FormDescription>
                 <div className="flex flex-col gap-2">
                   {inmutableMembers
-                    .filter((e) => !e.CompanyId)
+                    .filter((m) => !m.CompanyId)
                     .map((member) => (
                       <div
+                        className="flex items-center gap-2 cursor-pointer pr-4"
                         key={member.id}
-                        className={`flex items-center gap-4 p-2   border rounded cursor-pointer transition-all duration-300 ${
-                          usersToAdd.includes(member.id)
-                            ? "  opacity-100 border-l-8 border-l-primary"
-                            : "opacity-50 hover:opacity-100"
-                        }`}
                         onClick={() => handleAddUsers(member.id)}
                       >
-                        <MemberAvatar member={member} size="sm" />
-                        <p>{member.fullName}</p>
+                        <div
+                          className={` rounded transition-all duration-300 ${
+                            usersToAdd.includes(member.id)
+                              ? "   bg-blue-200 p-2 "
+                              : " p-0"
+                          }`}
+                        >
+                          <Check
+                            className={`rounded transition-all duration-300 ${
+                              usersToAdd.includes(member.id)
+                                ? "size-4 text-blue-500"
+                                : "size-0"
+                            }`}
+                          />
+                        </div>
+                        <div className="flex items-center gap-2 border flex-grow rounded-xl bg-muted">
+                          <MemberAvatar member={member} size="sm" />
+                          <p>{member.fullName}</p>
+                        </div>
                       </div>
                     ))}
                 </div>
@@ -245,14 +259,29 @@ export function CompanyForm() {
                   {inmutableServices.map((service) => (
                     <div
                       key={service.id}
-                      className={`flex items-center gap-4 p-2   border rounded cursor-pointer transition-all duration-300 ${
-                        servicesToAdd.includes(service.id)
-                          ? " border-l-8 border-l-primary opacity-100 font-medium"
-                          : "opacity-50 hover:opacity-100 font-light"
-                      }`}
                       onClick={() => handleAddService(service.id)}
+                      className="flex items-center gap-2 cursor-pointer pr-4"
                     >
-                      <p className="font-medium uppercase">{service.title}</p>
+                      <div
+                        className={`rounded transition-all duration-300 ${
+                          servicesToAdd.includes(service.id)
+                            ? " bg-blue-200 p-2"
+                            : "p-0 "
+                        }`}
+                        onClick={() => handleAddService(service.id)}
+                      >
+                        <Check
+                          className={`rounded transition-all duration-300 ${
+                            servicesToAdd.includes(service.id)
+                              ? "size-4 text-blue-500"
+                              : "size-0"
+                          }`}
+                        />
+                      </div>
+
+                      <div className="flex items-center gap-2 border flex-grow rounded-xl p-2 bg-muted">
+                        <p className="">{service.title}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -271,21 +300,31 @@ export function CompanyForm() {
                   Min 1 - Max 3
                 </FormDescription>
 
-                <div className="flex w-max space-x-4 py-3 flex-wrap max-w-full gap-2">
+                <div className="flex flex-col gap-2">
                   {CATEGORY_VALUES.map((category) => (
                     <div
                       key={category}
                       onClick={() => handleCategories(category)}
-                      className={` ${
-                        categoryList.includes(category)
-                          ? "opacity-100"
-                          : "opacity-65"
-                      }  cursor-pointer transition-all duration-300`}
+                      className={`flex items-center  gap-2 cursor-pointer transition-all duration-300`}
                     >
-                      <CategoryCard
-                        category={category}
-                        selected={categoryList.includes(category)}
-                      />
+                      <div
+                        className={`rounded transition-all duration-300 ${
+                          categoryList.includes(category)
+                            ? " bg-blue-200 p-2"
+                            : "p-0 "
+                        }`}
+                      >
+                        <Check
+                          className={`rounded transition-all duration-300 ${
+                            categoryList.includes(category)
+                              ? "size-4 text-blue-500"
+                              : "size-0"
+                          }`}
+                        />
+                      </div>
+                      <div className="text-black flex-grow">
+                        <CategoryCard category={category} selected={false} />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -303,16 +342,31 @@ export function CompanyForm() {
                 <FormDescription className="text-xs">
                   Métodos de pago aceptados por esta sucursal
                 </FormDescription>
-                <div className="flex w-max  py-3 flex-wrap max-w-full gap-2">
+                <div className="flex flex-col gap-4">
                   {PAYMENTS_VALUES.map((method) => (
                     <div
                       key={method}
                       onClick={() => handlePaymentMethods(method)}
+                      className="flex items-center gap-2 cursor-pointer"
                     >
-                      <PaymentCard
-                        paymentMethod={method}
-                        selected={paymentMethods.includes(method)}
-                      />
+                      <div
+                        className={`rounded transition-all duration-300 ${
+                          paymentMethods.includes(method)
+                            ? " bg-blue-200 p-2"
+                            : "p-0 "
+                        }`}
+                      >
+                        <Check
+                          className={`rounded transition-all duration-300 ${
+                            paymentMethods.includes(method)
+                              ? "size-4 text-blue-500"
+                              : "size-0"
+                          }`}
+                        />
+                      </div>
+                      <div className="flex-grow">
+                        <PaymentCard paymentMethod={method} />
+                      </div>
                     </div>
                   ))}
                 </div>

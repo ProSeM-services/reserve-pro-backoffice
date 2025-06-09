@@ -42,19 +42,31 @@ export function RevenueCard({ type }: RevenueCardProps) {
   const Config: Record<ICardType, ICardBody> = {
     appointments: {
       feedback: "+20.1% from last month",
-      Icon: () => <Book className="text-gray-400" />,
+      Icon: () => (
+        <div className="text-orange-500 bg-orange-200 p-2 rounded-xl">
+          <Book className="size-5" />
+        </div>
+      ),
       title: "Total de Turnos",
       value: `${appointments.length}`,
     },
     customers: {
       feedback: "+20.1% from last month",
-      Icon: () => <SquareUser className="text-gray-400" />,
+      Icon: () => (
+        <div className="text-blue-500 bg-blue-200 p-2 rounded-xl">
+          <SquareUser className="size-5" />
+        </div>
+      ),
       title: "Total Clientes",
       value: `${customers.length}`,
     },
     sales: {
       feedback: "+20.1% from last month",
-      Icon: () => <DollarSign className="text-gray-400" />,
+      Icon: () => (
+        <div className="text-green-500 bg-green-100 p-2 rounded-xl">
+          <DollarSign className="size-5" />
+        </div>
+      ),
       title: "Ingresos",
       value: `${formatCurrency(confirmedAppointmentsRevenue())}`,
     },

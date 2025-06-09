@@ -71,7 +71,7 @@ export function AdminPage() {
                   onClick={() => setPageTpye("payments")}
                   className={`${
                     pageType === "payments"
-                      ? "bg-primary text-white"
+                      ? "rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg hover:brightness-110 transition"
                       : "hover:bg-accent"
                   }    rounded-md  border   p-4 flex flex-col cursor-pointer  transition-all duration-300`}
                 >
@@ -99,7 +99,7 @@ export function AdminPage() {
                   onClick={() => setPageTpye("enterprise")}
                   className={`${
                     pageType === "enterprise"
-                      ? "bg-primary text-white"
+                      ? "rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg hover:brightness-110 transition"
                       : "hover:bg-accent"
                   } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer  transition-all duration-300`}
                 >
@@ -114,7 +114,7 @@ export function AdminPage() {
                   onClick={() => setPageTpye("companies")}
                   className={`${
                     pageType === "companies"
-                      ? "bg-primary text-white"
+                      ? "rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg hover:brightness-110 transition"
                       : "hover:bg-accent"
                   } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer  transition-all duration-300`}
                 >
@@ -127,7 +127,7 @@ export function AdminPage() {
                   onClick={() => setPageTpye("accounts")}
                   className={`${
                     pageType === "accounts"
-                      ? "bg-primary text-white"
+                      ? "rounded-xl bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg hover:brightness-110 transition"
                       : "hover:bg-accent"
                   } flex-grow   rounded-md  border  p-4 flex flex-col cursor-pointer  transition-all duration-300`}
                 >
