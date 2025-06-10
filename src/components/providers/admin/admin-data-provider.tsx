@@ -26,7 +26,6 @@ export default function AdminDataProvider({ children }: PropsWithChildren) {
   const { fetched: enterpriseFetched } = useAppSelector((s) => s.enterprise);
   const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
-    console.log("<--------- ADMIN DATA PROVIDER  ------------->");
     if (!accessToken) return;
     const fetchData = async () => {
       try {

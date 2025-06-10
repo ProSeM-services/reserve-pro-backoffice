@@ -75,8 +75,8 @@ export function PlanInformation() {
         <section className="space-y-4">
           <Label className="text-lg">Período de pago</Label>
           <CardDescription>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere,
-            obcaecati?
+            Selecciona el período de pago que prefieras. Los períodos más largos
+            pueden tener descuentos aplicados.
           </CardDescription>
           <div className="flex flex-wrap gap-4">
             {options.map((option) => (

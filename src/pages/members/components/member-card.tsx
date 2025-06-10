@@ -39,22 +39,24 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
           </div>
         </CardTitle>
       </CardHeader>
-      <hr className="w-5/6 mx-auto mb-4" />
-      <CardContent>
-        <div className="flex flex-col w-full justify-start text-[14px] gap-4 ">
-          <div className="flex items-center gap-2">
-            <MailCheck className="size-4" />
-            <span className="font-normal">{member.email || ""} </span>
-          </div>
-          {member.createdAt && (
-            <div className="flex items-center gap-2 ">
-              <CalendarCheck className="size-4" />
-              <span>Fecha de ingreso: </span>
-              <span>{new Date(member.createdAt).toLocaleDateString()}</span>
+      {type === "details" && <hr className="w-5/6 mx-auto mb-4" />}
+      {type === "details" && (
+        <CardContent>
+          <div className="flex flex-col w-full justify-start text-[14px] gap-4 ">
+            <div className="flex items-center gap-2">
+              <MailCheck className="size-4" />
+              <span className="font-normal">{member.email || ""} </span>
             </div>
-          )}
-        </div>
-      </CardContent>
+            {member.createdAt && (
+              <div className="flex items-center gap-2 ">
+                <CalendarCheck className="size-4" />
+                <span>Fecha de ingreso: </span>
+                <span>{new Date(member.createdAt).toLocaleDateString()}</span>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      )}
     </Card>
   );
 }

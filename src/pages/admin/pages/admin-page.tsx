@@ -19,6 +19,7 @@ import { useState } from "react";
 import { EnterpriseTable } from "../components/enterprise/enterprises-table";
 import { CompanyTable } from "@/pages/company/components/table/company-table";
 import { UsersTable } from "../components/members/members-table";
+import { formatCurrency } from "@/lib/utils/format-currency";
 
 type TPage = "payments" | "enterprise" | "companies" | "accounts";
 export function AdminPage() {
@@ -79,7 +80,9 @@ export function AdminPage() {
                   <div className="w-full  flex flex-col flex-grow items-start justify-center gap-2 px-8">
                     <div className="flex  justify-between w-full gap-2">
                       <PaymentStatusCell paymentStatus="paid" />
-                      <p className=" font-semibold">${total_paid.toFixed(2)}</p>
+                      <p className=" font-semibold">
+                        {formatCurrency(total_paid)}
+                      </p>
                     </div>
                     <div className="flex  justify-between w-full gap-2">
                       <PaymentStatusCell paymentStatus="pending" />

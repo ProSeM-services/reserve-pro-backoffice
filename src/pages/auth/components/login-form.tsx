@@ -171,6 +171,7 @@ export function LoginForm() {
                 Login
               </Button>
               <Button
+                type="button"
                 variant="link"
                 className="w-full underline italic  "
                 onClick={openResetPasswordDialog}

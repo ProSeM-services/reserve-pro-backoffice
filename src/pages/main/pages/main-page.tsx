@@ -22,6 +22,7 @@ import { ContentWrapper } from "../components/content-wrapper";
 import { CalendarPage } from "@/pages/calendar/page/calendar-page";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { PaymentPage } from "@/pages/payments/page/payment-page";
+import { SettingsPage } from "@/pages/settings/page/settings-page";
 
 export default function MainPage() {
   return (
@@ -122,6 +123,16 @@ export default function MainPage() {
                           permission={Permission.VIEW_APPOINTMENTS}
                         >
                           <PaymentPage />
+                        </RouteAuthorizationWrapper>
+                      }
+                    />
+                    <Route
+                      path="/settings"
+                      element={
+                        <RouteAuthorizationWrapper
+                          permission={Permission.VIEW_APPOINTMENTS}
+                        >
+                          <SettingsPage />
                         </RouteAuthorizationWrapper>
                       }
                     />

@@ -7,6 +7,7 @@ import { PaymentStatusCell } from "./payment-status-cell";
 import { PaymentVoucher } from "@/pages/payments/components/payment-voucher";
 import { PaymentActionsCell } from "./payments-actions-cell";
 import { FromatedDate } from "@/lib/format-date";
+import { formatCurrency } from "@/lib/utils/format-currency";
 
 const columns: ColumnDef<IPayment>[] = [
   {
@@ -21,7 +22,7 @@ const columns: ColumnDef<IPayment>[] = [
     accessorKey: "amount",
     header: "Amount",
     size: 100,
-    cell: (info) => `$${info.getValue()}`,
+    cell: (info) => `${formatCurrency(info.getValue<number>())}`,
   },
   {
     accessorKey: "status",

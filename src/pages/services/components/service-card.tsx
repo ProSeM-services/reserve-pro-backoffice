@@ -43,15 +43,17 @@ export const ServiceCard = ({
               {service.provision}
             </p>
           </div>
-          <div className="">
-            <p className="text-gray-500 font-light">
-              {service.description ? (
-                service.description
-              ) : (
-                <i>No hay descripción del serivcio</i>
-              )}
-            </p>
-          </div>
+          {!readonly && (
+            <div className="">
+              <p className="text-gray-500 font-light">
+                {service.description ? (
+                  service.description
+                ) : (
+                  <i>No hay descripción del serivcio</i>
+                )}
+              </p>
+            </div>
+          )}
 
           {showMembers && !service.Users.length && (
             <Tooltip>

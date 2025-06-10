@@ -1,11 +1,18 @@
 import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
 import { AddButton } from "@/components/common/add-button";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Permission } from "@/lib/constants/permissions";
 import { FromatedDate } from "@/lib/format-date";
+import { MemberCard } from "@/pages/members/components/member-card";
+import { ServiceCard } from "@/pages/services/components/service-card";
 import { useAppSelector } from "@/store/hooks";
-import { CircleStop, HouseIcon, UserIcon } from "lucide-react";
+import { HouseIcon, UserIcon } from "lucide-react";
 
 type Type = "member" | "company" | "services" | "appointments";
 interface IConfig {
@@ -60,18 +67,7 @@ export function DashboardCard({ type }: DashboardCardProps) {
       Component: () => (
         <>
           {services.map((service) => (
-            <div key={service.id} className="flex gap-2 items-start ">
-              <div>
-                <CircleStop />
-              </div>
-
-              <div>
-                <Label>{service.title}</Label>
-                <p className="text-gray-600">
-                  {service.provision} - ${service.price}
-                </p>
-              </div>
-            </div>
+            <ServiceCard service={service} key={service.id} readonly />
           ))}
         </>
       ),
@@ -83,24 +79,7 @@ export function DashboardCard({ type }: DashboardCardProps) {
       Component: () => (
         <>
           {members.map((member) => (
-            <div key={member.id} className="flex gap-2 items-start ">
-              <div>
-                {member.image ? (
-                  <img
-                    src={member.image}
-                    alt={`${member.name} asd`}
-                    className="size-10 aspect-square object-cover rounded-full"
-                  />
-                ) : (
-                  <UserIcon />
-                )}
-              </div>
-
-              <div>
-                <Label>{member.fullName}</Label>
-                <p className="text-gray-600">{member.email}</p>
-              </div>
-            </div>
+            <MemberCard member={member} key={member.id} type="read" />
           ))}
         </>
       ),
@@ -130,24 +109,28 @@ export function DashboardCard({ type }: DashboardCardProps) {
 
   const { Component, label, count, permission } = Config[type];
   return (
-    <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] ">
+    <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] relative ">
+      <CardHeader>
+        <CardTitle>{label}</CardTitle>
+        <CardDescription>Total de {label} creados</CardDescription>
+      </CardHeader>
+
       <section className="   flex flex-col  gap-4 relative ">
         <div className="flex flex-col items-center ">
-          <Label className="text-3xl">{count}</Label>
-          <p>{label}</p>
-        </div>
-
-        <div className="absolute right-0 top-0 ">
-          {type !== "appointments" && (
-            <AuthorizationWrapper permission={permission}>
-              <AddButton type={type} size="sm" />
-            </AuthorizationWrapper>
-          )}
+          <Label className="text-4xl">{count}</Label>
         </div>
       </section>
       <section className=" space-y-2 flex-grow  h-full max-h-full overflow-auto">
         <Component />
       </section>
+
+      <div className="absolute right-0 top-0 m-4 ">
+        {type !== "appointments" && (
+          <AuthorizationWrapper permission={permission}>
+            <AddButton type={type} size="sm" />
+          </AuthorizationWrapper>
+        )}
+      </div>
     </Card>
   );
 }
