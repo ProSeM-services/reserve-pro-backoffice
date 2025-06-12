@@ -65,11 +65,11 @@ export function DashboardCard({ type }: DashboardCardProps) {
       count: services.length,
       permission: Permission.CREATE_SERVICES,
       Component: () => (
-        <>
+        <div className="">
           {services.map((service) => (
             <ServiceCard service={service} key={service.id} readonly />
           ))}
-        </>
+        </div>
       ),
     },
     member: {
@@ -77,11 +77,11 @@ export function DashboardCard({ type }: DashboardCardProps) {
       count: members.length,
       permission: Permission.CREATE_MEMBERS,
       Component: () => (
-        <>
+        <div className="">
           {members.map((member) => (
             <MemberCard member={member} key={member.id} type="read" />
           ))}
-        </>
+        </div>
       ),
     },
     company: {
@@ -109,18 +109,18 @@ export function DashboardCard({ type }: DashboardCardProps) {
 
   const { Component, label, count, permission } = Config[type];
   return (
-    <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] relative ">
+    <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] relative  h-full max-h-[70vh] ">
       <CardHeader>
         <CardTitle>{label}</CardTitle>
         <CardDescription>Total de {label} creados</CardDescription>
       </CardHeader>
 
-      <section className="   flex flex-col  gap-4 relative ">
+      <section className="   flex flex-col  gap-4 relative  ">
         <div className="flex flex-col items-center ">
           <Label className="text-4xl">{count}</Label>
         </div>
       </section>
-      <section className=" space-y-2 flex-grow  h-full max-h-full overflow-auto">
+      <section className=" space-y-2 flex-grow  h-[100%] max-h-[100%] overflow-auto ">
         <Component />
       </section>
 

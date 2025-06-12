@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 
 export function SettingsPage() {
   return (
-    <Card className=" size-full container">
+    <Card className=" size-full bordern">
       <CardHeader>
         <CardTitle>Configuración de cuenta</CardTitle>
         <CardDescription>
@@ -21,7 +21,7 @@ export function SettingsPage() {
       </CardHeader>
       {/* <Separator /> */}
       <CardContent className="space-y-8 mt-6 ">
-        <section className="container">
+        <section className=" w-5/6 mx-auto">
           {/* Perfil */}
           <section>
             <h2 className="text-lg font-semibold mb-2">Perfil</h2>

@@ -15,11 +15,11 @@ export function AppointmnetCard({
       key={appointment.id}
       className={` ${
         appointment.confirmed
-          ? "bg-green-500"
+          ? "bg-green-300"
           : appointment.canceled
-          ? "bg-destructive"
-          : "bg-blue-800 hover:bg-blue-500 "
-      } text-white  text-[14px]   rounded p-2 shadow transition-all cursor-pointer relative space-y-1`}
+          ? "bg-red-400 text-white"
+          : "bg-blue-200 text-blue-600 "
+      }   text-[14px]   rounded p-2 shadow transition-all cursor-pointer relative space-y-1`}
     >
       <p className="block font-bold   truncate">{appointment.fullName}</p>
       <div>
@@ -29,7 +29,7 @@ export function AppointmnetCard({
       </div>
 
       <p className=" truncate text">{appointment.time} hs</p>
-      <div className="text-xs">
+      <div className="text-xs ">
         {appointment.User && (
           <div className="h-10 flex items-center gap-2  ">
             <MemberAvatar member={appointment.User} size="xs" />

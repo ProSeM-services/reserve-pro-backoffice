@@ -56,6 +56,7 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
     resolver: zodResolver(UpdateUserSchema),
     defaultValues: {
       ...member,
+      CompanyId: member.CompanyId || "",
       companyName: member.companyName || "",
       image: member.image || "",
       phone: member.phone || "",
@@ -149,7 +150,7 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
     }
   };
 
-  console.log("member", member);
+  console.log("member", form.formState.errors);
 
   return (
     <>

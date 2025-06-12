@@ -37,7 +37,7 @@ export function CalendarPage() {
         <SelectContent>
           <div>
             {members.map((member) => (
-              <SelectItem value={member.id}>
+              <SelectItem value={member.id} key={member.id}>
                 <div className="flex items-center gap-2">
                   <MemberAvatar member={member} size="xs" />
                   <Label>{member.fullName}</Label>

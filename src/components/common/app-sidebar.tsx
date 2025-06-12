@@ -2,11 +2,11 @@ import * as React from "react";
 import {
   BookOpen,
   BookPlus,
-  Bot,
   Building,
   CalendarCheck,
   CalendarDays,
   ClockIcon,
+  HouseIcon,
   LayoutDashboard,
   Settings,
   Settings2,
@@ -49,7 +49,7 @@ const data = {
     {
       title: "Nosotros",
       url: "#",
-      icon: Bot,
+      icon: HouseIcon,
       items: [
         {
           title: "Sucursales",
