@@ -75,7 +75,10 @@ export function CalendarAppointments({
     return {
       labelDay: format(day, "EEEE", { locale: es }),
       dd_mm: format(day, "dd/MM", { locale: es }),
-      appointments: appointmentsByDay[dayKey] || [],
+      appointments:
+        appointmentsByDay[dayKey]?.sort((a, b) =>
+          a.time.localeCompare(b.time)
+        ) || [],
     };
   });
 
