@@ -18,7 +18,7 @@ export function AppointmnetCard({
           ? "bg-green-300"
           : appointment.canceled
           ? "bg-red-400 text-white"
-          : "bg-blue-200 text-blue-600 "
+          : "bg-sky-100"
       }   text-[14px]   rounded p-2 shadow transition-all cursor-pointer relative space-y-1`}
     >
       <p className="block font-bold   truncate">{appointment.fullName}</p>

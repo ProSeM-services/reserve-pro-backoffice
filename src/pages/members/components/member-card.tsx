@@ -8,6 +8,7 @@ import {
   BookPlus,
   Building,
   CalendarCheck,
+  Clock,
   MailCheck,
 } from "lucide-react";
 import {
@@ -26,6 +27,7 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
   const memberService = inmutableServices.filter(
     (service) => service.Users && service.Users?.some((e) => e.id === member.id)
   );
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -40,7 +42,9 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
                   <p>
                     {member.name}, {member.lastName}
                   </p>
-                  {(!member.CompanyId || !memberService.length) && (
+                  {(!member.CompanyId ||
+                    !memberService.length ||
+                    !member.workhours) && (
                     <Tooltip>
                       <TooltipTrigger>
                         <AlertTriangle className="size-4 text-orange-500" />
@@ -59,6 +63,13 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
                               {" "}
                               <BookPlus className="size-4" />
                               Este miembro no se le asignó ningún servicio
+                            </p>
+                          )}
+                          {member.workhours?.length === 0 && (
+                            <p className="flex items-center gap-1">
+                              {" "}
+                              <Clock className="size-4" />
+                              Este miembro no tiene horarios de trabajo
                             </p>
                           )}
                         </div>
