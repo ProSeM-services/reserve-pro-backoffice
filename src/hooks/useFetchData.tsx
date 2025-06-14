@@ -38,6 +38,11 @@ import {
   togglePaymentsLoading,
 } from "@/store/feature/payments/paymentSlice";
 import { PaymentServices } from "@/services/payment.services";
+import {
+  setPaymentPlans,
+  togglePaymentPlansLoading,
+} from "@/store/feature/payment-plans/paymentPlanSlice";
+import { PaymentPlanServices } from "@/services/payment-plans.service";
 
 export default function useFetchData() {
   const storageMember = localStorage.getItem("userLogged");
@@ -92,6 +97,18 @@ export default function useFetchData() {
       console.log("Error fetching Companies", error);
     } finally {
       dispatch(toggleServiceLoading(false));
+    }
+  };
+
+  const fetchPaymentsPlans = async () => {
+    try {
+      dispatch(togglePaymentPlansLoading(true));
+      const plans = await PaymentPlanServices.getAll();
+      dispatch(setPaymentPlans({ paymentPlans: plans, fromServer: true }));
+    } catch (error) {
+      console.log("Error fetching Payment Plans", error);
+    } finally {
+      dispatch(togglePaymentPlansLoading(false));
     }
   };
   const fetchCustomers = async () => {
@@ -243,5 +260,6 @@ export default function useFetchData() {
     fetchMemberLogged,
     setCrossCompanyData,
     fetchPayments,
+    fetchPaymentsPlans,
   };
 }

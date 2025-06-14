@@ -64,7 +64,9 @@ const columns: ColumnDef<IAppointment>[] = [
           <MemberAvatar member={user} size="sm" />
           <div className="flex flex-col">
             <Label>{user.fullName}</Label>
-            <span className="text-sm text-gray-600">{user.email}</span>
+            <span className="text-xs text-gray-600 truncate w-[150px]">
+              {user.email}
+            </span>
           </div>
         </div>
       );

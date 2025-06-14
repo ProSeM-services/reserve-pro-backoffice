@@ -35,7 +35,7 @@ export function SalesStats() {
       <CardContent>
         <div className="flex flex-col gap-4">
           {confirmedAppointments.map((appointment) => (
-            <div className="flex justify-between">
+            <div className="flex justify-between" key={appointment.id}>
               <div className="flex gap-2">
                 <UserCircle />
                 <div>

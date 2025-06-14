@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useAppSelector } from "@/store/hooks";
 
 type TPlanOption = {
   period: string;
@@ -32,6 +33,10 @@ export function PlanInformation() {
     { period: "Anual", amount: mensualValue * 12, frequency: 12 },
   ];
   const [selectedOption, setSelectedOption] = useState<TPlanOption>(options[0]);
+
+  const { enterprise } = useAppSelector((s) => s.enterprise);
+  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
+  console.log("paymentsPlans", { paymentsPlans, enterprise });
 
   return (
     <Card className="p-4  rounded-lg flex flex-col gap-4 text-sm ">
@@ -75,8 +80,8 @@ export function PlanInformation() {
         <section className="space-y-4">
           <Label className="text-lg">Período de pago</Label>
           <CardDescription>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere,
-            obcaecati?
+            Selecciona el período de pago que prefieras. Los períodos más largos
+            pueden tener descuentos aplicados.
           </CardDescription>
           <div className="flex flex-wrap gap-4">
             {options.map((option) => (

@@ -43,24 +43,24 @@ export const ServiceCard = ({
               {service.provision}
             </p>
           </div>
-          <div className="">
-            <p className="text-gray-500 font-light">
-              {service.description ? (
-                service.description
-              ) : (
-                <i>No hay descripción del serivcio</i>
-              )}
-            </p>
-          </div>
+          {!readonly && (
+            <div className="">
+              <p className="text-gray-500 font-light">
+                {service.description ? (
+                  service.description
+                ) : (
+                  <i>No hay descripción del serivcio</i>
+                )}
+              </p>
+            </div>
+          )}
 
-          {showMembers && !service.Users.length && (
+          {showMembers && (!service.Users || !service.Users.length) && (
             <Tooltip>
               <TooltipTrigger>
-                <div className="flex items-center gap-2 rounded-full aspect-square bg-orange-100  p-2 text-orange-600">
-                  <TriangleAlert className="size-5" />
-                </div>
+                <TriangleAlert className="size-5 text-orange-600" />
               </TooltipTrigger>
-              <TooltipContent className="flex items-center gap-2 text-xs border p-2 text-orange-600">
+              <TooltipContent className=" bg-orange-200">
                 <p>
                   No tienes profesionales (miembros) asignados a este servicio
                 </p>

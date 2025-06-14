@@ -2,12 +2,13 @@ import * as React from "react";
 import {
   BookOpen,
   BookPlus,
-  Bot,
   Building,
   CalendarCheck,
   CalendarDays,
   ClockIcon,
+  HouseIcon,
   LayoutDashboard,
+  Settings,
   Settings2,
   SquareTerminal,
   SquareUser,
@@ -48,7 +49,7 @@ const data = {
     {
       title: "Nosotros",
       url: "#",
-      icon: Bot,
+      icon: HouseIcon,
       items: [
         {
           title: "Sucursales",
@@ -100,6 +101,12 @@ const data = {
       url: "#",
       icon: Settings2,
       items: [
+        {
+          title: "Configuracion",
+          url: "/settings",
+          permission: Permission.VIEW_PAYMENTS,
+          icon: Settings,
+        },
         {
           title: "Horarios",
           url: "/set-hours",

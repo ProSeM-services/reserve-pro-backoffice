@@ -24,6 +24,11 @@ export const columns: ColumnDef<IEnterprise>[] = [
     cell: ({ getValue }) => <>{getValue<Location>().value}</>,
   },
   {
+    accessorKey: "payment_plan",
+    header: "Plan de pago",
+    cell: ({ getValue }) => <>{getValue<string>() || "-"}</>,
+  },
+  {
     accessorKey: "createdAt",
     header: "Fecha de creación",
     cell: ({ getValue }) => (
@@ -37,5 +42,9 @@ export function EnterpriseTable() {
 
   // Aquí deberías usar un componente de tabla, por ejemplo, react-table o tu propio componente
   // Ejemplo básico:
-  return <RootTable columns={columns} data={enterprises} />;
+
+  const sortedEnterprises = [...enterprises].sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+  return <RootTable columns={columns} data={sortedEnterprises} />;
 }

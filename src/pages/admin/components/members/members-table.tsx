@@ -52,7 +52,11 @@ const columns: ColumnDef<IUser>[] = [
   {
     accessorKey: "role",
     header: "Rol",
-    cell: (info) => info.getValue(),
+    cell: (info) => (
+      <div className="bg-purple-200 text-purple-500 p-1 px-4 rounded-xl text-xs text-center ">
+        <p>{info.getValue<string>()}</p>
+      </div>
+    ),
   },
   {
     accessorKey: "createdAt",
