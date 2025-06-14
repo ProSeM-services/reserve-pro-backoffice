@@ -14,9 +14,13 @@ export default function DataProvider({ children }: PropsWithChildren) {
     setMainLoaderStatus,
     setCrossCompanyData,
     fetchPayments,
+    fetchPaymentsPlans,
   } = useFetchData();
 
   const { fetched: companyFetched } = useAppSelector((s) => s.company);
+  const { fetched: paymentsPlansFetched } = useAppSelector(
+    (s) => s.paymentsPlans
+  );
   const { fetched: membersFetched, memberLogged } = useAppSelector(
     (s) => s.member
   );
@@ -33,7 +37,6 @@ export default function DataProvider({ children }: PropsWithChildren) {
 
   const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
-    console.log("<--------- CUSTOMER DATA PROVIDER  ------------->");
     if (!accessToken) return;
     const fetchData = async () => {
       try {
@@ -45,6 +48,7 @@ export default function DataProvider({ children }: PropsWithChildren) {
         !servicesFetched && (await fetchServices());
         !appointmentsFetched && (await fetchAppointments());
         !paymentsFetched && (await fetchPayments());
+        !paymentsPlansFetched && (await fetchPaymentsPlans());
       } catch (error) {
         console.log("error fetching data", error);
       } finally {
