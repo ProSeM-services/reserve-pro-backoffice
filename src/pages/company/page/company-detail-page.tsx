@@ -1,4 +1,3 @@
-import { Clock2Icon } from "lucide-react";
 import { CategoryCard } from "@/components/common/category-card";
 import { NeedReladcompanyPage } from "../components/need-reload-company";
 import { EditCompany } from "../components/edit-company";
@@ -9,7 +8,6 @@ import {
   DeleteCompany,
 } from "../components";
 import { MapComponent } from "@/components/common/map";
-import WorkhourList from "@/components/common/work-hour-list";
 import { useAppSelector } from "@/store/hooks";
 import { PaymentCard } from "@/components/common/payment-card";
 import { Label } from "@/components/ui/label";
@@ -99,20 +97,6 @@ export function CompanyDetailPage() {
         <CompnayServicesList company={company} />
       </section>
 
-      {/* ---------------------------- WORKHOURS SECTION ---------------------------- */}
-      <section className="max-md:w-[90%]">
-        <Label>Horarios</Label>
-        {company.workhours?.length ? (
-          <WorkhourList worhHours={company.workhours} />
-        ) : (
-          <div className="flex flex-col gap-2  border border-accent    h-52 w-full rounded-md  items-center justify-center    ">
-            <Clock2Icon className="size-10" />
-            <p className="font-light text-sm w-60  text-center">
-              No tienes horarios definidos para esta sucursal.
-            </p>
-          </div>
-        )}
-      </section>
       {/* ---------------------------- WORKHOURS SECTION ---------------------------- */}
       <section className="max-md:w-[90%]">
         <CompanyImages company={company} />

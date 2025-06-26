@@ -1,5 +1,6 @@
 import { AdminServices } from "@/services/admin.service";
 import { NotificationServices } from "@/services/notification.service";
+import { PaymentPlanServices } from "@/services/payment-plans.service";
 import {
   setCompanies,
   toggleCompanyLoading,
@@ -14,6 +15,7 @@ import {
   toggleMembersLoading,
 } from "@/store/feature/members/membersSlice";
 import { setNotifications } from "@/store/feature/notifications/notificationsSlice";
+import { setPaymentPlans } from "@/store/feature/payment-plans/paymentPlanSlice";
 import { setPayments } from "@/store/feature/payments/paymentSlice";
 import { useAppDispatch } from "@/store/hooks";
 
@@ -85,6 +87,17 @@ export function useFetchAdminData() {
       dispatch(toggleCompanyLoading(false));
     }
   };
+  const fetchPaymentsPlans = async () => {
+    try {
+      dispatch(toggleCompanyLoading(true));
+      const paymentPlans = await PaymentPlanServices.getAll();
+      dispatch(setPaymentPlans({ paymentPlans, fromServer: true }));
+    } catch (error) {
+      console.log("Error fetchin PaymentPlans [ADMIN] : ", error);
+    } finally {
+      dispatch(toggleCompanyLoading(false));
+    }
+  };
 
   return {
     fetchAccounts,
@@ -93,5 +106,6 @@ export function useFetchAdminData() {
     fetchUsers,
     fetchCompanies,
     fetchPayments,
+    fetchPaymentsPlans,
   };
 }

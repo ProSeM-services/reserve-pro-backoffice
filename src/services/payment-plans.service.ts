@@ -10,7 +10,7 @@ export class PaymentPlanServices {
     return res.data;
   }
 
-  static async create(body: CreatePaymentPlan) {
+  static async create(body: CreatePaymentPlan): Promise<PaymentPlan> {
     const res = await axiosInstance.post(`${BASE_URL}/payment-plans`, body);
     return res.data;
   }
@@ -19,6 +19,10 @@ export class PaymentPlanServices {
       `${BASE_URL}/payment-plans/${id}`,
       body
     );
+    return res.data;
+  }
+  static async delete(id: string) {
+    const res = await axiosInstance.delete(`${BASE_URL}/payment-plans/${id}`);
     return res.data;
   }
 }

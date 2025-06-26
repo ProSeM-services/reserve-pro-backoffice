@@ -74,6 +74,7 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
       await editMember(member.id, {
         ...data,
         permissions: selectedPermissions,
+        password: undefined,
       });
       toast({
         title: "Miembro actualizado!",

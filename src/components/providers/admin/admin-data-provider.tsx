@@ -14,6 +14,7 @@ export default function AdminDataProvider({ children }: PropsWithChildren) {
     fetchNotifications,
     fetchPayments,
     fetchCompanies,
+    fetchPaymentsPlans,
   } = useFetchAdminData();
 
   const { fetched: membersFetched, memberLogged } = useAppSelector(
@@ -21,7 +22,9 @@ export default function AdminDataProvider({ children }: PropsWithChildren) {
   );
   const { fetched: mainFetched } = useAppSelector((s) => s.main);
   const { fetched: companyFetched } = useAppSelector((s) => s.company);
-
+  const { fetched: paymentsPlansFetched } = useAppSelector(
+    (s) => s.paymentsPlans
+  );
   const { fetched: paymentsFetched } = useAppSelector((s) => s.payments);
   const { fetched: enterpriseFetched } = useAppSelector((s) => s.enterprise);
   const accessToken = localStorage.getItem("accessToken");
@@ -32,15 +35,12 @@ export default function AdminDataProvider({ children }: PropsWithChildren) {
         setMainLoaderStatus(false);
         await setAuthInterceptor(accessToken);
         await fetchNotifications();
-        // await fetchAccounts();
-        // await fetchEnterprises();
-        // await fetchUsers();
-        // await fetchCompanies();
 
         !membersFetched && (await fetchAccounts());
         !companyFetched && (await fetchCompanies());
         !enterpriseFetched && (await fetchEnterprises());
         !paymentsFetched && (await fetchPayments());
+        !paymentsPlansFetched && (await fetchPaymentsPlans());
       } catch (error) {
         console.log("error fetching data", error);
       } finally {

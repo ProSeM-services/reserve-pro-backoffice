@@ -15,6 +15,7 @@ export function EmptyList({
   type,
 }: {
   type:
+    | "paymentPlan"
     | "member"
     | "company"
     | "service"
@@ -26,6 +27,7 @@ export function EmptyList({
 }) {
   const Config: Record<
     | "member"
+    | "paymentPlan"
     | "company"
     | "service"
     | "customer"
@@ -79,6 +81,11 @@ export function EmptyList({
     "no-incomes": {
       title: "Vacío",
       description: "No hay turnos confirmados.",
+      Icon: BadgeDollarSign,
+    },
+    paymentPlan: {
+      title: "Vacío",
+      description: "No hay pagos realizados.",
       Icon: BadgeDollarSign,
     },
   };
