@@ -1,10 +1,11 @@
+import { Permission } from "@/lib/constants/permissions";
 import React from "react";
 
 type PermissionLabelProps = {
-  permission: string;
+  permission: Permission;
 };
 
-const permissionMap: Record<string, string> = {
+const permissionMap: Record<Permission, string> = {
   "create:company": "Crear Sucursal",
   "update:company": "Actualizar Sucursal",
   "delete:company": "Eliminar Sucursal",
@@ -25,6 +26,16 @@ const permissionMap: Record<string, string> = {
   "update:workhours": "Actualizar Horarios de Trabajo",
   "delete:workhours": "Eliminar Horarios de Trabajo",
   "view:workhours": "Ver Horarios de Trabajo",
+  "update:own_workhours": "Actualizar Propios Horarios de Trabajo",
+  "view:customers": "Ver Clientes",
+  "view:payments": "Ver Pagos",
+  "create:payments": "Crear Pagos",
+  "update:payments": "Actualizar Pagos",
+  "delete:payments": "Eliminar Pagos",
+  "view:enterprises": "Ver Empresas",
+  "create:enterprises": "Crear Empresa",
+  "update:enterprises": "Actualizar Empresa",
+  "delete:enterprises": "Eliminar Empresa",
 };
 
 export const PermissionLabel: React.FC<PermissionLabelProps> = ({

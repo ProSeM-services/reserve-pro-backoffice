@@ -29,7 +29,7 @@ export const paymentPlanSlice = createSlice({
       state.fetched = true;
       state.paymentsPlans = action.payload.paymentPlans;
     },
-    addPaymentPlan: (state, action) => {
+    addPaymentPlan: (state, action: PayloadAction<PaymentPlan>) => {
       state.paymentsPlans.push(action.payload);
     },
     updatePaymentPlan: (state, action) => {

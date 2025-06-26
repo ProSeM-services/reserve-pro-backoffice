@@ -274,8 +274,8 @@ function EditWorkHourAside({
           </SheetHeader>
 
           <div className="grid grid-cols-2 w-full  gap-4 overflow-auto h-[90%] max-h-[90%] p-4">
-            {week.map((weekItem) => (
-              <div key={weekItem.long}>
+            {week.map((weekItem, index) => (
+              <div key={`keyOf-calendar-wh-${index}`}>
                 <div
                   className={`flex gap-2 items-center justify-center p-2 border text-center ${
                     weekItem.selected && "bg-primary text-white"
@@ -283,7 +283,7 @@ function EditWorkHourAside({
                 >
                   <Label className="uppercase">{weekItem.long}</Label>
                 </div>
-                <div className="border flex flex-col gap-2 p-2">
+                <div className="border flex flex-col gap-2 p-2 ">
                   {weekItem.workhour.segments.map((segment, segmentIndex) => (
                     <div
                       key={segmentIndex}

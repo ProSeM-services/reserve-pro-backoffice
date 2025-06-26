@@ -12,7 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAppSelector } from "@/store/hooks";
-
+import { AlertCircleIcon } from "lucide-react";
+import { PlanSelector } from "./plan-selector";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { PaymentPlan } from "@/interfaces/payment-plans.interface";
 type TPlanOption = {
   period: string;
   amount: number;
@@ -20,7 +23,38 @@ type TPlanOption = {
   discount?: number;
 };
 export function PlanInformation() {
-  const mensualValue = 20000;
+  const { enterprise } = useAppSelector((s) => s.enterprise);
+  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
+  console.log("paymentsPlans", { paymentsPlans, enterprise });
+
+  if (!enterprise.payment_plan)
+    return (
+      <Card>
+        <CardHeader>
+          <Alert>
+            <AlertCircleIcon />
+            <AlertTitle>Sin Plan seleccionado</AlertTitle>
+            <AlertDescription>
+              Puedes seleccionar un plan para asignarlo a tu negocio.
+            </AlertDescription>
+          </Alert>
+        </CardHeader>
+
+        <CardContent>
+          <PlanSelector />
+        </CardContent>
+      </Card>
+    );
+
+  const paymentPlan = paymentsPlans.filter(
+    (plan) => plan.id === enterprise.payment_plan
+  )[0];
+
+  return <PaymentPlanData paymentPlan={paymentPlan} />;
+}
+
+function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
+  const mensualValue = paymentPlan.price;
   const options: TPlanOption[] = [
     { period: "Mensual", amount: mensualValue, frequency: 1 },
     { period: "Trimestral", amount: mensualValue * 3, frequency: 3 },
@@ -33,11 +67,6 @@ export function PlanInformation() {
     { period: "Anual", amount: mensualValue * 12, frequency: 12 },
   ];
   const [selectedOption, setSelectedOption] = useState<TPlanOption>(options[0]);
-
-  const { enterprise } = useAppSelector((s) => s.enterprise);
-  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
-  console.log("paymentsPlans", { paymentsPlans, enterprise });
-
   return (
     <Card className="p-4  rounded-lg flex flex-col gap-4 text-sm ">
       <CardHeader>
@@ -51,11 +80,7 @@ export function PlanInformation() {
               </div>
               <div className="flex items-center gap-2">
                 <p>ID del plan</p>
-                <strong>3803466</strong>
-              </div>
-              <div className="flex items-center gap-2">
-                <p>Fecha de alta</p>
-                <strong>11/12/2023, 12:45:51 pm</strong>
+                <strong>{paymentPlan.id.slice(0, 10)}</strong>
               </div>
             </div>
             <div>
@@ -69,7 +94,12 @@ export function PlanInformation() {
               </div>
               <div className="flex items-center gap-2">
                 <p>Período de pago</p>
-                <strong>Mensual</strong>
+                <strong>
+                  Cada{" "}
+                  {paymentPlan.duration > 1
+                    ? `${paymentPlan.duration} meses`
+                    : "1 mes"}{" "}
+                </strong>
               </div>
             </div>
           </section>

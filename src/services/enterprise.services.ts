@@ -16,4 +16,8 @@ export class EnterpiseServices {
     const res = await axiosInstance.post(`${BASE_URL}/enterprise`, data);
     return res.data;
   }
+  static async update(id: string, data: Partial<IEnterprise>) {
+    const res = await axiosInstance.patch(`${BASE_URL}/enterprise/${id}`, data);
+    return res.data;
+  }
 }
