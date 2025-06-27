@@ -8,6 +8,7 @@ import { PaymentVoucher } from "@/pages/payments/components/payment-voucher";
 import { PaymentActionsCell } from "./payments-actions-cell";
 import { FromatedDate } from "@/lib/format-date";
 import { formatCurrency } from "@/lib/utils/format-currency";
+import { EmptyList } from "@/components/common/emty-list";
 
 const columns: ColumnDef<IPayment>[] = [
   {
@@ -38,6 +39,12 @@ const columns: ColumnDef<IPayment>[] = [
     size: 200,
     cell: (info) => <FromatedDate date={info.getValue<string>()} />,
   },
+  {
+    accessorKey: "end_date",
+    header: "Fecha de Vencimiento",
+    size: 200,
+    cell: (info) => <FromatedDate date={info.getValue<string>()} />,
+  },
 
   {
     accessorKey: "image",
@@ -54,5 +61,8 @@ const columns: ColumnDef<IPayment>[] = [
 ];
 export function PaymentsTable() {
   const { payments } = useAppSelector((s) => s.payments);
+  if (payments.length === 0) return <EmptyList type="paymentPlan" />;
+
+  console.log("paymnets", payments);
   return <RootTable columns={columns} data={payments} />;
 }

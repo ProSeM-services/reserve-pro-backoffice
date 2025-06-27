@@ -16,6 +16,7 @@ import { AlertCircleIcon } from "lucide-react";
 import { PlanSelector } from "./plan-selector";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
+import { FromatedDate } from "@/lib/format-date";
 type TPlanOption = {
   period: string;
   amount: number;
@@ -25,7 +26,6 @@ type TPlanOption = {
 export function PlanInformation() {
   const { enterprise } = useAppSelector((s) => s.enterprise);
   const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
-  console.log("paymentsPlans", { paymentsPlans, enterprise });
 
   if (!enterprise.payment_plan)
     return (
@@ -54,7 +54,9 @@ export function PlanInformation() {
 }
 
 function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
+  const { payments } = useAppSelector((s) => s.payments);
   const mensualValue = paymentPlan.price;
+
   const options: TPlanOption[] = [
     { period: "Mensual", amount: mensualValue, frequency: 1 },
     { period: "Trimestral", amount: mensualValue * 3, frequency: 3 },
@@ -67,6 +69,8 @@ function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
     { period: "Anual", amount: mensualValue * 12, frequency: 12 },
   ];
   const [selectedOption, setSelectedOption] = useState<TPlanOption>(options[0]);
+  const lastPayment = payments[payments.length - 1];
+
   return (
     <Card className="p-4  rounded-lg flex flex-col gap-4 text-sm ">
       <CardHeader>
@@ -82,15 +86,21 @@ function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
                 <p>ID del plan</p>
                 <strong>{paymentPlan.id.slice(0, 10)}</strong>
               </div>
+              <div className="flex items-center gap-2">
+                <p>Proximo vencimiento</p>
+                <strong>
+                  <FromatedDate date={lastPayment.end_date} />
+                </strong>
+              </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <p>Estado del plan</p>
-                <strong>Activo</strong>
+                <strong>{paymentPlan.isActive ? "Activo" : "Inactivo"}</strong>
               </div>
               <div className="flex items-center gap-2">
-                <p>Vencimiento</p>
-                <strong>11/06/2025</strong>
+                <p>Valor Mensual:</p>
+                <strong>{formatCurrency(paymentPlan.price)}</strong>
               </div>
               <div className="flex items-center gap-2">
                 <p>Período de pago</p>
@@ -108,10 +118,13 @@ function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
 
       <CardContent>
         <section className="space-y-4">
-          <Label className="text-lg">Período de pago</Label>
+          <Label className="text-lg">Formas de pago</Label>
           <CardDescription>
             Selecciona el período de pago que prefieras. Los períodos más largos
             pueden tener descuentos aplicados.
+            <br />
+            Los valores están referenciados a tu plan seleccionado{" "}
+            {`(${paymentPlan.name})`}
           </CardDescription>
           <div className="flex flex-wrap gap-4">
             {options.map((option) => (
