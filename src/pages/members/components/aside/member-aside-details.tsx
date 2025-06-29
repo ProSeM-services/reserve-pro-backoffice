@@ -151,8 +151,6 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
     }
   };
 
-  console.log("member", form.formState.errors);
-
   return (
     <>
       <Form {...form}>
@@ -275,6 +273,7 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
                       <Select
                         {...field}
                         onValueChange={(e) => form.setValue("role", e as Role)}
+                        disabled={member.role === "OWNER"}
                       >
                         <SelectTrigger className="">
                           <SelectValue placeholder="Role" />

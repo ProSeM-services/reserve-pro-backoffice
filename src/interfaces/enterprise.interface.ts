@@ -5,6 +5,7 @@ export const EnterpriseSchema = z.object({
   email: z.string().email("Invalid email format").optional(),
   address: z.string(),
   company_count: z.number(),
+  company_limit: z.number(),
   payment_plan: z.string().optional(),
   createdAt: z.string(),
 });

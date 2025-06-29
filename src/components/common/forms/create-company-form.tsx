@@ -1,4 +1,4 @@
-import { CreateCompanyZodSchema, ICompany, ICreateCompany } from "@/interfaces";
+import { CreateCompanyZodSchema, ICreateCompany } from "@/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -77,8 +77,8 @@ export function CompanyForm() {
   const onSubmit = async (values: ICreateCompany) => {
     try {
       setLoading(true);
-      const newCompany = (await createCompany(values)) as ICompany;
-
+      const newCompany = await createCompany(values);
+      console.log("res", newCompany);
       if (usersToAdd.length > 0 && newCompany) {
         await addMembersToCompany(usersToAdd, newCompany.id);
         usersToAdd.forEach((memberId) => {

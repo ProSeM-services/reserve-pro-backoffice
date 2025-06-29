@@ -35,7 +35,7 @@ export const CreateCompanyZodSchema = z.object({
     .max(3, "Puedes elegir como máximo 3 categorías.")
     .min(1, "Debes elegir por lo menos 1 categoría."),
   image: z.string().optional(),
-  email: z.string().email("Correo electrónico no válido").optional(),
+  email: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
 });
 

@@ -37,6 +37,7 @@ export default function useCreatingFetch() {
       return newCompany;
     } catch (error) {
       console.log("Error creating Companies", error);
+      throw error;
     } finally {
       //   dispatch(toggleCompanyLoading(false));
     }

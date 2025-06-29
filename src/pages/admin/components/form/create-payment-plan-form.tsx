@@ -31,6 +31,7 @@ export function CreatePaymentPlanForm() {
       isActive: true,
       name: "",
       price: 0,
+      company_limit: 1,
     },
   });
   const [loading, setLoading] = useState(false);
@@ -48,6 +49,7 @@ export function CreatePaymentPlanForm() {
       });
 
       dispatch(addPaymentPlan(newPlan));
+      form.reset();
     } catch (error) {
       console.log("Error creating new plan", error);
 
@@ -69,6 +71,10 @@ export function CreatePaymentPlanForm() {
     form.clearErrors("duration");
     form.setValue("duration", duration);
   };
+  const handleCompanyLimit = (value: number) => {
+    form.clearErrors("company_limit");
+    form.setValue("company_limit", value);
+  };
 
   return (
     <Form {...form}>
@@ -86,6 +92,25 @@ export function CreatePaymentPlanForm() {
                 <Input placeholder="Nombre" {...field} />
               </FormControl>
 
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="company_limit"
+          render={({ field }) => (
+            <FormItem className="w-1/2">
+              <FormLabel>Cantidad de sucursales</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Meses"
+                  {...field}
+                  type="number"
+                  onChange={(e) => handleCompanyLimit(parseInt(e.target.value))}
+                />
+              </FormControl>
+              <FormDescription>Limite de sucursales</FormDescription>
               <FormMessage />
             </FormItem>
           )}

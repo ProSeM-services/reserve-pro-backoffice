@@ -14,11 +14,29 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { AddImageCompany } from "../components/add-image-company";
 import { CompanyImages } from "../components/company-images";
+import { LinkIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 export function CompanyDetailPage() {
   const { selectedCompany, companies } = useAppSelector((s) => s.company);
   const company = companies.find((comp) => comp.id === selectedCompany);
+  const { toast } = useToast();
   if (!company) return;
 
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `${import.meta.env.VITE_NEXT_PUBLIC_URL}/booking?company=${company.id}`
+      );
+      // setCopied(true);
+      // setTimeout(() => setCopied(false), 2000); // Reset el estado después de 2s
+      toast({
+        title: "Link copiado",
+      });
+    } catch (err) {
+      console.error("Error al copiar:", err);
+    }
+  };
   return (
     <div className="flex flex-col gap-4 md:flex-grow relative p-4  max-md:max-w-full ">
       <div className="flex max-md:flex-col  gap-2 md:items-center justify-between  ">
@@ -31,6 +49,14 @@ export function CompanyDetailPage() {
                 <div className="text-gray-500 space-y-1">
                   <p>{company.address.value}</p>
                   <p>{company.email}</p>
+                  <Button
+                    onClick={handleCopy}
+                    variant={"secondary"}
+                    className="flex items-center gap-2"
+                  >
+                    <LinkIcon className="size-4" />
+                    Web para agendar turnos
+                  </Button>
                 </div>
               </div>
             </div>
