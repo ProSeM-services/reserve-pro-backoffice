@@ -10,6 +10,13 @@ import { MemberForm } from "./forms/crate-member-form";
 import { CompanyForm } from "./forms/create-company-form";
 import { Button } from "@/components/ui/button";
 import { CreateServicesForm } from "./forms/create-service-form";
+import { useAppSelector } from "@/store/hooks";
+import { checkTrialStatus } from "@/lib/utils/checkTrialStatus";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 export type ICreateType = "member" | "company" | "services";
 export type Size = "lg" | "sm";
 
@@ -39,6 +46,45 @@ const config: Record<
 };
 export function AddButton({ type, size = "lg" }: AddButtonProps) {
   const { title, Content, btnText } = config[type];
+  const { enterprise } = useAppSelector((s) => s.enterprise);
+  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
+  const { companies } = useAppSelector((s) => s.company);
+
+  const ableToCreateCompany = (): boolean => {
+    if (type !== "company") return true;
+    const { isInTrial } = checkTrialStatus(enterprise.createdAt);
+    console.log("is trial", isInTrial);
+    if (isInTrial) return false;
+
+    const paymentPlan = paymentsPlans.filter(
+      (p) => p.id === enterprise.payment_plan
+    )[0];
+    if (!paymentPlan) return false;
+
+    return paymentPlan.company_limit > companies.length;
+  };
+  const message = "Tu plan seleccionado no te permite crear nuevas sucursales.";
+  if (!ableToCreateCompany())
+    return (
+      <Popover>
+        <PopoverTrigger>
+          {" "}
+          <Button
+            disabled={!ableToCreateCompany()}
+            size={size === "lg" ? "default" : "icon"}
+            className={` flex items-center gap-2 ${
+              size === "lg" ? " w-full px-4" : "size-8 rounded-full"
+            }`}
+          >
+            {size === "lg" && (
+              <p className="max-md:hidden cursor-pointer">{btnText}</p>
+            )}
+            <PlusIcon className="size-4 " />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent>{message}</PopoverContent>
+      </Popover>
+    );
   return (
     <Sheet>
       <SheetTrigger>

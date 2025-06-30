@@ -44,7 +44,7 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
                   </p>
                   {(!member.CompanyId ||
                     !memberService.length ||
-                    !member.workhours) && (
+                    !member.workhours?.length) && (
                     <Tooltip>
                       <TooltipTrigger>
                         <AlertTriangle className="size-4 text-orange-500" />
