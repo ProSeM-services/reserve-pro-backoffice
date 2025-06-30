@@ -30,9 +30,9 @@ export function CustomerDropDown({ customer }: { customer: ICustomer }) {
         >
           Perfil
         </DropdownMenuItem>
-        <DropdownMenuItem>Contactar</DropdownMenuItem>
+        {/* <DropdownMenuItem>Contactar</DropdownMenuItem>
         <DropdownMenuItem>Aplicar Descuento</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuItem>Subscription</DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );
