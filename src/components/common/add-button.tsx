@@ -5,7 +5,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { PlusIcon, XIcon } from "lucide-react";
+import { AlertOctagonIcon, PlusIcon, XIcon } from "lucide-react";
 import { MemberForm } from "./forms/crate-member-form";
 import { CompanyForm } from "./forms/create-company-form";
 import { Button } from "@/components/ui/button";
@@ -53,7 +53,7 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
   const ableToCreateCompany = (): boolean => {
     if (type !== "company") return true;
     const { isInTrial } = checkTrialStatus(enterprise.createdAt);
-    console.log("is trial", isInTrial);
+
     if (isInTrial) return false;
 
     const paymentPlan = paymentsPlans.filter(
@@ -82,7 +82,10 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
             <PlusIcon className="size-4 " />
           </Button>
         </PopoverTrigger>
-        <PopoverContent>{message}</PopoverContent>
+        <PopoverContent className="flex text-sm gap-2 text-gray-700">
+          <AlertOctagonIcon />
+          <p>{message}</p>
+        </PopoverContent>
       </Popover>
     );
   return (

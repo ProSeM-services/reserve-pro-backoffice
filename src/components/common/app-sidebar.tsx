@@ -8,7 +8,6 @@ import {
   ClockIcon,
   HouseIcon,
   LayoutDashboard,
-  Settings,
   Settings2,
   SquareTerminal,
   SquareUser,
@@ -101,12 +100,6 @@ const data = {
       url: "#",
       icon: Settings2,
       items: [
-        {
-          title: "Configuracion",
-          url: "/settings",
-          permission: Permission.VIEW_PAYMENTS,
-          icon: Settings,
-        },
         {
           title: "Horarios",
           url: "/set-hours",

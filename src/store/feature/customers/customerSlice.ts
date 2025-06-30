@@ -51,7 +51,6 @@ export const customerSlice = createSlice({
         customer: ICustomer;
       }>
     ) => {
-      console.log("set Aside customers", action);
       state.asideOpen = action.payload.open;
       if (!action.payload.open) {
         state.asideCustomer = undefined;

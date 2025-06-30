@@ -20,9 +20,7 @@ export function CustomerDetails({ customer }: { customer: ICustomer }) {
 
           <div className="flex  text-sm space-x-1 text-gray-600 font-medium">
             <span> Cliente desde el</span>
-            <FromatedDate
-              date={new Date(customer.createdAt).toLocaleDateString()}
-            />
+            <FromatedDate date={customer.createdAt} />
           </div>
         </div>
 

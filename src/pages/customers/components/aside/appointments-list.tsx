@@ -18,7 +18,6 @@ export function AppointmentList({
 }) {
   const { services } = useAppSelector((s) => s.service);
   const { members } = useAppSelector((s) => s.member);
-  console.log({ appointments });
   return (
     <div className="flex flex-col gap-4   md:p-2   ">
       {appointments.map((app) => (

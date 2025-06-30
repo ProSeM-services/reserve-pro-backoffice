@@ -20,8 +20,8 @@ export function SettingsPage() {
         </CardDescription>
       </CardHeader>
       {/* <Separator /> */}
-      <CardContent className="space-y-8 mt-6 ">
-        <section className=" w-5/6 mx-auto">
+      <CardContent className="">
+        <section className=" size-1/2 ">
           {/* Perfil */}
           <section>
             <h2 className="text-lg font-semibold mb-2">Perfil</h2>
