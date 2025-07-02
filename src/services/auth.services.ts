@@ -41,4 +41,16 @@ export class AuthServices {
 
     return response.data;
   }
+  static async updatePassword(body: {
+    password: string;
+    userId: string;
+    newPassword: string;
+  }) {
+    const response = await axiosInstance.patch(
+      `${BASE_URL}/auth/update-password`,
+      body
+    );
+
+    return response.data;
+  }
 }

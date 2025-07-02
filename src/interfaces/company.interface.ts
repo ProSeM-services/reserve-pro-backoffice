@@ -18,12 +18,14 @@ export const CompanyZodSchema = z.object({
   image: z.string().optional(),
   images: z.array(z.string()),
   city: z.string().optional(),
-  email: z.string().email("Correo electrónico no válido").optional(),
+  email: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
   members: z.array(z.string()).optional(),
   services: z.array(z.string()).optional(),
   Users: z.array(UserSchema).optional(),
   Services: z.array(ServiceZodSchema).optional(),
+  floor: z.string().optional(),
+  apartment: z.string().optional(),
 });
 export const CreateCompanyZodSchema = z.object({
   name: z.string(),
@@ -37,6 +39,8 @@ export const CreateCompanyZodSchema = z.object({
   image: z.string().optional(),
   email: z.string().optional(),
   workhours: z.array(WorkhourZodSchema).optional(),
+  floor: z.string().optional(),
+  apartment: z.string().optional(),
 });
 
 export type ICompany = z.infer<typeof CompanyZodSchema>;

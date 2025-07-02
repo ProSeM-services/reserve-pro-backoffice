@@ -11,6 +11,7 @@ import {
   Settings2,
   SquareTerminal,
   SquareUser,
+  UserCog,
   Users,
 } from "lucide-react";
 import { NavMain } from "./nav-main";
@@ -25,7 +26,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Permission } from "@/lib/constants/permissions";
 
-const data = {
+const routes = {
   user: {
     name: "shadcn",
     email: "m@example.com",
@@ -112,6 +113,11 @@ const data = {
           permission: Permission.VIEW_PAYMENTS,
           icon: CalendarCheck,
         },
+        {
+          title: "Configuraciones",
+          url: "/settings",
+          icon: UserCog,
+        },
       ],
     },
   ],
@@ -124,7 +130,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <CompanySwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={routes.navMain} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

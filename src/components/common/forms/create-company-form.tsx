@@ -31,6 +31,8 @@ const INITIAL_COMPANY_DATA: ICreateCompany = {
   email: "",
   image: "",
   payment_methods: [],
+  apartment: "",
+  floor: "",
 };
 export function CompanyForm() {
   const { inmutableMembers } = useAppSelector((state) => state.member);
@@ -200,6 +202,34 @@ export function CompanyForm() {
               </FormItem>
             )}
           />
+          <div className="flex items-center w-full gap-2 ">
+            <FormField
+              control={form.control}
+              name="floor"
+              render={({ field }) => (
+                <FormItem className="flex-grow">
+                  <FormLabel>Piso</FormLabel>
+                  <FormControl>
+                    <Input placeholder="-" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="apartment"
+              render={({ field }) => (
+                <FormItem className="flex-grow">
+                  <FormLabel>Departamento</FormLabel>
+                  <FormControl>
+                    <Input placeholder="-" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
 
           <FormField
             control={form.control}

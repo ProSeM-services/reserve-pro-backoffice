@@ -43,7 +43,7 @@ export const CreatUserSchema = UserSchema.omit({
 });
 export const UpdateUserSchema = UserSchema.omit({
   id: true,
-});
+}).partial();
 
 export const RegisterUserSchmea = z
   .object({

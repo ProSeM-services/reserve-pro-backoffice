@@ -23,6 +23,8 @@ export const CompanyZodSchema = z.object({
   services: z.array(z.string()).optional(),
   Users: z.array(UserApiSchema).optional(),
   Services: z.array(ServiceZodSchema).optional(),
+  floor: z.string().optional(),
+  apartment: z.string().optional(),
 });
 export const CreateCompanyZodSchema = z.object({
   name: z.string(),

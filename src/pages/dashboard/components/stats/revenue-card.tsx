@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { IAppointment } from "@/interfaces/appointments.interface";
 import { formatCurrency } from "@/lib/utils/format-currency";
 import { useAppSelector } from "@/store/hooks";
 import { Book, DollarSign, SquareUser } from "lucide-react";
@@ -18,12 +19,16 @@ export function RevenueCard({ type }: RevenueCardProps) {
   const { customers } = useAppSelector((s) => s.customers);
   const { services } = useAppSelector((s) => s.service);
 
-  const confirmedAppointmentsRevenue = (): number => {
-    const confirmedAppointmnets = appointments.filter((a) => a.confirmed);
-
+  const pendingAppointments = appointments.filter(
+    (a) => !a.canceled && !a.confirmed
+  );
+  const confirmedAppointmnets = appointments.filter((a) => a.confirmed);
+  const confirmedAppointmentsRevenue = (
+    listOfAppointments: IAppointment[]
+  ): number => {
     let total = 0;
 
-    confirmedAppointmnets.forEach((app) => {
+    listOfAppointments.forEach((app) => {
       if (app.price) {
         total = total + app.price;
         return;
@@ -41,7 +46,7 @@ export function RevenueCard({ type }: RevenueCardProps) {
   };
   const Config: Record<ICardType, ICardBody> = {
     appointments: {
-      feedback: "+20.1% from last month",
+      feedback: "",
       Icon: () => (
         <div className="text-orange-500 bg-orange-200 p-2 rounded-xl">
           <Book className="size-5" />
@@ -51,7 +56,7 @@ export function RevenueCard({ type }: RevenueCardProps) {
       value: `${appointments.length}`,
     },
     customers: {
-      feedback: "+20.1% from last month",
+      feedback: "",
       Icon: () => (
         <div className="text-blue-500 bg-blue-200 p-2 rounded-xl">
           <SquareUser className="size-5" />
@@ -61,14 +66,18 @@ export function RevenueCard({ type }: RevenueCardProps) {
       value: `${customers.length}`,
     },
     sales: {
-      feedback: "+20.1% from last month",
+      feedback: `${formatCurrency(
+        confirmedAppointmentsRevenue(pendingAppointments)
+      )} sin confirmar`,
       Icon: () => (
         <div className="text-green-500 bg-green-100 p-2 rounded-xl">
           <DollarSign className="size-5" />
         </div>
       ),
       title: "Ingresos",
-      value: `${formatCurrency(confirmedAppointmentsRevenue())}`,
+      value: `${formatCurrency(
+        confirmedAppointmentsRevenue(confirmedAppointmnets)
+      )}`,
     },
   };
 

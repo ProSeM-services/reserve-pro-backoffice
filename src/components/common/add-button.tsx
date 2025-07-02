@@ -11,7 +11,6 @@ import { CompanyForm } from "./forms/create-company-form";
 import { Button } from "@/components/ui/button";
 import { CreateServicesForm } from "./forms/create-service-form";
 import { useAppSelector } from "@/store/hooks";
-import { checkTrialStatus } from "@/lib/utils/checkTrialStatus";
 import {
   Popover,
   PopoverContent,
@@ -52,9 +51,6 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
 
   const ableToCreateCompany = (): boolean => {
     if (type !== "company") return true;
-    const { isInTrial } = checkTrialStatus(enterprise.createdAt);
-
-    if (isInTrial) return false;
 
     const paymentPlan = paymentsPlans.filter(
       (p) => p.id === enterprise.payment_plan

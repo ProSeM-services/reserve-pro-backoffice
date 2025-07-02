@@ -89,7 +89,11 @@ function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
               <div className="flex items-center gap-2">
                 <p>Proximo vencimiento</p>
                 <strong>
-                  <FromatedDate date={lastPayment.end_date} />
+                  {lastPayment ? (
+                    <FromatedDate date={lastPayment.end_date} />
+                  ) : (
+                    "-"
+                  )}
                 </strong>
               </div>
             </div>
