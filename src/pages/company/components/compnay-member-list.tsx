@@ -1,17 +1,18 @@
 import { ICompany } from "@/interfaces";
 import { RemoveMember } from "./remove-member";
 import { Users2Icon } from "lucide-react";
+import { MemberCard } from "@/pages/members/components/member-card";
 
-export async function CompnayMemberList({ company }: { company: ICompany }) {
+export function CompnayMemberList({ company }: { company: ICompany }) {
   const members = company.Users;
   return (
     <div>
       {members?.length ? (
-        <div>
+        <div className="flex flex-col gap-2">
           {members.map((member) => (
             <div className="flex items-center gap-2" key={member.id}>
               <RemoveMember member={member} company={company} />
-              {member.name}
+              <MemberCard member={member} type="read" />
             </div>
           ))}
         </div>

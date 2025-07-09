@@ -1,19 +1,31 @@
 import { axiosInstance, BASE_URL } from "@/config/axios.config";
-import { IAddMember } from "@/interfaces";
-import { ICreateMember, IMember } from "@/interfaces/member.iterface";
+import { IAddMember, ICreateUser, IUser } from "@/interfaces";
+import { IAPIUser } from "@/interfaces/api";
 
 export class MemberServices {
-  static async getMembers(): Promise<IMember[]> {
+  static async getMembers(): Promise<IUser[]> {
     const res = await axiosInstance.get(`${BASE_URL}/user`);
 
     return res.data;
   }
-  static async getFree(): Promise<IMember[]> {
+  static async getFree(): Promise<IUser[]> {
     const res = await axiosInstance.get(`${BASE_URL}/user/free`);
 
     return res.data;
   }
-  static async getById(id: string): Promise<IMember> {
+  static async searchMembers(value: string): Promise<IUser[]> {
+    const res = await axiosInstance.get(
+      `${BASE_URL}/user/search?value=${value}`
+    );
+
+    return res.data;
+  }
+  static async sendInvite(id: string): Promise<IUser> {
+    const res = await axiosInstance.post(`${BASE_URL}/user/invite/${id}`);
+
+    return res.data;
+  }
+  static async getById(id: string): Promise<IUser> {
     const res = await axiosInstance.get(`${BASE_URL}/user/details/${id}`);
 
     return res.data;
@@ -24,7 +36,7 @@ export class MemberServices {
     return res.data;
   }
 
-  static async createMember(data: ICreateMember) {
+  static async createMember(data: ICreateUser): Promise<IAPIUser> {
     const res = await axiosInstance.post(`${BASE_URL}/user`, data);
 
     return res.data;
@@ -45,7 +57,7 @@ export class MemberServices {
 
     return res.data;
   }
-  static async update(id: string, data: Partial<IMember>) {
+  static async update(id: string, data: Partial<IUser>): Promise<IUser> {
     const res = await axiosInstance.patch(`${BASE_URL}/user/${id}`, data);
 
     return res.data;

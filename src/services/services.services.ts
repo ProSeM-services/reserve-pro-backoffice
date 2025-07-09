@@ -4,8 +4,8 @@ import {
   IAddService,
   ICreateService,
   IService,
+  IUser,
 } from "@/interfaces";
-import { IMember } from "@/interfaces/member.iterface";
 
 export class ServicesServices {
   static async getAll(): Promise<IService[]> {
@@ -23,7 +23,7 @@ export class ServicesServices {
 
     return res.data;
   }
-  static async getMembers(id: string): Promise<IMember[]> {
+  static async getMembers(id: string): Promise<IUser[]> {
     const res = await axiosInstance.get(`${BASE_URL}/services/members/${id}`);
 
     return res.data;
@@ -72,6 +72,10 @@ export class ServicesServices {
       data
     );
 
+    return res.data;
+  }
+  static async deleteService(serviceId: string) {
+    const res = await axiosInstance.delete(`${BASE_URL}/services/${serviceId}`);
     return res.data;
   }
 }

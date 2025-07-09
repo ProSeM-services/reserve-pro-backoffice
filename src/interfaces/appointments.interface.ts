@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MemberZodSchema } from "./member.iterface";
+import { UserSchema } from "./user.interface";
 const isoStringRegex =
   /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|([+-]\d{2}:\d{2}))$/;
 
@@ -25,7 +25,11 @@ export const AppointmentZodSchema = z.object({
   companyId: z.string().optional(),
   canceled: z.boolean().optional(),
   createdAt: z.string(),
-  User: MemberZodSchema,
+  fullName: z.string(),
+  price: z.number().optional(),
+  confirmed: z.boolean().optional(),
+  payment_method: z.string().optional(),
+  User: UserSchema,
 });
 
 export const SlotsZodSchmea = z.object({

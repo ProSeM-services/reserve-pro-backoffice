@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export const BASE_URL: string = import.meta.env.VITE_NEXT_PUBLIC_API;
+export const API_BASE_URL: string = import.meta.env.VITE_NEXT_PUBLIC_API;
+export const BASE_URL: string = `${API_BASE_URL}/api`;
+
 export const axiosInstance = axios.create({ baseURL: BASE_URL });
 
 export const setAuthInterceptor = async (token: string | null) => {
@@ -8,6 +10,8 @@ export const setAuthInterceptor = async (token: string | null) => {
     (config) => {
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+      } else {
+        config.headers.Authorization = undefined;
       }
       return config;
     },

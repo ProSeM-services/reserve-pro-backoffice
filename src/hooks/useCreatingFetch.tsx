@@ -1,42 +1,48 @@
+import { memberAdpater } from "@/adapters/members.adapter";
 import {
   ICompany,
   ICreateCompany,
   ICreateService,
+  ICreateUser,
   IService,
+  IUser,
 } from "@/interfaces";
-import { ICreateMember, IMember } from "@/interfaces/member.iterface";
+import { IAppointment } from "@/interfaces/appointments.interface";
+import { AppointmentServices } from "@/services/appointment.services";
 import { CompanyServices } from "@/services/company.services";
 import { MemberServices } from "@/services/member.services";
 import { ServicesServices } from "@/services/services.services";
+import { editAppointment } from "@/store/feature/appointnments/appointmentsSlice";
 import {
   addCompany,
   removeCompany,
-  setCompanyIsUpdated,
+  updateCompany,
 } from "@/store/feature/company/companySlice";
-import {
-  addMember,
-  setMemberUpdated,
-} from "@/store/feature/members/membersSlice";
+import { addMember, updateMember } from "@/store/feature/members/membersSlice";
 import {
   addService,
-  setSerivicesUpdated,
+  updateService,
 } from "@/store/feature/services/servicesSlice";
 import { useAppDispatch } from "@/store/hooks";
 
 export default function useCreatingFetch() {
   const dispatch = useAppDispatch();
-  const createCompany = async (data: ICreateCompany) => {
+  const createCompany = async (
+    data: ICreateCompany & { usersIds?: string[] }
+  ) => {
     try {
       //   dispatch(toggleCompanyLoading(true));
       const newCompany = await CompanyServices.createcompany(data);
       dispatch(addCompany(newCompany));
+      return newCompany;
     } catch (error) {
       console.log("Error creating Companies", error);
+      throw error;
     } finally {
       //   dispatch(toggleCompanyLoading(false));
     }
   };
-  const updateCompany = async (id: string, data: Partial<ICompany>) => {
+  const editCompany = async (id: string, data: Partial<ICompany>) => {
     try {
       //   dispatch(toggleCompanyLoading(true));
 
@@ -45,7 +51,7 @@ export default function useCreatingFetch() {
         data.image ? data : { ...data, image: "" }
       );
 
-      dispatch(setCompanyIsUpdated(true));
+      dispatch(updateCompany({ id, changes: data }));
     } catch (error) {
       console.log("Error updating company", error);
 
@@ -68,11 +74,11 @@ export default function useCreatingFetch() {
       //   dispatch(toggleCompanyLoading(false));
     }
   };
-  const createMember = async (data: ICreateMember) => {
+  const createMember = async (data: ICreateUser) => {
     try {
       //   dispatch(toggleMembersLoading(true));
       const newMember = await MemberServices.createMember(data);
-      dispatch(addMember(newMember));
+      dispatch(addMember(memberAdpater(newMember)));
     } catch (error) {
       console.log("Error creating Member", error);
       throw error;
@@ -81,16 +87,13 @@ export default function useCreatingFetch() {
     }
   };
 
-  const editMember = async (id: string, data: Partial<IMember>) => {
+  const editMember = async (id: string, data: Partial<IUser>) => {
     try {
-      //   dispatch(toggleMembersLoading(true));
       await MemberServices.update(id, data);
-      dispatch(setMemberUpdated(true));
+      dispatch(updateMember({ id, changes: data }));
     } catch (error) {
       console.log("Error creating Member", error);
       throw error;
-    } finally {
-      //   dispatch(toggleMembersLoading(false));
     }
   };
   const createService = async (data: ICreateService) => {
@@ -105,24 +108,112 @@ export default function useCreatingFetch() {
     }
   };
 
-  const updateService = async (id: string, data: Partial<IService>) => {
+  const editService = async (id: string, data: Partial<IService>) => {
     try {
       //   dispatch(toggleMembersLoading(true));
       await ServicesServices.updateService(id, data);
-      dispatch(setSerivicesUpdated(true));
+      dispatch(updateService({ id, changes: data }));
     } catch (error) {
       console.log("Error creating Service", error);
     } finally {
       //   dispatch(toggleMembersLoading(false));
     }
   };
+
+  const updateAppointment = async (id: string, data: Partial<IAppointment>) => {
+    try {
+      //   dispatch(toggleMembersLoading(true));
+      await AppointmentServices.update(id, data);
+      dispatch(editAppointment({ changes: data, id }));
+    } catch (error) {
+      console.log("Error creating Service", error);
+    } finally {
+      //   dispatch(toggleMembersLoading(false));
+    }
+  };
+  const addServicesToCompany = async (
+    servicesIds: string[],
+    companyId: string
+  ) => {
+    try {
+      const allServicesToAdd = servicesIds.map((serviceId) =>
+        ServicesServices.addToCompany({ companyId, serviceId })
+      );
+      await Promise.all(allServicesToAdd);
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
+  const addMemberToService = async (
+    membersIds: string[],
+    serviceId: string
+  ) => {
+    try {
+      const allMembersToAdd = membersIds.map((userId) =>
+        ServicesServices.addMember({ serviceId, userId })
+      );
+      await Promise.all(allMembersToAdd);
+      const updatedService = await ServicesServices.getById(serviceId);
+      dispatch(updateService({ id: serviceId, changes: updatedService }));
+    } catch (error) {}
+  };
+  const addMembersToCompany = async (
+    membersIds: string[],
+    companyId: string
+  ) => {
+    try {
+      const allMembersToAdd = membersIds.map((userId) =>
+        MemberServices.addToCompany({ companyId, userId })
+      );
+      await Promise.all(allMembersToAdd);
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
+  const removeMemberFromService = async (userId: string, serviceId: string) => {
+    try {
+      await ServicesServices.removeMember({ serviceId, userId });
+      const updatedService = await ServicesServices.getById(serviceId);
+      dispatch(updateService({ id: serviceId, changes: updatedService }));
+    } catch (error) {}
+  };
+  const removeMemberFromCompany = async (userId: string, companyId: string) => {
+    try {
+      await MemberServices.removeFromCompany({
+        companyId,
+        userId,
+      });
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
+  const removeServiceFromCompany = async (
+    serviceId: string,
+    companyId: string
+  ) => {
+    try {
+      await ServicesServices.removeFromCompany({
+        companyId,
+        serviceId,
+      });
+      const updatedCompany = await CompanyServices.getCopanyById(companyId);
+      dispatch(updateCompany({ id: companyId, changes: updatedCompany }));
+    } catch (error) {}
+  };
   return {
+    addMembersToCompany,
+    addServicesToCompany,
+    addMemberToService,
     createCompany,
     createMember,
     createService,
     deleteCompany,
-    updateCompany,
-    updateService,
+    editCompany,
+    editService,
     editMember,
+    updateAppointment,
+    removeMemberFromService,
+    removeMemberFromCompany,
+    removeServiceFromCompany,
   };
 }

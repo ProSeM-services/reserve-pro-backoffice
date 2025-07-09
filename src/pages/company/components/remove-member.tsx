@@ -1,28 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { ICompany } from "@/interfaces";
-import { IMember } from "@/interfaces/member.iterface";
-import { CompanyServices } from "@/services/company.services";
-import { TrashIcon } from "lucide-react";
+import { ICompany, IUser } from "@/interfaces";
+import { CircleMinus } from "lucide-react";
 import { useState } from "react";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { memberAdpater } from "@/adapters/members.adapter";
+import useCreatingFetch from "@/hooks/useCreatingFetch";
 /* Component to handle the action to remove one member from company */
 export function RemoveMember({
   member,
   company,
 }: {
-  member: IMember;
+  member: IUser;
   company: ICompany;
 }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
+  const { removeMemberFromCompany } = useCreatingFetch();
   const handleDeleteFromCompany = async () => {
     setDeleting(true);
     try {
-      await CompanyServices.removeMember({
-        companyId: company.id,
-        userId: member.id,
-      });
+      await removeMemberFromCompany(member.id, company.id);
       toast({
         title: `${member.name}, ${member.lastName} elminado de ${company.name}`,
       });
@@ -34,6 +37,9 @@ export function RemoveMember({
       setDeleting(false);
     }
   };
+
+  const adaptedMember = memberAdpater(member);
+
   return (
     <Button
       variant={"ghost"}
@@ -42,7 +48,18 @@ export function RemoveMember({
       onClick={handleDeleteFromCompany}
       isLoading={deleting}
     >
-      <TrashIcon className="size-4" />
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <CircleMinus className="size-4" />
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>
+              Remover a {adaptedMember.fullName} de {company.name}
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </Button>
   );
 }

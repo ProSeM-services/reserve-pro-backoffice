@@ -7,10 +7,10 @@ import React, {
 } from "react";
 import { Input } from "@/components/ui/input";
 import { MapPinIcon, MapPinOffIcon } from "lucide-react";
-import { useSearchParams } from "next/navigation";
 import { GeocodeServices } from "@/services/geocode.services";
 import { Location } from "@/interfaces/location.interface";
 import DynamicMap from "@/components/common/dynamic-map";
+import { useSearchParams } from "react-router";
 
 interface Prediction {
   place_id: string;
@@ -29,8 +29,7 @@ export function EditAddressInput({
   placeholder = "Ingresa la dirección",
   location = "",
 }: AddressInputProps) {
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const [params] = useSearchParams();
   const [query, setQuery] = useState(params.get("city") || "");
   const [mapValue, setMapValue] = useState(location || "");
   const [locationValues, setLocationValue] = useState<Location>({
@@ -50,7 +49,9 @@ export function EditAddressInput({
     const loadScript = () => {
       console.log(locationValues);
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_APIMAPS}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${
+        import.meta.env.VITE_NEXT_PUBLIC_APIMAPS
+      }&libraries=places`;
       script.async = true;
       document.head.appendChild(script);
       script.onload = () => {

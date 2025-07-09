@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { User2Icon, KeyIcon, Mail, HouseIcon } from "lucide-react";
+import { User2Icon, KeyIcon, Mail, MailCheck } from "lucide-react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -12,31 +12,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  CreateTenantZodSchema,
-  ICreateTentant,
-} from "@/interfaces/member.iterface";
+import { IUserRegister, RegisterUserSchmea } from "@/interfaces/user.interface";
 import { AuthServices } from "@/services/auth.services";
 import { useToast } from "@/components/ui/use-toast";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import { useNavigate } from "react-router";
-const EMPTY_TENANT_DATA: ICreateTentant = {
+import { PhoneInput } from "@/components/ui/phone-input";
+const EMPTY_TENANT_DATA: IUserRegister = {
   email: "",
   lastName: "",
   name: "",
   password: "",
   confirmPassword: "",
-  role: "ADMIN",
-  companyName: "",
   userName: "",
-  image: "",
+  phone: "",
 };
 
 export function RegisterForm() {
@@ -44,8 +33,8 @@ export function RegisterForm() {
   const [open, setOpen] = useState(false);
 
   const nav = useNavigate();
-  const form = useForm<ICreateTentant>({
-    resolver: zodResolver(CreateTenantZodSchema),
+  const form = useForm<IUserRegister>({
+    resolver: zodResolver(RegisterUserSchmea),
     defaultValues: EMPTY_TENANT_DATA,
   });
 
@@ -57,15 +46,17 @@ export function RegisterForm() {
   };
   const { toast } = useToast();
 
-  const onSubmit = async (values: ICreateTentant) => {
+  const onSubmit = async (values: IUserRegister) => {
     setLoading(true);
     try {
       await AuthServices.register(values);
 
       setOpen(true);
     } catch (error) {
+      console.log("error at register", error);
+
       //@ts-ignore
-      if (error.response.data.message) {
+      if (error.response?.data?.message) {
         //@ts-ignore
         const message = error.response.data.message;
         toast({
@@ -73,7 +64,14 @@ export function RegisterForm() {
           description: message,
           variant: "destructive",
         });
+        return;
       }
+
+      toast({
+        title: "Hubo un error",
+        description: "No se pudo crear la cuenta, verifica tus datos",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -82,24 +80,27 @@ export function RegisterForm() {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className=" flex flex-col gap-4 ">
-            <div className="w-full flex flex-col gap-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className=" h-full">
+          <div className=" flex flex-col justify-center gap-4 h-full ">
+            <div className="w-full flex flex-col   justify-center    gap-4">
               <div className="flex gap-4 ">
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <Label htmlFor="email">Name</Label>
+                      <Label htmlFor="email">Nombre</Label>
                       <div className="relative ">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 "
-                          {...field}
-                          placeholder="Enter your first name"
-                        />
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 "
+                            {...field}
+                            placeholder="Enter your first name"
+                          />
+                        </FormControl>
                         <User2Icon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
                       </div>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -108,102 +109,74 @@ export function RegisterForm() {
                   name="lastName"
                   render={({ field }) => (
                     <FormItem className="w-1/2">
-                      <Label htmlFor="email">Last Name</Label>
-                      <div className="relative">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                          {...field}
-                          placeholder="Enter your last name"
-                        />
-                        <User2Icon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label htmlFor="email">Email</Label>
-                    <div className="relative">
-                      <Input
-                        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                        {...field}
-                        placeholder="example@email.com"
-                      />
-                      <Mail className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="companyName"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label htmlFor="email">Company Name</Label>
-                    <div className="relative">
-                      <Input
-                        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                        {...field}
-                        placeholder="Name of your company"
-                      />
-                      <HouseIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="userName"
-                render={({ field }) => (
-                  <FormItem>
-                    <Label htmlFor="password">User Name</Label>
-                    <div className="relative">
-                      <Input
-                        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                        {...field}
-                        placeholder="user name"
-                      />
-                      <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              <div className="flex  gap-4 w-full">
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2">
-                      <Label htmlFor="password">Password</Label>
-                      <div className="relative">
-                        <Input
-                          className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                          {...field}
-                          placeholder="******"
-                          type="password"
-                        />
-                        <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="confirmPassword"
-                  render={({ field }) => (
-                    <FormItem className="w-1/2">
-                      <Label htmlFor="password">Confirm Passwod</Label>
+                      <Label htmlFor="email">Apellido</Label>
                       <div className="relative">
                         <FormControl>
                           <Input
                             className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
                             {...field}
-                            placeholder="******"
-                            type="password"
+                            placeholder="Enter your last name"
+                          />
+                        </FormControl>
+                        <User2Icon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="flex gap-4 ">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2">
+                      <Label htmlFor="email">Email</Label>
+                      <div className="relative">
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            {...field}
+                            placeholder="example@email.com"
+                          />
+                        </FormControl>
+                        <Mail className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem className="w-1/2">
+                      <Label htmlFor="phone">Numero de celular</Label>
+                      <div className="relative">
+                        <FormControl>
+                          <PhoneInput {...field} placeholder="+1 1111 111" />
+                        </FormControl>
+                        {/* <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <section className="flex flex-col gap-2 ">
+                <FormField
+                  control={form.control}
+                  name="userName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <Label htmlFor="password">Nombre de Usuario</Label>
+                      <div className="relative">
+                        <FormControl>
+                          <Input
+                            className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                            {...field}
+                            placeholder="Nombre de Usuario"
                           />
                         </FormControl>
                         <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -212,33 +185,82 @@ export function RegisterForm() {
                     </FormItem>
                   )}
                 />
-              </div>
+                <div className="flex  gap-4 w-full">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem className="w-1/2">
+                        <Label htmlFor="password">Contraseña</Label>
+                        <div className="relative">
+                          <FormControl>
+                            <Input
+                              className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                              {...field}
+                              placeholder="******"
+                              type="password"
+                            />
+                          </FormControl>
+                          <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem className="w-1/2">
+                        <Label htmlFor="password">Confirmar Contraseña</Label>
+                        <div className="relative">
+                          <FormControl>
+                            <Input
+                              className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
+                              {...field}
+                              placeholder="******"
+                              type="password"
+                            />
+                          </FormControl>
+                          <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </section>
             </div>
-            <Button
-              type="submit"
-              className="w-full text-white"
-              disabled={loading}
-              isLoading={loading}
-            >
-              Create account
-            </Button>
-            <Button variant="outline" className="w-full" disabled>
-              Sign Up with Google
-            </Button>
+            <section className=" flex flex-col gap-2">
+              <Button
+                type="submit"
+                className="w-full text-white"
+                disabled={loading}
+                isLoading={loading}
+              >
+                Crear Cuenta
+              </Button>
+              <Button variant="outline" className="w-full" disabled>
+                Sign Up with Google
+              </Button>
+            </section>
           </div>
         </form>
       </Form>
       <Dialog open={open} onOpenChange={() => handleCloseDialog(!open)}>
         <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirmar tu mail</DialogTitle>
-            <DialogDescription>
-              Hemos enviado un correo electrónico a la dirección proporcionada.
-              Por favor, revisa tu bandeja de entrada y haz clic en el enlace de
-              confirmación para activar tu cuenta.
-            </DialogDescription>
-          </DialogHeader>
-          {/* Agrega un botón aquí para reenviar el correo si es necesario */}
+          <div className="w-full max-w-md rounded-lg bg-white p-6 ">
+            <div className=" flex flex-col  items-center text-center gap-4">
+              <MailCheck className="h-16 w-16 text-green-500" />
+              <h1 className="text-2xl font-semibold text-gray-800">
+                Confirmar tu mail
+              </h1>
+              <p className="text-sm text-gray-600">
+                Hemos enviado un correo electrónico a la dirección
+                proporcionada. Por favor, revisa tu bandeja de entrada y haz
+                clic en el enlace de confirmación para activar tu cuenta.
+              </p>
+            </div>
+          </div>
           <DialogClose onClick={() => setOpen(false)}></DialogClose>
         </DialogContent>
       </Dialog>

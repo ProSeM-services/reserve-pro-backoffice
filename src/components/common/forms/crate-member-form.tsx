@@ -9,11 +9,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
-import {
-  CreateMemberZodSchema,
-  ICreateMember,
-  ROLES_VALUES,
-} from "@/interfaces/member.iterface";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -27,7 +22,9 @@ import {
 import { BaselineIcon, ShieldCheck } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
-const INITIAL_MEMBER_DATA: ICreateMember = {
+import { ROLES_VALUES } from "@/lib/constants/role";
+import { CreatUserSchema, ICreateUser } from "@/interfaces";
+const INITIAL_MEMBER_DATA: ICreateUser = {
   email: "",
   lastName: "",
   name: "",
@@ -38,17 +35,17 @@ const INITIAL_MEMBER_DATA: ICreateMember = {
   image: "",
   phone: "",
   workhours: [],
+  EnterpriseId: "",
 };
 export function MemberForm() {
   const { toast } = useToast();
   const { createMember } = useCreatingFetch();
   const [loading, setLoading] = useState(false);
-  const form = useForm<ICreateMember>({
-    resolver: zodResolver(CreateMemberZodSchema),
-    mode: "onChange",
+  const form = useForm<ICreateUser>({
+    resolver: zodResolver(CreatUserSchema),
     defaultValues: INITIAL_MEMBER_DATA,
   });
-  const onSubmit = async (values: ICreateMember) => {
+  const onSubmit = async (values: ICreateUser) => {
     try {
       setLoading(true);
       await createMember(values);
@@ -73,78 +70,83 @@ export function MemberForm() {
   return (
     <Form {...form}>
       <form
+        autoComplete="off"
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-2 text-left  h-full max-h-full overflow-auto"
       >
         <section className=" space-y-3">
-          <div className="flex flex-col ">
-            <p className="font-medium">Informacion de accesso</p>
-            <span className="font-light">
+          <div className="flex flex-col text-sm ">
+            <p className="font-medium">Informacion personal</p>
+            <span className="font-light ">
               {" "}
-              Definir las claves de accesso para {form.getValues("name")}{" "}
-              {form.getValues("lastName")}
+              Completar con la información personal del nuevo miembro
             </span>
           </div>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nombre</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nombre" {...field} />
-                </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Apellido</FormLabel>
-                <FormControl>
-                  <Input placeholder="Apellido" {...field} />
-                </FormControl>
+          <section className="w-full flex items-center gap-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem className="w-1/2">
+                  <FormLabel>Nombre</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nombre" {...field} />
+                  </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="example@mail.com"
-                    {...field}
-                  />
-                </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="w-1/2">
+                  <FormLabel>Apellido</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Apellido" {...field} />
+                  </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Núemro de celular</FormLabel>
-                <FormControl>
-                  <PhoneInput {...field} />
-                </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </section>
+          <section className="w-full flex items-center gap-2">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className="w-1/2">
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="example@mail.com"
+                      {...field}
+                    />
+                  </FormControl>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem className="w-1/2">
+                  <FormLabel>Núemro de celular</FormLabel>
+                  <FormControl>
+                    <PhoneInput {...field} />
+                  </FormControl>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </section>
           <FormField
             control={form.control}
             name="role"
@@ -182,7 +184,7 @@ export function MemberForm() {
         <hr className="border-accent" />
 
         <section className=" space-y-3">
-          <div className="flex flex-col ">
+          <div className="flex flex-col  text-sm ">
             <p className="font-medium">Informacion de accesso</p>
             <span className="font-light">
               {" "}
@@ -197,7 +199,12 @@ export function MemberForm() {
               <FormItem>
                 <FormLabel>Nombre de usuario</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nombre de usuario" {...field} />
+                  <Input
+                    placeholder="Nombre de usuario"
+                    autoComplete="off"
+                    {...field}
+                    name="prevent-auto-complete-1"
+                  />
                 </FormControl>
 
                 <FormMessage />
@@ -211,7 +218,13 @@ export function MemberForm() {
               <FormItem>
                 <FormLabel>Contraseña</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="******" {...field} />
+                  <Input
+                    type="password"
+                    placeholder="******"
+                    autoComplete="off"
+                    {...field}
+                    name="prevent-auto-complete"
+                  />
                 </FormControl>
 
                 <FormMessage />

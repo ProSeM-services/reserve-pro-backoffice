@@ -1,6 +1,8 @@
 import { ICompany } from "@/interfaces";
+import { ServiceCard } from "@/pages/services/components/service-card";
 
 import { AxeIcon } from "lucide-react";
+import { RemoveService } from "./remove-service";
 
 export function CompnayServicesList({ company }: { company: ICompany }) {
   const services = company.Services;
@@ -8,9 +10,12 @@ export function CompnayServicesList({ company }: { company: ICompany }) {
   return (
     <div>
       {services?.length ? (
-        <div className="grid grid-cols-2 gap-2 ">
+        <div className="flex flex-col gap-2">
           {services.map((service) => (
-            <p>{service.title}</p>
+            <div className="flex items-center gap-2" key={service.id}>
+              <RemoveService company={company} service={service} />
+              <ServiceCard service={service} readonly />
+            </div>
           ))}
         </div>
       ) : (

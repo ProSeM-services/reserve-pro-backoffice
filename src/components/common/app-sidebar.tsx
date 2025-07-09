@@ -1,52 +1,40 @@
 import * as React from "react";
 import {
-  AudioWaveform,
   BookOpen,
-  Bot,
-  Command,
-  GalleryVerticalEnd,
+  BookPlus,
+  Building,
+  CalendarCheck,
+  CalendarDays,
+  ClockIcon,
+  HouseIcon,
+  LayoutDashboard,
   Settings2,
   SquareTerminal,
+  SquareUser,
+  UserCog,
+  Users,
 } from "lucide-react";
-
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
-import { TeamSwitcher } from "./team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
+import { Permission } from "@/lib/constants/permissions";
 
-// This is sample data.
-const data = {
+const routes = {
   user: {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
+      title: "General",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
@@ -54,25 +42,32 @@ const data = {
         {
           title: "Dashboard",
           url: "/dashboard",
+          icon: LayoutDashboard,
         },
       ],
     },
     {
-      title: "Models",
+      title: "Nosotros",
       url: "#",
-      icon: Bot,
+      icon: HouseIcon,
       items: [
         {
           title: "Sucursales",
           url: "/company",
+          permission: Permission.VIEW_COMPANY,
+          icon: Building,
         },
         {
           title: "Miembros",
           url: "/members",
+          permission: Permission.VIEW_MEMBERS,
+          icon: Users,
         },
         {
           title: "Servicios",
           url: "/services",
+          permission: Permission.VIEW_SERVICES,
+          icon: BookPlus,
         },
       ],
     },
@@ -84,33 +79,44 @@ const data = {
         {
           title: "Turnos",
           url: "/appointment",
+          permission: Permission.VIEW_APPOINTMENTS,
+          icon: CalendarCheck,
         },
         {
           title: "Clientes",
           url: "/customers",
+          permission: Permission.VIEW_CUSTOMERS,
+          icon: SquareUser,
+        },
+        {
+          title: "Calendario",
+          url: "/calendar",
+          permission: Permission.VIEW_APPOINTMENTS,
+          icon: CalendarDays,
         },
       ],
     },
     {
-      title: "Settings",
+      title: "Configuraciones",
       url: "#",
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
+          title: "Horarios",
+          url: "/set-hours",
+          permission: Permission.VIEW_WORKHOURS,
+          icon: ClockIcon,
         },
         {
-          title: "Team",
-          url: "#",
+          title: "Subscripcion",
+          url: "/payments",
+          permission: Permission.VIEW_PAYMENTS,
+          icon: CalendarCheck,
         },
         {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
+          title: "Configuraciones",
+          url: "/settings",
+          icon: UserCog,
         },
       ],
     },
@@ -118,16 +124,21 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { open } = useSidebar();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        {open && (
+          <div className="  flex items-center justify-center ">
+            <img src="/images/logo-text.png" className="h-[60px] " />
+          </div>
+        )}
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={routes.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

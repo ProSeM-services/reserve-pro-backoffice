@@ -5,14 +5,16 @@ import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { useAppSelector } from "@/store/hooks";
 import { BarLoader } from "@/components/common/bar-loader";
-import { ServicesServices } from "@/services/services.services";
+import { ServiceCard } from "@/pages/services/components/service-card";
+import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { EmptyList } from "@/components/common/emty-list";
 
 export function AddServicesAside({ company }: { company: ICompany }) {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false); // Added state for loading
 
   const { services } = useAppSelector((s) => s.service);
-
+  const { addServicesToCompany } = useCreatingFetch();
   const { toast } = useToast();
   const handleSelectService = (memberId: string) => {
     let res = [];
@@ -28,10 +30,7 @@ export function AddServicesAside({ company }: { company: ICompany }) {
   const handleAddServices = async () => {
     setLoading(true); // Set loading to true when adding services
     try {
-      const allServicesToAdd = selectedServices.map((serviceId) =>
-        ServicesServices.addToCompany({ companyId: company.id!, serviceId })
-      );
-      await Promise.all(allServicesToAdd);
+      await addServicesToCompany(selectedServices, company.id);
       toast({
         title: "Servicios cargados!",
         description: `Los servicios fueron agregados exitosamente a ${company.name}!`,
@@ -55,27 +54,29 @@ export function AddServicesAside({ company }: { company: ICompany }) {
   return (
     <div className="space-y-2 h-full max-h-full overflow-auto  ">
       {servicesToShow.length === 0 ? (
-        <p>No hay servicios para mostrar!</p>
+        <EmptyList type="no-services-to-add" />
       ) : (
         <div>
           {loading && <BarLoader />}
-          {servicesToShow?.map((service) => (
-            <div
-              className={`flex relative items-center gap-2 border rounded-md border-accent  cursor-pointer hover:bg-secondary transition-all duration-150 ${
-                selectedServices.includes(service.id!)
-                  ? "border border-primary "
-                  : ""
-              }`}
-              key={service.id}
-              onClick={() => handleSelectService(service.id!)}
-            >
-              <div className="w-full">{service.title}</div>
+          <div className="flex flex-col gap-2 text-xs">
+            {servicesToShow?.map((service) => (
+              <div
+                className={`flex relative items-center gap-2 border rounded-md border-accent  cursor-pointer hover:bg-secondary transition-all duration-150 ${
+                  selectedServices.includes(service.id!)
+                    ? "border border-primary "
+                    : ""
+                }`}
+                key={service.id}
+                onClick={() => handleSelectService(service.id!)}
+              >
+                <ServiceCard service={service} readonly selectable />
 
-              {selectedServices.includes(service.id!) && (
-                <CheckCircleIcon className="text-primary absolute right-2 bottom-2  size-6" />
-              )}
-            </div>
-          ))}
+                {selectedServices.includes(service.id!) && (
+                  <CheckCircleIcon className="text-primary absolute right-2 bottom-2  size-6" />
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

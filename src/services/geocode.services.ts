@@ -14,6 +14,7 @@ export class GeocodeServices {
       );
 
       if (response.data.status !== "OK") {
+        console.log("error", response);
         throw new Error(`Geocodificación fallida: ${response.data.status}`);
       }
       const result = response.data.results[0];
@@ -34,7 +35,7 @@ export class GeocodeServices {
         city,
       };
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
       throw new Error("Error en la geocodificación: ");
     }
   }

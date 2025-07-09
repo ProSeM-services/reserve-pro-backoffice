@@ -8,7 +8,7 @@ import React, {
 import { Input } from "@/components/ui/input";
 import { MapPinIcon, MapPinOffIcon } from "lucide-react";
 import DynamicMap from "./dynamic-map";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams } from "react-router";
 
 interface Prediction {
   place_id: string;
@@ -27,8 +27,7 @@ export function AddressInput({
   placeholder = "Ingresa la dirección",
   value = "",
 }: AddressInputProps) {
-  const searchParams = useSearchParams();
-  const params = new URLSearchParams(searchParams);
+  const [params] = useSearchParams();
   const [query, setQuery] = useState(params.get("city") || "");
   const [mapValue, setMapValue] = useState(value || "");
   const [predictions, setPredictions] = useState<Prediction[]>([]);
@@ -41,7 +40,9 @@ export function AddressInput({
   useEffect(() => {
     const loadScript = () => {
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_APIMAPS}&libraries=places`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${
+        import.meta.env.VITE_NEXT_PUBLIC_APIMAPS
+      }&libraries=places`;
       script.async = true;
       document.head.appendChild(script);
       script.onload = () => {

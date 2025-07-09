@@ -4,12 +4,14 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface MainState extends IStoreState {
   firstLoad: boolean;
+  crossCompanyId?: string;
 }
 
 const initialState: MainState = {
   firstLoad: false,
   loading: true,
   fetched: false,
+  crossCompanyId: "",
 };
 
 export const mainSlice = createSlice({
@@ -19,10 +21,13 @@ export const mainSlice = createSlice({
     setMainFetched: (state, action: PayloadAction<boolean>) => {
       state.fetched = action.payload;
     },
+    setCrossMainCompany: (state, action: PayloadAction<string>) => {
+      state.crossCompanyId = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setMainFetched } = mainSlice.actions;
+export const { setMainFetched, setCrossMainCompany } = mainSlice.actions;
 
 export default mainSlice.reducer;

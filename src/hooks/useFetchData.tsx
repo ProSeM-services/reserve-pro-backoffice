@@ -26,20 +26,49 @@ import {
   toggleServiceLoading,
 } from "@/store/feature/services/servicesSlice";
 import { setMainFetched } from "@/store/feature/main/mainSlice";
-import { useAppDispatch } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSession } from "@/store/feature/session/sessionSlice";
-import { AuthServices } from "@/services/auth.services";
+import { memberListAdpater } from "@/adapters/members.adapter";
+import { appointmentListAdpater } from "@/adapters/appointments.adpater";
+import { customersListAdpater } from "@/adapters/customers.adapter";
+import { IAPICustomer } from "@/interfaces/api/customer.interface";
+import { IUser } from "@/interfaces";
+import {
+  setPayments,
+  togglePaymentsLoading,
+} from "@/store/feature/payments/paymentSlice";
+import { PaymentServices } from "@/services/payment.services";
+import {
+  setPaymentPlans,
+  togglePaymentPlansLoading,
+} from "@/store/feature/payment-plans/paymentPlanSlice";
+import { PaymentPlanServices } from "@/services/payment-plans.service";
 
 export default function useFetchData() {
+  const storageMember = localStorage.getItem("userLogged");
+  const member = storageMember ? (JSON.parse(storageMember) as IUser) : null;
+
   const dispatch = useAppDispatch();
   const setMainLoaderStatus = (status: boolean) => {
     dispatch(setMainFetched(status));
+  };
+
+  const fetchPayments = async () => {
+    try {
+      dispatch(togglePaymentsLoading(true));
+      const payments = await PaymentServices.getPayments();
+      dispatch(setPayments({ payments, fromServer: true }));
+    } catch (error) {
+      console.log("Error fetching Paymetns", error);
+    } finally {
+      dispatch(togglePaymentsLoading(false));
+    }
   };
   const fetchCompanies = async () => {
     try {
       dispatch(toggleCompanyLoading(true));
       const companies = await CompanyServices.getCompanies();
-      dispatch(setCompanies(companies));
+      dispatch(setCompanies({ companies, fromServer: true }));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
@@ -50,7 +79,9 @@ export default function useFetchData() {
     try {
       dispatch(toggleMembersLoading(true));
       const members = await MemberServices.getMembers();
-      dispatch(setMembers(members));
+      dispatch(
+        setMembers({ members: memberListAdpater(members), fromServer: true })
+      );
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
@@ -61,18 +92,54 @@ export default function useFetchData() {
     try {
       dispatch(toggleServiceLoading(true));
       const services = await ServicesServices.getAll();
-      dispatch(setServices(services));
+      dispatch(setServices({ services, fromServer: true }));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
       dispatch(toggleServiceLoading(false));
     }
   };
+
+  const fetchPaymentsPlans = async () => {
+    try {
+      dispatch(togglePaymentPlansLoading(true));
+      const plans = await PaymentPlanServices.getAll();
+      dispatch(setPaymentPlans({ paymentPlans: plans, fromServer: true }));
+    } catch (error) {
+      console.log("Error fetching Payment Plans", error);
+    } finally {
+      dispatch(togglePaymentPlansLoading(false));
+    }
+  };
   const fetchCustomers = async () => {
     try {
+      if (!member) return;
+      const role = member.role;
       dispatch(toggleCustomersLoading(true));
       const customers = await CustomerServices.getAll();
-      dispatch(setCustomers(customers));
+      if (role === "BASIC") {
+        const filteredCustomers = customers
+          .map((customer) => {
+            const memberAppointmnets = customer.Appointments.filter(
+              (app) => app.UserId === member.id
+            );
+
+            if (memberAppointmnets.length > 0) {
+              const res: IAPICustomer = {
+                ...customer,
+                Appointments: memberAppointmnets,
+              };
+
+              return res;
+            }
+          })
+          .filter((e) => e !== undefined);
+
+        console.log("Filtered Customers", filteredCustomers);
+        dispatch(setCustomers(customersListAdpater(filteredCustomers)));
+      } else {
+        dispatch(setCustomers(customersListAdpater(customers)));
+      }
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
@@ -81,10 +148,30 @@ export default function useFetchData() {
   };
   const fetchAppointments = async () => {
     try {
+      if (!member) return;
+      const role = member.role;
       dispatch(toggleAppointmentsLoading(true));
       const { appointments, limit, offset, page, total } =
         await AppointmentServices.getAll();
-      dispatch(setAppointments(appointments));
+
+      if (role === "BASIC") {
+        const filteredAppointmnets = appointments.filter(
+          (app) => app.UserId === member.id
+        );
+        dispatch(
+          setAppointments({
+            appointments: appointmentListAdpater(filteredAppointmnets),
+            fromServer: true,
+          })
+        );
+      } else {
+        dispatch(
+          setAppointments({
+            appointments: appointmentListAdpater(appointments),
+            fromServer: true,
+          })
+        );
+      }
       dispatch(setAppointmentsTableData({ limit, offset, page, total }));
     } catch (error) {
       console.log("Error fetching Companies", error);
@@ -92,29 +179,77 @@ export default function useFetchData() {
       dispatch(toggleAppointmentsLoading(false));
     }
   };
+
   const fetchCompanyData = async (id: string) => {
     try {
       dispatch(toggleAppointmentsLoading(true));
-      const appointment = await CompanyServices.getCopanyById(id);
-      dispatch(setSelectedCompany(appointment));
+      const company = await CompanyServices.getCopanyById(id);
+      dispatch(setSelectedCompany(company.id));
     } catch (error) {
       console.log("Error fetching Companies", error);
     } finally {
       dispatch(toggleAppointmentsLoading(false));
     }
   };
-  const fetchMemberLogged = async () => {
-    try {
-      dispatch(toggleMembersLoading(true));
-      const member = await AuthServices.me();
-      dispatch(setSession(member));
-    } catch (error) {
-      console.log("Error fetching Member logged", error);
-    } finally {
-      dispatch(toggleMembersLoading(false));
+  const fetchMemberLogged = (member: IUser) => {
+    dispatch(setSession(member));
+  };
+  const { inmutablesCompanies } = useAppSelector((s) => s.company);
+  const { inmutableMembers } = useAppSelector((s) => s.member);
+  const { inmutablesAppointments } = useAppSelector((s) => s.appointments);
+
+  const setCrossCompanyData = (companyId: string) => {
+    if (companyId === "all") {
+      dispatch(
+        setCompanies({
+          companies: inmutablesCompanies,
+          fromServer: false,
+        })
+      );
+      dispatch(
+        setMembers({
+          members: inmutableMembers,
+          fromServer: false,
+        })
+      );
+      dispatch(
+        setAppointments({
+          appointments: inmutablesAppointments,
+          fromServer: false,
+        })
+      );
+      return;
     }
+    dispatch(
+      setCompanies({
+        companies: inmutablesCompanies.filter((e) => e.id === companyId),
+        fromServer: false,
+      })
+    );
+    dispatch(
+      setMembers({
+        members: inmutableMembers.filter((e) => e.CompanyId === companyId),
+        fromServer: false,
+      })
+    );
+    dispatch(
+      setAppointments({
+        appointments: inmutablesAppointments.filter(
+          (e) => e.companyId === companyId
+        ),
+        fromServer: false,
+      })
+    );
+  };
+  const clearStore = () => {
+    dispatch(setCompanies({ companies: [] }));
+    dispatch(setMembers({ members: [] }));
+    dispatch(setAppointments({ appointments: [] }));
+    dispatch(setServices({ services: [] }));
+    dispatch(setCustomers([]));
   };
   return {
+    clearStore,
     fetchCompanies,
     fetchMembers,
     fetchCustomers,
@@ -123,5 +258,8 @@ export default function useFetchData() {
     fetchAppointments,
     fetchCompanyData,
     fetchMemberLogged,
+    setCrossCompanyData,
+    fetchPayments,
+    fetchPaymentsPlans,
   };
 }

@@ -1,8 +1,8 @@
 import { setAuthInterceptor } from "@/config/axios.config";
-import { PropsWithChildren, useEffect } from "react";
+import { Fragment, PropsWithChildren, useEffect } from "react";
 import { useAppSelector } from "@/store/hooks";
-import { BarLoader } from "@/components/common/bar-loader";
 import useFetchData from "@/hooks/useFetchData";
+import { LoaderMain } from "../common/loader-main";
 
 export default function DataProvider({ children }: PropsWithChildren) {
   const {
@@ -12,33 +12,43 @@ export default function DataProvider({ children }: PropsWithChildren) {
     fetchServices,
     fetchAppointments,
     setMainLoaderStatus,
-    fetchMemberLogged,
+    setCrossCompanyData,
+    fetchPayments,
+    fetchPaymentsPlans,
   } = useFetchData();
 
   const { fetched: companyFetched } = useAppSelector((s) => s.company);
-  const { fetched: membersFetched } = useAppSelector((s) => s.member);
+  const { fetched: paymentsPlansFetched } = useAppSelector(
+    (s) => s.paymentsPlans
+  );
+  const { fetched: membersFetched, memberLogged } = useAppSelector(
+    (s) => s.member
+  );
   const { fetched: customerFetched } = useAppSelector((s) => s.customers);
   const { fetched: servicesFetched } = useAppSelector((s) => s.service);
-  const { fetched: mainFetched } = useAppSelector((s) => s.main);
-  const { fetched: sessionFetched, session } = useAppSelector((s) => s.session);
+  const { fetched: mainFetched, crossCompanyId } = useAppSelector(
+    (s) => s.main
+  );
 
   const { fetched: appointmentsFetched } = useAppSelector(
     (s) => s.appointments
   );
+  const { fetched: paymentsFetched } = useAppSelector((s) => s.payments);
 
+  const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
     if (!accessToken) return;
     const fetchData = async () => {
       try {
         setMainLoaderStatus(false);
         await setAuthInterceptor(accessToken);
-        !companyFetched && (await fetchCompanies());
         !membersFetched && (await fetchMembers());
+        !companyFetched && (await fetchCompanies());
         !customerFetched && (await fetchCustomers());
         !servicesFetched && (await fetchServices());
         !appointmentsFetched && (await fetchAppointments());
-        !sessionFetched && !session && (await fetchMemberLogged());
+        !paymentsFetched && (await fetchPayments());
+        !paymentsPlansFetched && (await fetchPaymentsPlans());
       } catch (error) {
         console.log("error fetching data", error);
       } finally {
@@ -46,22 +56,15 @@ export default function DataProvider({ children }: PropsWithChildren) {
       }
     };
     fetchData();
-  }, []);
+  }, [memberLogged]);
+  useEffect(() => {
+    if (!crossCompanyId) return;
+    setCrossCompanyData(crossCompanyId);
+  }, [crossCompanyId]);
   if (!mainFetched)
     return (
-      <div className=" size-full overflow-hidden">
-        <div className=" h-full max-h-full max-md:max-h-[92%]     overflow-hidden rounded-md p-4">
-          <div className="flex items-center justify-center h-screen  relative">
-            <BarLoader />
-            <div className="relative">
-              {/* Fondo de la animación */}
-              <div className="absolute  inset-0  bg-gradient-to-r from-primary via-green-600 to-grenn-500 blur-xl rounded-full animate-pulse"></div>
-              {/* Círculo animado:  border-4 border-t-4 border-t-primary border-primary/25 rounded-full animate-spin */}
-              <div className="size-16"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      // THIS IS THE LOADER DISPLAYED WHEN THE DATA IS COMING FROM THE SERVER AT THE FIRST LOAD OF THE WEB APP
+      <LoaderMain />
     );
-  return <div className=" size-full">{children}</div>;
+  return <Fragment>{children}</Fragment>;
 }
