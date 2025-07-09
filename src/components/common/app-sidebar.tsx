@@ -16,13 +16,13 @@ import {
 } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
-import { CompanySwitcher } from "./company-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Permission } from "@/lib/constants/permissions";
 
@@ -124,10 +124,15 @@ const routes = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { open } = useSidebar();
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <CompanySwitcher />
+        {open && (
+          <div className="  flex items-center justify-center ">
+            <img src="/images/logo-text.png" className="h-[60px] " />
+          </div>
+        )}
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={routes.navMain} />

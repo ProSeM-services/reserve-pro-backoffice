@@ -82,6 +82,7 @@ export function AppointmentStats() {
           dateLimits.year
         );
         setChartConfig(createChartConfig(res));
+
         setData(res);
         dispatch(setAppointmentsStats(res));
         dispatch(setINITIAL_DATE_LIMIT(dateLimits));
@@ -112,6 +113,9 @@ export function AppointmentStats() {
         </div>
       </Card>
     );
+
+  const monthsList = MONTHS.slice(dateLimits.start, dateLimits.end + 1);
+
   return (
     <Card className=" w-full h-full max-md:h-[500px] flex flex-col justify-between  border-border ">
       <CardHeader>
@@ -203,9 +207,9 @@ export function AppointmentStats() {
               <XAxis
                 dataKey="month"
                 tickLine={false}
-                tickMargin={2}
+                tickMargin={0}
                 axisLine={false}
-                tickFormatter={(_, i) => MONTHS[i].slice(0, 3)}
+                tickFormatter={(_, i) => monthsList[i]?.slice(0, 3) || ""}
               />
               <ChartTooltip
                 cursor={false}

@@ -19,7 +19,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
         setLoading(true);
         await setAuthInterceptor(accessToken);
         const res = await AuthServices.me();
-        console.log("RES /ME", res);
         fetchMemberLogged(res);
         if (res.role === "MASTER") {
           nav("/admin");

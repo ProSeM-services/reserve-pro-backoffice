@@ -8,7 +8,7 @@ export function LoaderMain() {
 
             <div className=" h-full w-full flex items-center justify-center">
               <img
-                src="/images/reserve-pro-high-resolution-logo-transparent.png"
+                src="/images/rp-logo.png"
                 className="w-[250px] object-cover"
               />
             </div>

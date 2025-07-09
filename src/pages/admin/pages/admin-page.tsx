@@ -30,7 +30,7 @@ export function AdminPage() {
             >
               <div className=" size-[100px] flex items-center justify-center">
                 <img
-                  src="/images/reserve-pro-high-resolution-logo-transparent.png"
+                  src="/images/rp-logo.png"
                   className="w-[100%] object-cover"
                 />
               </div>

@@ -19,7 +19,7 @@ export function DashboardPage() {
         <TabsContent value="stats" className="h-full  ">
           <DashboardStats />
         </TabsContent>
-        <TabsContent value="we" className=" ">
+        <TabsContent value="we" className=" h-full ">
           <DashboardWe />
         </TabsContent>
       </Tabs>

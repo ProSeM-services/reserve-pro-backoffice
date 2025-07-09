@@ -109,7 +109,7 @@ export function DashboardCard({ type }: DashboardCardProps) {
 
   const { Component, label, count, permission } = Config[type];
   return (
-    <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] relative  h-full max-h-[70vh] ">
+    <Card className="flex flex-col   p-2 gap-2  max-sm:w-full  max-sm:max-w-full flex-grow max-md:max-w-[50%] md:max-w-[33%]  min-w-[250px] relative  h-full max-h-full">
       <CardHeader>
         <CardTitle>{label}</CardTitle>
         <CardDescription>Total de {label} creados</CardDescription>
