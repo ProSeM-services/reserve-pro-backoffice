@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
+import { ICreateSubscription } from "@/interfaces/subscription.schema";
 import { formatCurrency } from "@/lib/utils/format-currency";
-import { EnterpiseServices } from "@/services/enterprise.services";
+import { SubscriptionServices } from "@/services/subscription.service";
 import { useAppSelector } from "@/store/hooks";
 import { useState } from "react";
 
@@ -20,9 +21,21 @@ export function PlanSelector() {
     try {
       setLoading(true);
 
-      await EnterpiseServices.update(enterprise.id, {
-        payment_plan: selectedPlan.id,
-      });
+      const endDate = new Date();
+      endDate.setMonth(endDate.getMonth() + 1);
+
+      const data: ICreateSubscription = {
+        amount: selectedPlan.price,
+        billingCycle: "monthly",
+        discountApplied: 0,
+        endDate: endDate.toISOString(),
+        startDate: new Date().toISOString(),
+        EnterpriseId: enterprise.id,
+        PlanId: selectedPlan.id,
+        status: "active",
+      };
+
+      await SubscriptionServices.create(data);
       toast({
         title: "Plan de pago seleccionado",
       });

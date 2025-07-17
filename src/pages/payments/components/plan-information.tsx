@@ -17,6 +17,7 @@ import { PlanSelector } from "./plan-selector";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
 import { FromatedDate } from "@/lib/format-date";
+import { ISubscription } from "@/interfaces/subscription.schema";
 type TPlanOption = {
   period: string;
   amount: number;
@@ -24,10 +25,10 @@ type TPlanOption = {
   discount?: number;
 };
 export function PlanInformation() {
-  const { enterprise } = useAppSelector((s) => s.enterprise);
   const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
+  const { currentSubscription } = useAppSelector((s) => s.subscription);
 
-  if (!enterprise.payment_plan)
+  if (!currentSubscription)
     return (
       <Card>
         <CardHeader>
@@ -47,15 +48,25 @@ export function PlanInformation() {
     );
 
   const paymentPlan = paymentsPlans.filter(
-    (plan) => plan.id === enterprise.payment_plan
+    (plan) => plan.id === currentSubscription.PlanId
   )[0];
 
-  return <PaymentPlanData paymentPlan={paymentPlan} />;
+  return (
+    <PaymentPlanData
+      currentSubscription={currentSubscription}
+      paymentPlan={paymentPlan}
+    />
+  );
 }
 
-function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
-  const { payments } = useAppSelector((s) => s.payments);
-  const mensualValue = paymentPlan.price;
+function PaymentPlanData({
+  currentSubscription,
+  paymentPlan,
+}: {
+  currentSubscription: ISubscription;
+  paymentPlan: PaymentPlan;
+}) {
+  const mensualValue = currentSubscription.amount;
 
   const options: TPlanOption[] = [
     { period: "Mensual", amount: mensualValue, frequency: 1 },
@@ -69,8 +80,8 @@ function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
     { period: "Anual", amount: mensualValue * 12, frequency: 12 },
   ];
   const [selectedOption, setSelectedOption] = useState<TPlanOption>(options[0]);
-  const lastPayment = payments[payments.length - 1];
 
+  if (!paymentPlan) return;
   return (
     <Card className="p-4  rounded-lg flex flex-col gap-4 text-sm ">
       <CardHeader>
@@ -84,36 +95,27 @@ function PaymentPlanData({ paymentPlan }: { paymentPlan: PaymentPlan }) {
               </div>
               <div className="flex items-center gap-2">
                 <p>ID del plan</p>
-                <strong>{paymentPlan.id.slice(0, 10)}</strong>
+                <strong>{currentSubscription.id.slice(0, 10)}</strong>
               </div>
               <div className="flex items-center gap-2">
                 <p>Proximo vencimiento</p>
                 <strong>
-                  {lastPayment ? (
-                    <FromatedDate date={lastPayment.end_date} />
-                  ) : (
-                    "-"
-                  )}
+                  <FromatedDate date={currentSubscription.endDate} />
                 </strong>
               </div>
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <p>Estado del plan</p>
-                <strong>{paymentPlan.isActive ? "Activo" : "Inactivo"}</strong>
+                <strong>{currentSubscription.status}</strong>
               </div>
               <div className="flex items-center gap-2">
                 <p>Valor Mensual:</p>
-                <strong>{formatCurrency(paymentPlan.price)}</strong>
+                <strong>{formatCurrency(currentSubscription.amount)}</strong>
               </div>
               <div className="flex items-center gap-2">
                 <p>Período de pago</p>
-                <strong>
-                  Cada{" "}
-                  {paymentPlan.duration > 1
-                    ? `${paymentPlan.duration} meses`
-                    : "1 mes"}{" "}
-                </strong>
+                <strong>Cada {currentSubscription.billingCycle}</strong>
               </div>
             </div>
           </section>
