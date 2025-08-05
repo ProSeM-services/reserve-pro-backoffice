@@ -55,8 +55,10 @@ export function AddButton({ type, size = "lg" }: AddButtonProps) {
     const paymentPlan = paymentsPlans.filter(
       (p) => p.id === enterprise.payment_plan
     )[0];
-    if (!paymentPlan) return false;
-
+    if (!paymentPlan) {
+      //SI NO TIENE PLAN SOLAMENTE SE PUEDE SI NO TIENE COMPANIES!
+      return companies.length === 0;
+    }
     return paymentPlan.company_limit > companies.length;
   };
   const message = "Tu plan seleccionado no te permite crear nuevas sucursales.";

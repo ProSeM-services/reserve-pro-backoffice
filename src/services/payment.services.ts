@@ -16,6 +16,7 @@ export class PaymentServices {
     email: string;
     amount: number;
     frequency: number;
+    plan_id: string;
   }): Promise<{ init_point: string }> {
     const res = await axiosInstance.post(
       `${BASE_URL}/payments/subscribe`,

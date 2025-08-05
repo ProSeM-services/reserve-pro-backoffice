@@ -1,53 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
-import { ICreateSubscription } from "@/interfaces/subscription.schema";
 import { formatCurrency } from "@/lib/utils/format-currency";
-import { SubscriptionServices } from "@/services/subscription.service";
 import { useAppSelector } from "@/store/hooks";
 import { useState } from "react";
 
-export function PlanSelector() {
+export function PlanSelector({
+  selectPlan,
+}: {
+  selectPlan: (data: PaymentPlan) => void;
+}) {
   const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
-  const { enterprise } = useAppSelector((s) => s.enterprise);
 
   const [selectedPlan, setSelectedPlan] = useState<PaymentPlan>();
-  const [loading, setLoading] = useState(false);
 
-  const { toast } = useToast();
   const handleSubmitNewPlan = async () => {
     if (!selectedPlan) return;
-    try {
-      setLoading(true);
+    selectPlan(selectedPlan);
 
-      const endDate = new Date();
-      endDate.setMonth(endDate.getMonth() + 1);
-
-      const data: ICreateSubscription = {
-        amount: selectedPlan.price,
-        billingCycle: "monthly",
-        discountApplied: 0,
-        endDate: endDate.toISOString(),
-        startDate: new Date().toISOString(),
-        EnterpriseId: enterprise.id,
-        PlanId: selectedPlan.id,
-        status: "active",
-      };
-
-      await SubscriptionServices.create(data);
-      toast({
-        title: "Plan de pago seleccionado",
-      });
-    } catch (error) {
-      console.log("Error selecting new payment plan");
-      toast({
-        title: "Error al seleccionar plan de pago",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    return;
   };
 
   const handleSelectPlan = (plan: PaymentPlan) => {
@@ -83,11 +54,7 @@ export function PlanSelector() {
         ))}
       </div>
 
-      <Button
-        disabled={!selectedPlan}
-        isLoading={loading}
-        onClick={handleSubmitNewPlan}
-      >
+      <Button disabled={!selectedPlan} onClick={handleSubmitNewPlan}>
         Confirmar
       </Button>
     </section>

@@ -28,6 +28,40 @@ export function PlanInformation() {
   const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
   const { currentSubscription } = useAppSelector((s) => s.subscription);
 
+  const paymentPlan = paymentsPlans.filter(
+    (plan) => plan.id === currentSubscription?.PlanId
+  )[0];
+  const [selectedPlan, setSelectedPlan] = useState<PaymentPlan>(); //state for select plan fpr new customers
+  if (selectedPlan) {
+    return (
+      <Card>
+        <CardHeader>
+          <Alert className="border-sky-400 text-sky-500">
+            <AlertTitle>Plan seleccionado</AlertTitle>
+            <AlertDescription>
+              Has seleccionad el plan : {selectedPlan.name}
+            </AlertDescription>
+          </Alert>
+        </CardHeader>
+
+        <CardContent>
+          <section className=" w-full flex  justify-end">
+            <div className="flex flex-col gap-2 items-center">
+              <Label className="text-sm">Importe a pagar</Label>
+              <p className="text-xl text-indigo-500 font-semibold">
+                {formatCurrency(selectedPlan.price)}
+              </p>
+              <SubscribeButton
+                amount={selectedPlan.price}
+                frequency={1}
+                plan_id={selectedPlan.id}
+              />
+            </div>
+          </section>
+        </CardContent>
+      </Card>
+    );
+  }
   if (!currentSubscription)
     return (
       <Card>
@@ -42,14 +76,10 @@ export function PlanInformation() {
         </CardHeader>
 
         <CardContent>
-          <PlanSelector />
+          <PlanSelector selectPlan={setSelectedPlan} />
         </CardContent>
       </Card>
     );
-
-  const paymentPlan = paymentsPlans.filter(
-    (plan) => plan.id === currentSubscription.PlanId
-  )[0];
 
   return (
     <PaymentPlanData
@@ -166,6 +196,7 @@ function PaymentPlanData({
             <SubscribeButton
               amount={selectedOption.amount}
               frequency={selectedOption.frequency}
+              plan_id={paymentPlan.id}
             />
           </div>
         </section>

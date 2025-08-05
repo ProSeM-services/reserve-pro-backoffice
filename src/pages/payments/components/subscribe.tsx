@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { PaymentPlan } from "@/interfaces/payment-plans.interface";
 import { PaymentServices } from "@/services/payment.services";
 import { useState } from "react";
 interface SubscribeButtonProps {
   amount: number;
   frequency: number;
+  plan_id: PaymentPlan["id"];
 }
-export function SubscribeButton({ amount, frequency }: SubscribeButtonProps) {
+export function SubscribeButton({
+  amount,
+  frequency,
+  plan_id,
+}: SubscribeButtonProps) {
   const [loading, setLoading] = useState(false);
   const hanldleSubscribe = async () => {
     try {
@@ -15,6 +21,7 @@ export function SubscribeButton({ amount, frequency }: SubscribeButtonProps) {
         email,
         amount,
         frequency,
+        plan_id,
       });
 
       location.replace(suscription.init_point!);
