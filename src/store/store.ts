@@ -12,6 +12,7 @@ import enterpriseReducer from "./feature/enterprise/enterpriseSlice";
 import paymentsReducer from "./feature/payments/paymentSlice";
 import notificationReducer from "./feature/notifications/notificationsSlice";
 import paymentPlansReducer from "./feature/payment-plans/paymentPlanSlice";
+import subscriptionReducer from "./feature/subscription/subscriptionSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -29,6 +30,7 @@ export const makeStore = () => {
       payments: paymentsReducer,
       notifications: notificationReducer,
       paymentsPlans: paymentPlansReducer,
+      subscription: subscriptionReducer,
     },
   });
 };

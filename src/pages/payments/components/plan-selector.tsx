@@ -1,40 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
 import { formatCurrency } from "@/lib/utils/format-currency";
-import { EnterpiseServices } from "@/services/enterprise.services";
 import { useAppSelector } from "@/store/hooks";
 import { useState } from "react";
 
-export function PlanSelector() {
+export function PlanSelector({
+  selectPlan,
+}: {
+  selectPlan: (data: PaymentPlan) => void;
+}) {
   const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
-  const { enterprise } = useAppSelector((s) => s.enterprise);
 
   const [selectedPlan, setSelectedPlan] = useState<PaymentPlan>();
-  const [loading, setLoading] = useState(false);
 
-  const { toast } = useToast();
   const handleSubmitNewPlan = async () => {
     if (!selectedPlan) return;
-    try {
-      setLoading(true);
+    selectPlan(selectedPlan);
 
-      await EnterpiseServices.update(enterprise.id, {
-        payment_plan: selectedPlan.id,
-      });
-      toast({
-        title: "Plan de pago seleccionado",
-      });
-    } catch (error) {
-      console.log("Error selecting new payment plan");
-      toast({
-        title: "Error al seleccionar plan de pago",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
+    return;
   };
 
   const handleSelectPlan = (plan: PaymentPlan) => {
@@ -70,11 +54,7 @@ export function PlanSelector() {
         ))}
       </div>
 
-      <Button
-        disabled={!selectedPlan}
-        isLoading={loading}
-        onClick={handleSubmitNewPlan}
-      >
+      <Button disabled={!selectedPlan} onClick={handleSubmitNewPlan}>
         Confirmar
       </Button>
     </section>

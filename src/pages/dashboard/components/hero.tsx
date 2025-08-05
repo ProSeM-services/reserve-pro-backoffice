@@ -8,8 +8,10 @@ export default function Hero() {
   const { member } = useSession();
   const { enterprise } = useAppSelector((s) => s.enterprise);
   const { notifications } = useAppSelector((s) => s.notifications);
+  const { currentSubscription } = useAppSelector((s) => s.subscription);
 
   const { daysLeft, isInTrial } = checkTrialStatus(enterprise.createdAt);
+
   return (
     <header className="flex  justify-between h-full  items-center  w-full ">
       <h2 className="font-medium text-xl max-md:text-sm ">
@@ -17,7 +19,7 @@ export default function Hero() {
       </h2>
 
       <div className="flex items-center gap-2">
-        {isInTrial && !enterprise.payment_plan && (
+        {isInTrial && !currentSubscription && (
           <div className="rounded-md p-2 bg-green-200 text-green-600">
             Quedan {daysLeft} días de prueba
           </div>

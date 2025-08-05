@@ -1,11 +1,28 @@
-import { useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { CreatePaymentSheet } from "../components/create-payment";
 import { PaymentsTable } from "../components/payment-table/payment-table";
 import { PaymentList } from "../components/payment-list";
 import { PlanInformation } from "../components/plan-information";
+import { useEffect } from "react";
+import { SubscriptionServices } from "@/services/subscription.service";
+import { setCurrentSubscription } from "@/store/feature/subscription/subscriptionSlice";
 
 export function PaymentPage() {
   const { payments } = useAppSelector((s) => s.payments);
+  const { fetched } = useAppSelector((s) => s.subscription);
+  const {
+    enterprise: { id },
+  } = useAppSelector((s) => s.enterprise);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (fetched) return;
+    const fetchSubscription = async () => {
+      const res = await SubscriptionServices.getSubscription(id);
+      dispatch(setCurrentSubscription(res));
+    };
+
+    fetchSubscription();
+  }, []);
   return (
     <div className="space-y-4">
       <section className=" flex justify-between items-center">

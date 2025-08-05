@@ -1,5 +1,4 @@
 import { FromatedDate } from "@/lib/format-date";
-import { SubscribeButton } from "./subscribe";
 import { formatCurrency } from "@/lib/utils/format-currency";
 
 export function CreatePaymentForm() {
@@ -44,7 +43,6 @@ export function CreatePaymentForm() {
           <hr />
         </div>
       </section>
-      <SubscribeButton amount={20000} frequency={1} />
     </div>
   );
 }
