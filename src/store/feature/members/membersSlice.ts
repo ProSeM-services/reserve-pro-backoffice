@@ -82,6 +82,14 @@ export const memberSlice = createSlice({
         }
       }
     },
+    removeMember: (state, action: PayloadAction<string>) => {
+      state.members = state.members.filter(
+        (service) => service.id !== action.payload
+      );
+      state.inmutableMembers = state.inmutableMembers.filter(
+        (service) => service.id !== action.payload
+      );
+    },
   },
 });
 
@@ -94,6 +102,7 @@ export const {
   setMemberUpdated,
   updateMember,
   setAccounts,
+  removeMember,
 } = memberSlice.actions;
 
 export default memberSlice.reducer;

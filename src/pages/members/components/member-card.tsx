@@ -17,6 +17,7 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import { useAppSelector } from "@/store/hooks";
+import { DeleteMember } from "./delete-member";
 
 interface MemberCardProps {
   member: IUser;
@@ -80,7 +81,12 @@ export function MemberCard({ member, type = "details" }: MemberCardProps) {
                 {type === "read" ? null : (
                   <>
                     {type === "details" && (
-                      <OpenMemberDetails member={member} />
+                      <div>
+                        <OpenMemberDetails member={member} />
+                        {member.role !== "OWNER" && (
+                          <DeleteMember member={member} />
+                        )}
+                      </div>
                     )}
                     {type === "invite" && <SendInviteUser member={member} />}
                   </>

@@ -43,6 +43,8 @@ import {
   togglePaymentPlansLoading,
 } from "@/store/feature/payment-plans/paymentPlanSlice";
 import { PaymentPlanServices } from "@/services/payment-plans.service";
+import { SubscriptionServices } from "@/services/subscription.service";
+import { setCurrentSubscription } from "@/store/feature/subscription/subscriptionSlice";
 
 export default function useFetchData() {
   const storageMember = localStorage.getItem("userLogged");
@@ -180,6 +182,11 @@ export default function useFetchData() {
     }
   };
 
+  const fetchSubscription = async (enterpriseId: string) => {
+    const res = await SubscriptionServices.getSubscription(enterpriseId);
+    dispatch(setCurrentSubscription(res));
+  };
+
   const fetchCompanyData = async (id: string) => {
     try {
       dispatch(toggleAppointmentsLoading(true));
@@ -261,5 +268,6 @@ export default function useFetchData() {
     setCrossCompanyData,
     fetchPayments,
     fetchPaymentsPlans,
+    fetchSubscription,
   };
 }
