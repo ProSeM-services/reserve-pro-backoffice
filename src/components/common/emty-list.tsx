@@ -70,7 +70,7 @@ export function EmptyList({
     },
     "no-members-to-add": {
       title: "Equipo vacío",
-      description: "No hay más miembros en tu equipo para que puedas agregar",
+      description: "",
       Icon: UserRoundX,
     },
     "no-services-to-add": {

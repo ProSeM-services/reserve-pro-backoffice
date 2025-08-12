@@ -156,9 +156,9 @@ export function CompanyForm() {
               name="name"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Company Name</FormLabel>
+                  <FormLabel>Nombre de la sucursal</FormLabel>
                   <FormControl>
-                    <Input placeholder="Company Name" {...field} />
+                    <Input placeholder="Nombre" {...field} />
                   </FormControl>
 
                   <FormMessage />
@@ -189,7 +189,7 @@ export function CompanyForm() {
             name="address"
             render={() => (
               <FormItem>
-                <FormLabel>Address</FormLabel>
+                <FormLabel>Dirección</FormLabel>
                 <FormControl>
                   <AddressInput
                     value={form.getValues("address")}
@@ -237,7 +237,7 @@ export function CompanyForm() {
             render={() => (
               <FormItem>
                 <FormLabel>Agregar miembros</FormLabel>
-                <FormDescription className="text-xs">
+                <FormDescription className="text-sm">
                   Seleccionar los miembros que serán parte de esta sucursal
                 </FormDescription>
                 <div className="flex flex-col gap-2">
@@ -276,57 +276,59 @@ export function CompanyForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="servicesIds"
-            render={() => (
-              <FormItem>
-                <FormLabel>Agregar servicios</FormLabel>
-                <FormDescription className="text-xs">
-                  Seleccionar los servicios que serán parte de esta sucursal
-                </FormDescription>
-                <div className="flex flex-col gap-2">
-                  {inmutableServices.map((service) => (
-                    <div
-                      key={service.id}
-                      onClick={() => handleAddService(service.id)}
-                      className="flex items-center gap-2 cursor-pointer pr-4"
-                    >
+          {inmutableServices.length === 0 ? null : (
+            <FormField
+              control={form.control}
+              name="servicesIds"
+              render={() => (
+                <FormItem>
+                  <FormLabel>Agregar servicios</FormLabel>
+                  <FormDescription className="text-sm">
+                    Seleccionar los servicios que serán parte de esta sucursal
+                  </FormDescription>
+                  <div className="flex flex-col gap-2">
+                    {inmutableServices.map((service) => (
                       <div
-                        className={`rounded transition-all duration-300 ${
-                          servicesToAdd.includes(service.id)
-                            ? " bg-blue-200 p-2"
-                            : "p-0 "
-                        }`}
+                        key={service.id}
                         onClick={() => handleAddService(service.id)}
+                        className="flex items-center gap-2 cursor-pointer pr-4"
                       >
-                        <Check
+                        <div
                           className={`rounded transition-all duration-300 ${
                             servicesToAdd.includes(service.id)
-                              ? "size-4 text-blue-500"
-                              : "size-0"
+                              ? " bg-blue-200 p-2"
+                              : "p-0 "
                           }`}
-                        />
-                      </div>
+                          onClick={() => handleAddService(service.id)}
+                        >
+                          <Check
+                            className={`rounded transition-all duration-300 ${
+                              servicesToAdd.includes(service.id)
+                                ? "size-4 text-blue-500"
+                                : "size-0"
+                            }`}
+                          />
+                        </div>
 
-                      <div className="flex items-center gap-2 border flex-grow rounded-xl p-2 bg-muted">
-                        <p className="">{service.title}</p>
+                        <div className="flex items-center gap-2 border flex-grow rounded-xl p-2 bg-muted">
+                          <p className="">{service.title}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="category"
             render={() => (
               <FormItem>
                 <FormLabel>Categorías</FormLabel>
-                <FormDescription className="text-xs">
+                <FormDescription className="text-sm">
                   Min 1 - Max 3
                 </FormDescription>
 
@@ -335,7 +337,9 @@ export function CompanyForm() {
                     <div
                       key={category}
                       onClick={() => handleCategories(category)}
-                      className={`flex items-center  gap-2 cursor-pointer transition-all duration-300`}
+                      className={`flex items-center  gap-2 cursor-pointer transition-all duration-300 ${
+                        categoryList.includes(category) ? "" : "opacity-85"
+                      }`}
                     >
                       <div
                         className={`rounded transition-all duration-300 ${
@@ -369,15 +373,17 @@ export function CompanyForm() {
             render={() => (
               <FormItem>
                 <FormLabel>Métodos de pago</FormLabel>
-                <FormDescription className="text-xs">
-                  Métodos de pago aceptados por esta sucursal
+                <FormDescription className="text-sm">
+                  Seleccion los métodos de pago aceptados por esta sucursal
                 </FormDescription>
                 <div className="flex flex-col gap-4">
                   {PAYMENTS_VALUES.map((method) => (
                     <div
                       key={method}
                       onClick={() => handlePaymentMethods(method)}
-                      className="flex items-center gap-2 cursor-pointer"
+                      className={`flex items-center gap-2 cursor-pointer ${
+                        paymentMethods.includes(method) ? "" : "opacity-85"
+                      }`}
                     >
                       <div
                         className={`rounded transition-all duration-300 ${
