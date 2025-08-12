@@ -25,10 +25,12 @@ export const CreateServiceZodSchema = ServiceZodSchema.omit({
   id: true,
   Users: true,
   companyId: true,
+  companies: true,
 });
 export const UpdateServiceZodSchema = ServiceZodSchema.omit({
   id: true,
   Users: true,
+  companies: true,
 }).partial();
 
 export type IService = z.infer<typeof ServiceZodSchema>;
