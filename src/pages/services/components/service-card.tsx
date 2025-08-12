@@ -9,6 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useAppSelector } from "@/store/hooks";
 interface ServiceCardProps {
   service: IService;
   readonly?: boolean;
@@ -22,11 +23,29 @@ export const ServiceCard = ({
   readonly = false,
   showMembers = false,
 }: ServiceCardProps) => {
+  const { inmutablesCompanies } = useAppSelector((s) => s.company);
+
+  const servicesCompanies = inmutablesCompanies.filter((s) =>
+    s.Services?.some((s) => s.id === service.id)
+  );
   return (
     <Card className="w-full ">
       <CardHeader>
         <div className="flex justify-between w-full items-center  ">
-          <CardTitle>{service.title}</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            {service.title}
+
+            {!servicesCompanies.length && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <TriangleAlert className="size-5 text-orange-600" />
+                </TooltipTrigger>
+                <TooltipContent className=" bg-orange-200">
+                  <p>Este servicio no está asignadoa ninguna sucursal</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </CardTitle>
 
           {!readonly && <ServiceCardDropDown service={service} />}
         </div>

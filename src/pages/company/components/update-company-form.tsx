@@ -1,4 +1,4 @@
-import { CompanyZodSchema, ICompany } from "@/interfaces";
+import { CompanyEditSchema, ICompany, IEditCompany } from "@/interfaces";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -37,14 +37,13 @@ export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
   const { editCompany } = useCreatingFetch();
   const { toast } = useToast();
 
-  const form = useForm<Partial<ICompany>>({
-    resolver: zodResolver(CompanyZodSchema),
+  const form = useForm<Partial<IEditCompany>>({
+    resolver: zodResolver(CompanyEditSchema),
     mode: "onChange",
     defaultValues: company,
   });
 
-  const onSubmit = async (values: Partial<ICompany>) => {
-    console.log("VALUES TO UPDATE: ", values);
+  const onSubmit = async (values: Partial<IEditCompany>) => {
     try {
       setLoading(true);
       await editCompany(company.id, values);
