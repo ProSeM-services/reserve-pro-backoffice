@@ -145,14 +145,14 @@ function PaymentPlanData({
               </div>
               <div className="flex items-center gap-2">
                 <p>Período de pago</p>
-                <strong>Cada {currentSubscription.billingCycle}</strong>
+                <strong>Cada Mes</strong>
               </div>
             </div>
           </section>
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="hidden">
         <section className="space-y-4">
           <Label className="text-lg">Formas de pago</Label>
           <CardDescription>

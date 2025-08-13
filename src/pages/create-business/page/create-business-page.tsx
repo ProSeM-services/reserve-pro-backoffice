@@ -32,7 +32,7 @@ export function CreateBusinessPage() {
       address: "",
       name: "",
       email: "",
-      company_count: 0,
+      company_count: 1,
     },
   });
 
@@ -115,19 +115,7 @@ export function CreateBusinessPage() {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="company_count"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Cantidad de sucursales</FormLabel>
-                  <FormControl>
-                    <Input placeholder="0" {...field} type="number" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <FormField
               control={form.control}
               name="address"

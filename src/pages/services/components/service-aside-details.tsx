@@ -8,6 +8,7 @@ import { BarLoader } from "@/components/common/bar-loader";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { Label } from "@/components/ui/label";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { EmptyList } from "@/components/common/emty-list";
 
 export default function ServiceAsideDetails({
   service,
@@ -33,24 +34,26 @@ export default function ServiceAsideDetails({
       <div className="space-y-2 relative">
         {deleting && <BarLoader />}
         <Label>Miembros</Label>
-        {service.Users.length
-          ? service.Users.map((user) => (
-              <div className="flex items-center gap-2  w-full" key={user.id}>
-                <Button
-                  disabled={deleting}
-                  size={"icon"}
-                  variant={"ghost"}
-                  className="size-8"
-                  onClick={() => handleDeleteMember(user.id)}
-                >
-                  <TrashIcon className="size-3" />
-                </Button>
-                <MemberCard member={user} type="read" />
-              </div>
-            ))
-          : null}
+        {service.Users.length ? (
+          service.Users.map((user) => (
+            <div className="flex items-center gap-2  w-full" key={user.id}>
+              <Button
+                disabled={deleting}
+                size={"icon"}
+                variant={"ghost"}
+                className="size-8"
+                onClick={() => handleDeleteMember(user.id)}
+              >
+                <TrashIcon className="size-3" />
+              </Button>
+              <MemberCard member={user} type="read" />
+            </div>
+          ))
+        ) : (
+          <EmptyList type="no-members-to-add" />
+        )}
         <div className="">
-          <Label>Agregar</Label>
+          <Label>Agregar Miembros a este servicio</Label>
           <AddMembertoServiceAside service={service} />
         </div>
       </div>

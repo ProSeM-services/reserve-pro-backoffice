@@ -1,3 +1,4 @@
+import { ImageDialogViewer } from "@/components/common/image-dialog-viewer";
 import { LoaderSpinner } from "@/components/common/loader-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -5,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { ICompany } from "@/interfaces";
-import { getS3Url } from "@/lib/utils/s3-image";
 import { FilesServices } from "@/services/files.services";
 import { PlusCircle, TrashIcon } from "lucide-react";
 import { useRef, useState } from "react";
@@ -19,7 +19,6 @@ export function CompanyImages({ company }: CompanyImagesProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [preview, setPreview] = useState<{ name: string; src: string }[]>([]);
   const [loading, setLoading] = useState(false);
-
   const originalImages = company?.images ? company.images : [];
   const handleButtonClick = () => {
     if (fileInputRef.current) {
@@ -45,7 +44,23 @@ export function CompanyImages({ company }: CompanyImagesProps) {
     setFiles((s) => s.filter((f) => f.name !== value));
     setPreview((s) => s.filter((f) => f.name !== value));
   };
+
   const { editCompany } = useCreatingFetch();
+
+  const handleDeleteImageFromDb = async (image: string) => {
+    try {
+      await FilesServices.detele(image);
+      await editCompany(company.id, {
+        images: company.images.filter((e) => e !== image),
+      });
+      toast({
+        title: "Imagen elimanda correctamente",
+        variant: "success",
+      });
+    } catch (error) {
+      console.log("Error deleting image", error);
+    }
+  };
   const onSubmit = async () => {
     if (files.length === 0) return;
     try {
@@ -53,11 +68,12 @@ export function CompanyImages({ company }: CompanyImagesProps) {
       const allImagesToAdd = files.map((value) => FilesServices.upload(value));
       const response = await Promise.all(allImagesToAdd);
 
-      const data = { images: response.map((re) => re.fileName) };
+      const data = {
+        images: [...company.images, ...response.map((re) => re.fileName)],
+      };
 
       await editCompany(company.id, data);
 
-      console.log("company data", company);
       setPreview([]);
       toast({
         title: "Sucursal Actualizada!",
@@ -90,18 +106,18 @@ export function CompanyImages({ company }: CompanyImagesProps) {
       <div className="flex gap-2 flex-wrap">
         {originalImages &&
           originalImages.length > 0 &&
-          originalImages.map((image, index) => (
-            <img
-              key={index}
-              src={getS3Url(image)}
-              alt={`Imagen ${index + 1}`}
-              className="w-32 h-32 object-cover rounded"
-            />
+          originalImages.map((image) => (
+            <div key={`img-reservepro-${image}`} className="relative">
+              <ImageDialogViewer
+                image={image}
+                handleDelete={handleDeleteImageFromDb}
+              />
+            </div>
           ))}
         {preview.length > 0 && (
           <div className="flex gap-2 items-center">
             {preview.map(({ name, src }) => (
-              <div>
+              <div key={`name: ${name}`}>
                 {!loading ? (
                   <div className="relative">
                     {" "}

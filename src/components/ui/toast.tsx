@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ToastPrimitives from "@radix-ui/react-toast";
 import { cva, type VariantProps } from "class-variance-authority";
-import { X } from "lucide-react";
+import { AlertCircle, CheckCircle2, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
@@ -28,7 +28,7 @@ const toastVariants = cva(
     variants: {
       variant: {
         default: "border bg-background text-foreground",
-        success: "bg-primary text-white border border-accent",
+        success: "border bg-background text-foreground",
         destructive:
           "destructive group border-destructive bg-destructive text-destructive-foreground",
       },
@@ -43,13 +43,32 @@ const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
+>(({ className, variant, children, ...props }, ref) => {
+  const renderIcon = () => {
+    switch (variant) {
+      case "default":
+        return <CheckCircle2 className=" size-8 text-green-500" />;
+      case "success":
+        return <CheckCircle2 className=" size-8 text-green-500" />;
+      case "destructive":
+        return <AlertCircle className=" size-8 text-red-500" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <ToastPrimitives.Root
       ref={ref}
       className={cn(toastVariants({ variant }), className)}
       {...props}
-    />
+    >
+      {/* Contenido con ícono a la izquierda */}
+      <div className="flex items-start gap-3">
+        {renderIcon()}
+        <div className="flex flex-col">{children}</div>
+      </div>
+    </ToastPrimitives.Root>
   );
 });
 Toast.displayName = ToastPrimitives.Root.displayName;

@@ -32,8 +32,8 @@ export function SalesStats() {
         <CardTitle>Turnos confirmados</CardTitle>
         <CardDescription>Turnos realizados y cobrados</CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-col gap-4">
+      <CardContent className="h-[80%]">
+        <div className="flex flex-col gap-4 h-full max-h-full overflow-auto">
           {confirmedAppointments.map((appointment) => (
             <div className="flex justify-between" key={appointment.id}>
               <div className="flex gap-2">

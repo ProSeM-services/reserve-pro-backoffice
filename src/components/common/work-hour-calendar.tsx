@@ -36,7 +36,7 @@ export function WorkHourCalendar({ workhours }: WorkHourCalendarProps) {
           <div className=" flex items-center h-10">{time}</div>
         ))}
       </div>
-      <div className="grid grid-cols-7  w-full h-full gap-1 mx-1">
+      <div className="grid grid-cols-7 bg-white  w-full h-full gap-1 mx-1">
         {week.map((weekItem) => (
           <div key={weekItem.long}>
             <div
@@ -58,7 +58,7 @@ export function WorkHourCalendar({ workhours }: WorkHourCalendarProps) {
                       <div
                         className={`${
                           isActive
-                            ? `bg-sky-500 h-10 text-white flex items-center px-2  ${
+                            ? `bg-indigo-500 h-10 text-white flex items-center px-2  ${
                                 i === HOURS_VALUES.indexOf(segment.startime)
                                   ? "rounded-t"
                                   : i === HOURS_VALUES.indexOf(segment.endTime)

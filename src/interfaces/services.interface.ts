@@ -17,6 +17,7 @@ export const ServiceZodSchema = z.object({
   images: z.array(z.string()).default([]).nullable(),
   provision: z.enum(PROVISION_VALUES),
   Users: z.array(UserSchema),
+  companies: z.array(z.any()),
   companyId: z.string().optional(),
 });
 
@@ -24,10 +25,12 @@ export const CreateServiceZodSchema = ServiceZodSchema.omit({
   id: true,
   Users: true,
   companyId: true,
+  companies: true,
 });
 export const UpdateServiceZodSchema = ServiceZodSchema.omit({
   id: true,
   Users: true,
+  companies: true,
 }).partial();
 
 export type IService = z.infer<typeof ServiceZodSchema>;

@@ -46,10 +46,7 @@ export default function useCreatingFetch() {
     try {
       //   dispatch(toggleCompanyLoading(true));
 
-      await CompanyServices.updateCompany(
-        id,
-        data.image ? data : { ...data, image: "" }
-      );
+      await CompanyServices.updateCompany(id, data);
 
       dispatch(updateCompany({ id, changes: data }));
     } catch (error) {

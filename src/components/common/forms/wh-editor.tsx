@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IWorkhour, Segment } from "@/interfaces";
 import { Button } from "@/components/ui/button";
-import { CopyCheck, Edit, Minus, PlusIcon } from "lucide-react";
+import { CalendarCog, CopyCheck, Minus, PlusIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
 import {
@@ -24,7 +24,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { WorkHourCalendar } from "../work-hour-calendar";
 import { HOURS_VALUES } from "@/constants/work-hours/hour-values";
 import {
   Popover,
@@ -214,8 +213,6 @@ export const WorkhoursEditor: React.FC<{
         handleSave={handleSave}
         updating={updating}
       />
-
-      <WorkHourCalendar workhours={workhours ? workhours : []} />
     </div>
   );
 };
@@ -258,9 +255,11 @@ function EditWorkHourAside({
     <AuthorizationWrapper permission={Permission.UPDATE_WORKHOURS}>
       <Sheet>
         <Popover></Popover>
-        <SheetTrigger className="flex items-center gap-2 text-[14px] font-medium bg-accent rounded px-4 p-2">
-          <p>Editar</p>
-          <Edit className="size-4" />
+        <SheetTrigger>
+          <Button className="flex items-center gap-2 ">
+            <p>Editar Horarios</p>
+            <CalendarCog className="size-4" />
+          </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
@@ -400,12 +399,16 @@ function EditWorkHourAside({
                                     onClick={() => handleDaySelection(w.long)}
                                     variant="secondary"
                                     className={`flex gap-2 justify-start ${
-                                      !w.selected ? "opacity-15" : ""
+                                      !w.selected ? "opacity-50" : ""
                                     }`}
                                     // disabled={!w.selected}
                                   >
+                                    <CopyCheck
+                                      className={` transition-all duration-300 ${
+                                        w.selected ? "size-4" : "size-0"
+                                      }`}
+                                    />
                                     <p>{w.long}</p>
-                                    {/* <CopyCheck className="size-4" /> */}
                                   </Button>
                                 ))}
 

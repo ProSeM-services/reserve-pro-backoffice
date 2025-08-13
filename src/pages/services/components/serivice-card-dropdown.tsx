@@ -23,19 +23,13 @@ export function ServiceCardDropDown({ service }: { service: IService }) {
       <DropdownMenuContent>
         <DropdownMenuLabel>{service.title}</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() =>
-            dispatch(setAside({ open: true, service, type: "add-member" }))
-          }
-        >
-          Agregar Miembro
-        </DropdownMenuItem>
+
         <DropdownMenuItem
           onClick={() =>
             dispatch(setAside({ open: true, service, type: "details" }))
           }
         >
-          Ver Detalles
+          Agregar Miembro
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() =>

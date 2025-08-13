@@ -6,6 +6,7 @@ import {
   PackageCheck,
   Contact,
   UserSearch,
+  CircleDollarSignIcon,
 } from "lucide-react";
 import { BarLoader } from "./bar-loader";
 export type ILoadingWrapper =
@@ -13,7 +14,8 @@ export type ILoadingWrapper =
   | "members"
   | "services"
   | "customers"
-  | "appointments";
+  | "appointments"
+  | "payments";
 interface LoaderWrapperProps extends PropsWithChildren {
   type: ILoadingWrapper;
   loading: boolean;
@@ -42,6 +44,10 @@ const Config: Record<ILoadingWrapper, IConfig> = {
   services: {
     icon: PackageCheck,
     text: "servicios",
+  },
+  payments: {
+    icon: CircleDollarSignIcon,
+    text: "Pagos",
   },
 };
 

@@ -17,6 +17,11 @@ export function AccountDefinitionPage() {
       return;
     }
   };
+
+  const convertValue = (value: AccountType) => {
+    if (value === "BUSSINESS") return "negocio";
+    if (value === "PROFESSIONAL") return "profesional";
+  };
   return (
     <div className="w-full min-h-screen h-screen     overflow-hidden  flex flex-col gap-4 justify-center items-center  ">
       <Label className="text-2xl">¿Qué tipo de cuenta deseas crear?</Label>
@@ -24,11 +29,11 @@ export function AccountDefinitionPage() {
         {ACCOUNT_TYPE_VALUES.map((value) => (
           <Button
             key={value}
-            className="h-32 text-lg aspect-video"
+            className="h-32 text-lg aspect-video uppercase"
             variant={"secondary"}
             onClick={() => handleSelectType(value)}
           >
-            {value}
+            {convertValue(value)}
           </Button>
         ))}
       </div>

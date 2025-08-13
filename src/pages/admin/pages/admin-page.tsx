@@ -29,10 +29,7 @@ export function AdminPage() {
             "
             >
               <div className=" size-[100px] flex items-center justify-center">
-                <img
-                  src="/images/rp-logo.png"
-                  className="w-[100%] object-cover"
-                />
+                <img src="/images/logo.svg" className="w-[100%] object-cover" />
               </div>
             </SidebarHeader>
             <SidebarContent>

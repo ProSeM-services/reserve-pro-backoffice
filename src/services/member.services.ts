@@ -62,4 +62,9 @@ export class MemberServices {
 
     return res.data;
   }
+  static async delete(id: string) {
+    const res = await axiosInstance.delete(`${BASE_URL}/user/${id}`);
+
+    return res.data;
+  }
 }

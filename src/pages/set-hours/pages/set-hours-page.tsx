@@ -16,6 +16,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IUser } from "@/interfaces";
 import { EmptyList } from "@/components/common/emty-list";
+import { WorkHourCalendar } from "@/components/common/work-hour-calendar";
 export function SetHoursPage() {
   const { members } = useAppSelector((s) => s.member);
   const { companies } = useAppSelector((s) => s.company);
@@ -59,36 +60,39 @@ export function SetHoursPage() {
         </TabsList>
       )}
       <TabsContent value="members" className="flex flex-col gap-2 h-[90%] ">
-        {!hasPermission(member, Permission.UPDATE_WORKHOURS) &&
-        member.role !== "OWNER" &&
-        member.role !== "ADMIN" ? (
-          <MemberCard member={selectedMember} type="read" />
-        ) : (
-          <Select
-            value={selectedMember.id}
-            onValueChange={(value) => handleSelectMember(value)}
-          >
-            <SelectTrigger className="">
-              <SelectValue placeholder="Inicio" />
-            </SelectTrigger>
-            <SelectContent>
-              {members.map((member) => (
-                <SelectItem value={member.id} key={member.id} className="">
-                  <div className="flex items-center gap-4 p-1">
-                    <MemberAvatar member={member} size="xs" />
-                    <p>{member.fullName}</p>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
-        <section className=" flex-grow   ">
+        <div className="flex items-center gap-4">
+          {!hasPermission(member, Permission.UPDATE_WORKHOURS) &&
+          member.role !== "OWNER" &&
+          member.role !== "ADMIN" ? (
+            <MemberCard member={selectedMember} type="read" />
+          ) : (
+            <Select
+              value={selectedMember.id}
+              onValueChange={(value) => handleSelectMember(value)}
+            >
+              <SelectTrigger className="">
+                <SelectValue placeholder="Inicio" />
+              </SelectTrigger>
+              <SelectContent>
+                {members.map((member) => (
+                  <SelectItem value={member.id} key={member.id} className="">
+                    <div className="flex items-center gap-4 p-1">
+                      <MemberAvatar member={member} size="xs" />
+                      <p>{member.fullName}</p>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
           <WorkhoursEditor
             id={selectedMember.id}
             type={"member"}
             workhours={selectedMember.workhours}
           />
+        </div>
+        <section className=" flex-grow   ">
+          <WorkHourCalendar workhours={selectedMember.workhours || []} />
         </section>
       </TabsContent>
       {companies.length && selectedCompany && (
@@ -96,27 +100,30 @@ export function SetHoursPage() {
           value="company"
           className="flex flex-col gap-2 h-[90%] -mt-1"
         >
-          <Select
-            value={selectedCompany.id}
-            onValueChange={handleSelectCompany}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecciona una sucursal" />
-            </SelectTrigger>
-            <SelectContent>
-              {companies.map((s) => (
-                <SelectItem value={s.id} key={s.id}>
-                  {s.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <section className="flex-grow ">
+          <div className="flex items-center gap-4">
+            <Select
+              value={selectedCompany.id}
+              onValueChange={handleSelectCompany}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecciona una sucursal" />
+              </SelectTrigger>
+              <SelectContent>
+                {companies.map((s) => (
+                  <SelectItem value={s.id} key={s.id}>
+                    {s.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <WorkhoursEditor
               id={selectedCompany.id}
               type="company"
               workhours={selectedCompany.workhours}
             />
+          </div>
+          <section className="flex-grow ">
+            <WorkHourCalendar workhours={selectedCompany.workhours || []} />
           </section>
         </TabsContent>
       )}

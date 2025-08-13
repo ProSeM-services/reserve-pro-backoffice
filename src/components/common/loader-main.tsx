@@ -7,10 +7,7 @@ export function LoaderMain() {
             <div className="absolute  inset-10  bg-gradient-to-r from-blue-600 to-indigo-500  blur-[100px] size-[170px] rounded-full animate-pulse outline"></div>
 
             <div className=" h-full w-full flex items-center justify-center">
-              <img
-                src="/images/rp-logo.png"
-                className="w-[250px] object-cover"
-              />
+              <img src="/images/logo.svg" className="w-[250px] object-cover" />
             </div>
           </div>
         </div>

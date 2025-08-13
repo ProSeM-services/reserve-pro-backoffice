@@ -7,7 +7,7 @@ export function ContentWrapper({ children }: PropsWithChildren) {
     <div
       className={`p-4  flex-grow ${isMobile && "w-[98dvw]"}   ${
         open && !isMobile ? "max-w-[85vw]" : "max-w-full "
-      } max-h-[90vh] overflow-auto aspect-square`}
+      } max-h-[94vh] overflow-auto bg-accent/50`}
     >
       {children}
     </div>
