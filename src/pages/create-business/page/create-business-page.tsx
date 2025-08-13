@@ -71,6 +71,7 @@ export function CreateBusinessPage() {
     );
   }
 
+  console.log("FOMR SATE", form.formState.errors);
   return (
     <div className="mx-auto flex justify-center items-center h-full">
       <BackgroundMark />
