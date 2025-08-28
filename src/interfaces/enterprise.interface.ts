@@ -1,3 +1,4 @@
+import { ENTERPRISE_STATUS_VALUES } from "@/constants/enterprise-status.constants";
 import { z } from "zod";
 export const EnterpriseSchema = z.object({
   id: z.string(),
@@ -8,6 +9,7 @@ export const EnterpriseSchema = z.object({
   company_limit: z.number(),
   payment_plan: z.string().optional(),
   createdAt: z.string(),
+  status: z.enum(ENTERPRISE_STATUS_VALUES),
 });
 export type IEnterprise = z.infer<typeof EnterpriseSchema>;
 export const CreateEnterpriseSchema = z.object({

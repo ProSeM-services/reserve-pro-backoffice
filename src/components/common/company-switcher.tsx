@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronsUpDown } from "lucide-react";
+import { BriefcaseBusiness, ChevronsUpDown, GitBranch } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/sidebar";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
-import { AudioWaveform } from "lucide-react";
 import LoaderWrapper from "./loader-wrapper";
 import { useToast } from "../ui/use-toast";
 import { ICompany } from "@/interfaces";
@@ -75,21 +74,24 @@ export function CompanySwitcher() {
             side={isMobile ? "bottom" : "right"}
             sideOffset={4}
           >
-            <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Sucursales
-            </DropdownMenuLabel>
             <LoaderWrapper loading={loading} type="company">
+              <DropdownMenuLabel className="text-xs text-muted-foreground">
+                Negocio
+              </DropdownMenuLabel>
               <DropdownMenuItem
                 key={"todas"}
                 onClick={() => handleSelectCompany(enterprise?.name || "")}
                 className="gap-2 p-2     cursor-pointer"
               >
                 <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <AudioWaveform className="size-4 shrink-0" />
+                  <BriefcaseBusiness className="size-4 shrink-0" />
                 </div>
                 {enterprise?.name}
                 <DropdownMenuShortcut>Negocio</DropdownMenuShortcut>
               </DropdownMenuItem>
+              <DropdownMenuLabel className="text-xs text-muted-foreground">
+                Sucursales
+              </DropdownMenuLabel>
               {inmutablesCompanies.map((option, index) => (
                 <DropdownMenuItem
                   key={option.name}
@@ -97,7 +99,7 @@ export function CompanySwitcher() {
                   className="gap-2 p-2 cursor-pointer"
                 >
                   <div className="flex size-6 items-center justify-center rounded-sm border">
-                    <AudioWaveform className="size-4 shrink-0" />
+                    <GitBranch className="size-4 shrink-0" />
                   </div>
                   {option.name}
                   <DropdownMenuShortcut>
