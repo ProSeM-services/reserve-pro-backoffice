@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { formatCurrency } from "@/lib/utils/format-currency";
 const INITIAL_SERVICE_DATA: ICreateService = {
   duration: 0,
   price: 0,
@@ -135,6 +136,10 @@ export function CreateServicesForm() {
                     onChange={(e) => handlePrice(parseInt(e.target.value))}
                   />
                 </FormControl>
+                <FormDescription>
+                  Valor del servicio por turno:{" "}
+                  {formatCurrency(form.getValues("price") || 0)}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

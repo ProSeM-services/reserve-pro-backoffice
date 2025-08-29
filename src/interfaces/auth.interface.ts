@@ -1,3 +1,4 @@
+import { EnterpriseStatus } from "@/constants/enterprise-status.constants";
 import { IUser } from "./user.interface";
 
 export interface ILoginResponse {
@@ -7,4 +8,5 @@ export interface ILoginResponse {
     refreshToken: string;
     expiresIn: number;
   };
+  enterpriseStatus: EnterpriseStatus | null;
 }

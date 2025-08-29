@@ -25,6 +25,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Permission } from "@/lib/constants/permissions";
+import { useAppSelector } from "@/store/hooks";
 
 const routes = {
   user: {
@@ -125,6 +126,33 @@ const routes = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open } = useSidebar();
+  const { enterprise } = useAppSelector((s) => s.enterprise);
+
+  const inactiveRoutes = {
+    user: {
+      name: "shadcn",
+      email: "m@example.com",
+      avatar: "/avatars/shadcn.jpg",
+    },
+    navMain: [
+      {
+        title: "Configuraciones",
+        url: "#",
+        icon: Settings2,
+        items: [
+          {
+            title: "Subscripcion",
+            url: "/payments",
+            permission: Permission.VIEW_PAYMENTS,
+            icon: CalendarCheck,
+          },
+        ],
+      },
+    ],
+  };
+  const routesList =
+    enterprise.status === "INACTIVE" ? inactiveRoutes.navMain : routes.navMain;
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -135,7 +163,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         )}
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={routes.navMain} />
+        <NavMain items={routesList} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

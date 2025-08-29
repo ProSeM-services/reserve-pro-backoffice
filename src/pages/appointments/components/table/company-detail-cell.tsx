@@ -1,4 +1,5 @@
 import { useAppSelector } from "@/store/hooks";
+import { House } from "lucide-react";
 export default function CompanyDetailCell({
   companyId,
 }: {
@@ -11,7 +12,7 @@ export default function CompanyDetailCell({
   if (!company) return;
   return (
     <div className=" flex items-center gap-2  ">
-      <p>{company.name}</p>
+      <House className="size-4" /> <p>{company.name}</p>
     </div>
   );
 }

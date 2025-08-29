@@ -1,4 +1,4 @@
-export function WhatsAppIcon({ width = 14 }: { width?: number }) {
+export function WhatsAppIcon({ width = 14 }: { width?: number | string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

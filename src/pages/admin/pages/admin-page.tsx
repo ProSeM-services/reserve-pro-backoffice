@@ -20,7 +20,7 @@ import { PaymentPlansPage } from "./payment-plans-page";
 export function AdminPage() {
   const location = useLocation();
   return (
-    <div className="h-full w-full  flex flex-col  overflow-hidden     ">
+    <div className="h-[100dvh] w-full  flex flex-col  overflow-hidden  ">
       <SessionProvider>
         <SidebarProvider>
           <Sidebar collapsible="icon" className="h-full  ">
@@ -55,7 +55,7 @@ export function AdminPage() {
               >
                 <DollarSignIcon className="size-4" />
 
-                <span>Palnes</span>
+                <span>Planes</span>
               </Link>
             </SidebarContent>
             <SidebarFooter>
@@ -64,16 +64,18 @@ export function AdminPage() {
             <SidebarRail />
           </Sidebar>
           <AdminDataProvider>
-            <div className=" h-full w-full p-6   flex flex-col gap-4">
-              <section className="h-[5vh] flex justify-between items-center gap-4 border rounded-md  p-4 ">
+            <div className=" h-full w-full p-6   flex flex-col gap-4  ">
+              <section className="h-[5vh] flex justify-between items-center gap-4 border rounded-md  p-4  ">
                 <SidebarTrigger className="-ml-1" />
                 <NotificationsButton />
               </section>
-              <Routes>
-                <Route path="/" element={<AdminDashboardPage />} />
-                <Route path="/payment-plans" element={<PaymentPlansPage />} />
-                <Route path="*" element={<h2> NOT FOUND</h2>} />
-              </Routes>
+              <section className=" flex-1 overflow-auto max-h-[90dvh] ">
+                <Routes>
+                  <Route path="/" element={<AdminDashboardPage />} />
+                  <Route path="/payment-plans" element={<PaymentPlansPage />} />
+                  <Route path="*" element={<h2> NOT FOUND</h2>} />
+                </Routes>
+              </section>
             </div>
           </AdminDataProvider>
         </SidebarProvider>

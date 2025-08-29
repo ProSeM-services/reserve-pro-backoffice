@@ -33,8 +33,8 @@ export default function ServiceAsideDetails({
 
       <div className="space-y-2 relative">
         {deleting && <BarLoader />}
-        <Label>Miembros</Label>
-        {service.Users.length ? (
+        <Label>Miembros dentro del servicio : {service.title}</Label>
+        {service.Users && service.Users.length ? (
           service.Users.map((user) => (
             <div className="flex items-center gap-2  w-full" key={user.id}>
               <Button
