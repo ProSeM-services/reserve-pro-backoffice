@@ -21,6 +21,7 @@ export function PaymentPage() {
     if (fetched) return;
     const fetchSubscription = async () => {
       setLoading(true);
+      console.log("ID", id);
       const res = await SubscriptionServices.getSubscription(id);
       dispatch(setCurrentSubscription(res));
       setLoading(false);

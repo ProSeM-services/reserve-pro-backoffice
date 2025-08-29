@@ -32,10 +32,16 @@ export function LoginForm() {
         user: values.user,
         password: values.password,
       });
-      if (res.user && !res.user.membership_status) {
+
+      if (
+        res.user &&
+        res.user.role !== "OWNER" &&
+        res.enterpriseStatus === "INACTIVE"
+      ) {
         toast({
           title: "Cuenta inactiva",
           variant: "destructive",
+          description: `No pudimos completar el inicio de sesión porque el negocio al que pertenecés se encuentra inactivo por falta de pago.`,
         });
         return;
       }
@@ -47,6 +53,14 @@ export function LoginForm() {
       localStorage.setItem("accessToken", res.backendTokens.accessToken);
       localStorage.setItem("userLogged", JSON.stringify(res.user));
 
+      if (
+        res.user &&
+        res.user.role === "OWNER" &&
+        res.enterpriseStatus === "INACTIVE"
+      ) {
+        location.replace("/payments");
+        return;
+      }
       if (res.user.role === "MASTER") {
         location.replace("/admin");
         return;

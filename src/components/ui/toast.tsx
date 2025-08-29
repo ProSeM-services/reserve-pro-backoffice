@@ -30,7 +30,7 @@ const toastVariants = cva(
         default: "border bg-background text-foreground",
         success: "border bg-background text-foreground",
         destructive:
-          "destructive group border-destructive bg-destructive text-destructive-foreground",
+          "destructive group border-destructive text-destructive bg-background",
       },
     },
     defaultVariants: {
@@ -65,7 +65,7 @@ const Toast = React.forwardRef<
     >
       {/* Contenido con ícono a la izquierda */}
       <div className="flex items-start gap-3">
-        {renderIcon()}
+        <div>{renderIcon()}</div>
         <div className="flex flex-col">{children}</div>
       </div>
     </ToastPrimitives.Root>
