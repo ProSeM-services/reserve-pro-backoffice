@@ -16,9 +16,7 @@ export function SubscribeButton({
   const hanldleSubscribe = async () => {
     try {
       setLoading(true);
-      const email = "test_user_906562990@testuser.com";
       const suscription = await PaymentServices.subscribe({
-        email,
         amount,
         frequency,
         plan_id,
