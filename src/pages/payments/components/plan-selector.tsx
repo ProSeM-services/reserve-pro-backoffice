@@ -29,24 +29,28 @@ export function PlanSelector({
   };
   return (
     <section className="flex flex-col gap-2 items-start">
-      <div className="flex  gap-4 justify-center w-full">
+      <div className="flex  md:gap-4 gap-1 justify-center w-full flex-wrap">
         {paymentsPlans.map((plan) => (
           <Card
             key={plan.id}
             onClick={() => handleSelectPlan(plan)}
-            className={`text-center cursor-pointer transition-all duration-300  ${
+            className={`text-center cursor-pointer transition-all duration-300 max-md:w-[45%]  ${
               selectedPlan?.name === plan.name
                 ? " w-1/2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white shadow-lg hover:brightness-110 "
                 : " w-1/4 text-gray-500"
             }`}
           >
             <CardHeader>
-              <CardTitle className="text-xl">{plan.name}</CardTitle>
+              <CardTitle className="text-xl max-md:text-xs">
+                {plan.name}
+              </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-2">
-              <strong className="text-xl">{formatCurrency(plan.price)}</strong>
+              <strong className="text-xl max-md:text-lg ">
+                {formatCurrency(plan.price)}
+              </strong>
 
-              <p className="text-[14px]">
+              <p className="text-[14px] max-md:text-xs">
                 Este plan te permite crear {plan.company_limit} sucursales
               </p>
             </CardContent>

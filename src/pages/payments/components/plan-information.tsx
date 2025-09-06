@@ -45,7 +45,7 @@ export function PlanInformation() {
         </CardHeader>
 
         <CardContent>
-          <section className=" w-full flex  justify-end">
+          <section className=" w-full flex  justify-end ">
             <div className="flex flex-col gap-2 items-center">
               <Label className="text-sm">Importe a pagar</Label>
               <p className="text-xl text-indigo-500 font-semibold">

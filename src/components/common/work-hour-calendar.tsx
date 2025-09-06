@@ -36,15 +36,15 @@ export function WorkHourCalendar({ workhours }: WorkHourCalendarProps) {
           <div className=" flex items-center h-10">{time}</div>
         ))}
       </div>
-      <div className="grid grid-cols-7 bg-white  w-full h-full gap-1 mx-1">
+      <div className="grid grid-cols-7  bg-white  w-full h-full gap-1 mx-1 max-md:max-w-full overflow-x-auto">
         {week.map((weekItem) => (
-          <div key={weekItem.long}>
+          <div key={weekItem.long} className=" w-full">
             <div
               className={`flex gap-2 items-center  justify-center p-2 border text-center h-10 ${
                 weekItem.selected && "bg-primary text-white"
               }`}
             >
-              <Label className="uppercase">{weekItem.long}</Label>
+              <Label className="uppercase">{weekItem.long} </Label>
             </div>
 
             <div className="flex  flex-col w-full border   ">

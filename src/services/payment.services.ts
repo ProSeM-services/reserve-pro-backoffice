@@ -13,7 +13,6 @@ export class PaymentServices {
     return res.data;
   }
   static async subscribe(body: {
-    email: string;
     amount: number;
     frequency: number;
     plan_id: string;
