@@ -13,7 +13,6 @@ import { PaymentCard } from "@/components/common/payment-card";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { AddImageCompany } from "../components/add-image-company";
-import { CompanyImages } from "../components/company-images";
 import { LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -38,7 +37,7 @@ export function CompanyDetailPage() {
     }
   };
   return (
-    <div className="flex flex-col gap-4 md:flex-grow relative p-4  max-md:max-w-full ">
+    <div className="flex flex-col gap-4  container  relative p-4  max-md:max-w-full max-h-full overflow-auto ">
       <div className="flex max-md:flex-col  gap-2 md:items-center justify-between  ">
         <div className="flex items-center gap-2">
           <div className="flex flex-col">
@@ -121,11 +120,6 @@ export function CompanyDetailPage() {
           <AddToCompany company={company} type="service" />
         </div>
         <CompnayServicesList company={company} />
-      </section>
-
-      {/* ---------------------------- WORKHOURS SECTION ---------------------------- */}
-      <section className="max-md:w-[90%]">
-        <CompanyImages company={company} />
       </section>
     </div>
   );
