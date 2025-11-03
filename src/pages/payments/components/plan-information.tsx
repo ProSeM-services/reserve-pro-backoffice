@@ -12,12 +12,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAppSelector } from "@/store/hooks";
-import { AlertCircleIcon } from "lucide-react";
 import { PlanSelector } from "./plan-selector";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
 import { FromatedDate } from "@/lib/format-date";
 import { ISubscription } from "@/interfaces/subscription.schema";
+import { EmptyList } from "@/components/common/emty-list";
 type TPlanOption = {
   period: string;
   amount: number;
@@ -66,13 +66,7 @@ export function PlanInformation() {
     return (
       <Card>
         <CardHeader>
-          <Alert>
-            <AlertCircleIcon />
-            <AlertTitle>Sin Plan seleccionado</AlertTitle>
-            <AlertDescription>
-              Puedes seleccionar un plan para asignarlo a tu negocio.
-            </AlertDescription>
-          </Alert>
+          <EmptyList type="no-subscription" />
         </CardHeader>
 
         <CardContent>

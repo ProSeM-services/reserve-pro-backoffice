@@ -23,7 +23,7 @@ function Filters() {
         <MemberSelector />
       </div>
       <AuthorizationWrapper permission={Permission.VIEW_COMPANY}>
-        <div className="w-[300px] max-md:w-full">
+        <div className="w-[300px] max-md:w-full ">
           <CompanySelector />
         </div>
       </AuthorizationWrapper>

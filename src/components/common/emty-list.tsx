@@ -7,6 +7,7 @@ import {
   ListX,
   LucideProps,
   Navigation,
+  SquareKanban,
   UserRoundX,
   Users2Icon,
   UserSquare,
@@ -14,30 +15,20 @@ import {
 import { Link } from "react-router";
 import { Button } from "../ui/button";
 
-export function EmptyList({
-  type,
-}: {
-  type:
-    | "paymentPlan"
-    | "member"
-    | "company"
-    | "service"
-    | "customer"
-    | "no-members-to-add"
-    | "appointments"
-    | "no-services-to-add"
-    | "no-incomes";
-}) {
+type TType =
+  | "paymentPlan"
+  | "member"
+  | "company"
+  | "service"
+  | "customer"
+  | "no-members-to-add"
+  | "appointments"
+  | "no-services-to-add"
+  | "no-incomes"
+  | "no-subscription";
+export function EmptyList({ type }: { type: TType }) {
   const Config: Record<
-    | "member"
-    | "paymentPlan"
-    | "company"
-    | "service"
-    | "customer"
-    | "no-members-to-add"
-    | "appointments"
-    | "no-services-to-add"
-    | "no-incomes",
+    TType,
     {
       Icon: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
@@ -94,6 +85,11 @@ export function EmptyList({
       title: "Vacío",
       description: "No hay pagos realizados.",
       Icon: BadgeDollarSign,
+    },
+    "no-subscription": {
+      title: "Sin Plan",
+      description: "No hay ninguna subscripción asociada e esta cuenta.",
+      Icon: SquareKanban,
     },
   };
 

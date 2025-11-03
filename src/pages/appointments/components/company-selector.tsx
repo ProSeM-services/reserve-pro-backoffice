@@ -26,6 +26,7 @@ export function CompanySelector() {
         setAbleToSelect(true);
         return;
       }
+
       const company = inmutablesCompanies.find((e) => e.id === crossCompanyId);
       if (!company) return;
       dispatch(setSelectedCompanyForAppointments(company));
@@ -46,15 +47,14 @@ export function CompanySelector() {
   return (
     <Select
       onValueChange={(value) => handleSelectCompany(value)}
-      disabled={!ableToSelect}
+      disabled={!ableToSelect || companies.length === 1}
     >
       <SelectTrigger className="h-12 px-4 space-x-4 w-full">
         {selectedCompanyForAppointments === "all" ? (
-          <div className="flex gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 cursor-pointer">
             <HouseIcon />
             <div className="flex flex-col items-start">
-              <Label>Todos</Label>
-              <span>Turnos de todas las </span>
+              <Label>Todas las sucursales</Label>
             </div>
           </div>
         ) : (

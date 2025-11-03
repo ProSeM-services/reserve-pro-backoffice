@@ -43,7 +43,7 @@ const Toast = React.forwardRef<
   React.ElementRef<typeof ToastPrimitives.Root>,
   React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root> &
     VariantProps<typeof toastVariants>
->(({ className, variant, children, ...props }, ref) => {
+>(({ className, variant = "success", children, ...props }, ref) => {
   const renderIcon = () => {
     switch (variant) {
       case "default":
