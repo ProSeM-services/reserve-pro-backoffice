@@ -6,7 +6,6 @@ import { PaymentStatusCell } from "./payment-status-cell";
 import { FromatedDate } from "@/lib/format-date";
 import { PaymentByCell } from "./payment-by-cell";
 import { formatCurrency } from "@/lib/utils/format-currency";
-import { EmptyList } from "@/components/common/emty-list";
 
 const columns: ColumnDef<IPayment>[] = [
   {
@@ -57,7 +56,7 @@ export function PaymentsTable() {
   const { payments } = useAppSelector((s) => s.payments);
 
   if (payments.length === 0) {
-    return <EmptyList type="paymentPlan" />;
+    return null;
   }
   return <RootTable columns={columns} data={payments} />;
 }

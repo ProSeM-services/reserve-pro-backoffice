@@ -65,7 +65,7 @@ export function CompanyPage() {
                     </div>
                   </section>
                 ) : (
-                  <section className="flex max-lg:flex-col gap-2  h-[90%]">
+                  <section className="flex max-lg:flex-col gap-2  max-h-[90%] h-[90%]">
                     <CompanyDetailPage />
                   </section>
                 )}
