@@ -23,6 +23,7 @@ import { CalendarPage } from "@/pages/calendar/page/calendar-page";
 import { SessionProvider } from "@/components/providers/session-provider";
 import { PaymentPage } from "@/pages/payments/page/payment-page";
 import { SettingsPage } from "@/pages/settings/page/settings-page";
+import { AbsencesPage } from "@/pages/absences/page/absences-page";
 
 export default function MainPage() {
   return (
@@ -111,6 +112,16 @@ export default function MainPage() {
                           permission={Permission.VIEW_APPOINTMENTS}
                         >
                           <CalendarPage />
+                        </RouteAuthorizationWrapper>
+                      }
+                    />
+                    <Route
+                      path="/absences"
+                      element={
+                        <RouteAuthorizationWrapper
+                          permission={Permission.VIEW_WORKHOURS}
+                        >
+                          <AbsencesPage />
                         </RouteAuthorizationWrapper>
                       }
                     />

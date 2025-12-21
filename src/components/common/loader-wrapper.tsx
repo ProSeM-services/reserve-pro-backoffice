@@ -15,7 +15,8 @@ export type ILoadingWrapper =
   | "services"
   | "customers"
   | "appointments"
-  | "payments";
+  | "payments"
+  | "absences";
 interface LoaderWrapperProps extends PropsWithChildren {
   type: ILoadingWrapper;
   loading: boolean;
@@ -48,6 +49,10 @@ const Config: Record<ILoadingWrapper, IConfig> = {
   payments: {
     icon: CircleDollarSignIcon,
     text: "Pagos",
+  },
+  absences: {
+    icon: CalendarCheck,
+    text: "ausencias",
   },
 };
 
