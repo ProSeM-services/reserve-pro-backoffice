@@ -13,6 +13,7 @@ import {
   SquareUser,
   UserCog,
   Users,
+  CalendarX,
 } from "lucide-react";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
@@ -107,6 +108,12 @@ const routes = {
           url: "/set-hours",
           permission: Permission.VIEW_WORKHOURS,
           icon: ClockIcon,
+        },
+        {
+          title: "Ausencias",
+          url: "/absences",
+          permission: Permission.VIEW_WORKHOURS,
+          icon: CalendarX,
         },
         {
           title: "Subscripcion",

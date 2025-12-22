@@ -37,6 +37,7 @@ import { Role, ROLES_VALUES } from "@/lib/constants/role";
 import { getS3Url } from "@/lib/utils/s3-image";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import { IUpdateUser, IUser, UpdateUserSchema } from "@/interfaces";
+import { MemberAbsences } from "./member-absences";
 export function MemberAsideDetails({ member }: { member: IUser }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -301,6 +302,10 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
               />
             </div>
           </section>
+
+          <Separator />
+
+          <MemberAbsences member={member} />
 
           <Separator />
 
