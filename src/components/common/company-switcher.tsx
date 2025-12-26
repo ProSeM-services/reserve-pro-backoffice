@@ -15,37 +15,43 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 import LoaderWrapper from "./loader-wrapper";
 import { useToast } from "../ui/use-toast";
 import { ICompany } from "@/interfaces";
 import useSession from "@/hooks/useSession";
-import { setCrossMainCompany } from "@/store/feature/main/mainSlice";
 import CompanyDetailCell from "@/pages/appointments/components/table/company-detail-cell";
+import { useCompaniesQuery } from "@/queries/companies";
+import { useEnterprisesQuery } from "@/queries/enterprises";
+
 export function CompanySwitcher() {
   const { isMobile } = useSidebar();
   const { member } = useSession();
-  const { inmutablesCompanies, loading } = useAppSelector((s) => s.company);
-  const { enterprise } = useAppSelector((s) => s.enterprise);
+  const { data: companies = [], isLoading: loading } = useCompaniesQuery();
+  const { data: enterprises = [] } = useEnterprisesQuery();
+  const enterpriseId = localStorage.getItem("enterpriseId");
+  const enterprise = enterprises.find((e) => e.id === enterpriseId);
   const [activeTeam, setActiveTeam] = React.useState(enterprise?.name || "");
   const { toast } = useToast();
-  const dispatch = useAppDispatch();
+
+  if (!member) return null;
+
   const handleSelectCompany = (company: ICompany | string) => {
     if (typeof company === "string") {
-      setActiveTeam(enterprise?.name);
-      dispatch(setCrossMainCompany("all"));
+      setActiveTeam(enterprise?.name || "");
+      localStorage.removeItem("companyFilterId");
       toast({
         title: "Atencion",
-        description: `Los datos de la aplicación estarán relacionades a toda la empresa`,
+        description:
+          "Los datos de la aplicacion estaran relacionados a toda la empresa",
       });
       return;
     }
-    dispatch(setCrossMainCompany(company.id));
+    localStorage.setItem("companyFilterId", company.id);
     setActiveTeam(company.name);
     toast({
       title: "Atencion",
-      description: `Los datos de la aplicación estarán relacionades a la sucursal ${company.name}`,
+      description: `Los datos de la aplicacion estaran relacionados a la sucursal ${company.name}`,
     });
   };
 
@@ -59,7 +65,7 @@ export function CompanySwitcher() {
         <DropdownMenu>
           <DropdownMenuTrigger
             asChild
-            disabled={inmutablesCompanies.length === 1}
+            disabled={companies.length <= 1}
           >
             <SidebarMenuButton
               size="lg"
@@ -89,13 +95,13 @@ export function CompanySwitcher() {
                 <div className="flex size-6 items-center justify-center rounded-sm border">
                   <BriefcaseBusiness className="size-4 shrink-0" />
                 </div>
-                {enterprise?.name}
+                {enterprise?.name || "Negocio"}
                 <DropdownMenuShortcut>Negocio</DropdownMenuShortcut>
               </DropdownMenuItem>
               <DropdownMenuLabel className="text-xs text-muted-foreground">
                 Sucursales
               </DropdownMenuLabel>
-              {inmutablesCompanies.map((option, index) => (
+              {companies.map((option, index) => (
                 <DropdownMenuItem
                   key={option.name}
                   onClick={() => handleSelectCompany(option)}

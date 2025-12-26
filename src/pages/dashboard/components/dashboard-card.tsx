@@ -11,8 +11,11 @@ import { Permission } from "@/lib/constants/permissions";
 import { FromatedDate } from "@/lib/format-date";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { ServiceCard } from "@/pages/services/components/service-card";
-import { useAppSelector } from "@/store/hooks";
-import { HouseIcon, UserIcon } from "lucide-react";
+import { HouseIcon, UserIcon } from "lucide-react"; 
+import { useMembersQuery } from "@/queries/members"; 
+import { useCompaniesQuery } from "@/queries/companies"; 
+import { useServicesQuery } from "@/queries/services"; 
+import { useAppointmentsQuery } from "@/queries/appointments"; 
 
 type Type = "member" | "company" | "services" | "appointments";
 interface IConfig {
@@ -25,11 +28,12 @@ interface IConfig {
 interface DashboardCardProps {
   type: Type;
 }
-export function DashboardCard({ type }: DashboardCardProps) {
-  const { members } = useAppSelector((s) => s.member);
-  const { companies } = useAppSelector((s) => s.company);
-  const { services } = useAppSelector((s) => s.service);
-  const { appointments } = useAppSelector((s) => s.appointments);
+export function DashboardCard({ type }: DashboardCardProps) { 
+  const { data: members = [] } = useMembersQuery(); 
+  const { data: companies = [] } = useCompaniesQuery(); 
+  const { data: services = [] } = useServicesQuery(); 
+  const { data: appointmentsData } = useAppointmentsQuery(); 
+  const appointments = appointmentsData?.appointments || []; 
 
   const Config: Record<Type, IConfig> = {
     appointments: {

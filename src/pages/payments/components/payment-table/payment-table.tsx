@@ -1,6 +1,5 @@
 import { RootTable } from "@/components/common/table";
 import { IPayment } from "@/interfaces/payment.interface";
-import { useAppSelector } from "@/store/hooks";
 import { ColumnDef } from "@tanstack/react-table";
 import { PaymentStatusCell } from "./payment-status-cell";
 import { FromatedDate } from "@/lib/format-date";
@@ -52,11 +51,7 @@ const columns: ColumnDef<IPayment>[] = [
     ),
   },
 ];
-export function PaymentsTable() {
-  const { payments } = useAppSelector((s) => s.payments);
-
-  if (payments.length === 0) {
-    return null;
-  }
+export function PaymentsTable({ payments }: { payments: IPayment[] }) {
+  if (!payments.length) return null;
   return <RootTable columns={columns} data={payments} />;
 }

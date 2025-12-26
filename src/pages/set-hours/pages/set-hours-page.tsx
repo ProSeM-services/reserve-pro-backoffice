@@ -1,6 +1,5 @@
 import { WorkhoursEditor } from "@/components/common/forms/wh-editor";
 import useSession from "@/hooks/useSession";
-import { useAppSelector } from "@/store/hooks";
 import {
   Select,
   SelectContent,
@@ -12,31 +11,31 @@ import { MemberAvatar } from "@/components/common/members/member-avatar";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { hasPermission } from "@/lib/auth/has-permission";
 import { Permission } from "@/lib/constants/permissions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IUser } from "@/interfaces";
 import { EmptyList } from "@/components/common/emty-list";
 import { WorkHourCalendar } from "@/components/common/work-hour-calendar";
+import { useMembersQuery } from "@/queries/members";
+import { useCompaniesQuery } from "@/queries/companies";
+import { ICompany } from "@/interfaces/company.interface";
+
 export function SetHoursPage() {
-  const { members } = useAppSelector((s) => s.member);
-  const { companies } = useAppSelector((s) => s.company);
   const { member } = useSession();
-  const [selectedMember, setSelectedMember] = useState<IUser>(member);
-  const [selectedCompany, setSelectedCompany] = useState(
-    companies.length ? companies[0] : null
+  const { data: members = [] } = useMembersQuery();
+  const { data: companies = [] } = useCompaniesQuery();
+  const [selectedMember, setSelectedMember] = useState<IUser | undefined>(
+    member
   );
+  const [selectedCompany, setSelectedCompany] = useState<ICompany | null>(null);
 
-  if (!member) return;
+  useEffect(() => {
+    if (companies.length) {
+      setSelectedCompany(companies[0]);
+    }
+  }, [companies]);
 
-  const handleSelectMember = (id: string) => {
-    const selectedMember = members.filter((e) => e.id === id)[0];
-    setSelectedMember(selectedMember);
-  };
-
-  const handleSelectCompany = (id: string) => {
-    const selectedCompany = companies.filter((b) => b.id === id)[0];
-    if (selectedCompany) setSelectedCompany(selectedCompany);
-  };
+  if (!member) return null;
 
   if (members.length === 0 && companies.length === 0) {
     return (
@@ -46,6 +45,16 @@ export function SetHoursPage() {
       </div>
     );
   }
+
+  const handleSelectMember = (id: string) => {
+    const selectedMember = members.find((e) => e.id === id);
+    if (selectedMember) setSelectedMember(selectedMember);
+  };
+
+  const handleSelectCompany = (id: string) => {
+    const selectedCompany = companies.find((b) => b.id === id);
+    if (selectedCompany) setSelectedCompany(selectedCompany);
+  };
 
   return (
     <Tabs defaultValue="members" className="  ">
@@ -64,10 +73,10 @@ export function SetHoursPage() {
           {!hasPermission(member, Permission.UPDATE_WORKHOURS) &&
           member.role !== "OWNER" &&
           member.role !== "ADMIN" ? (
-            <MemberCard member={selectedMember} type="read" />
+            selectedMember && <MemberCard member={selectedMember} type="read" />
           ) : (
             <Select
-              value={selectedMember.id}
+              value={selectedMember?.id}
               onValueChange={(value) => handleSelectMember(value)}
             >
               <SelectTrigger className="">
@@ -85,14 +94,18 @@ export function SetHoursPage() {
               </SelectContent>
             </Select>
           )}
-          <WorkhoursEditor
-            id={selectedMember.id}
-            type={"member"}
-            workhours={selectedMember.workhours}
-          />
+          {selectedMember && (
+            <WorkhoursEditor
+              id={selectedMember.id}
+              type={"member"}
+              workhours={selectedMember.workhours}
+            />
+          )}
         </div>
         <section className=" flex-grow   ">
-          <WorkHourCalendar workhours={selectedMember.workhours || []} />
+          <WorkHourCalendar
+            workhours={selectedMember?.workhours || []}
+          />
         </section>
       </TabsContent>
       {companies.length && selectedCompany && (

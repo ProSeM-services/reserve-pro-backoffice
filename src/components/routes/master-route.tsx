@@ -1,12 +1,13 @@
 import { setAuthInterceptor } from "@/config/axios.config";
-import useFetchData from "@/hooks/useFetchData";
 import { AuthServices } from "@/services/auth.services";
 import { Fragment, PropsWithChildren, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useAppDispatch } from "@/store/hooks";
+import { setSession } from "@/store/feature/session/sessionSlice";
 
 export function MasterRouteProtector({ children }: PropsWithChildren) {
   const nav = useNavigate();
-  const { fetchMemberLogged } = useFetchData();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const accessToken = localStorage.getItem("accessToken");
   useEffect(() => {
@@ -15,7 +16,7 @@ export function MasterRouteProtector({ children }: PropsWithChildren) {
         setLoading(true);
         await setAuthInterceptor(accessToken);
         const res = await AuthServices.me();
-        fetchMemberLogged(res);
+        dispatch(setSession(res));
         if (res.role !== "MASTER") {
           setLoading(false);
           localStorage.clear();

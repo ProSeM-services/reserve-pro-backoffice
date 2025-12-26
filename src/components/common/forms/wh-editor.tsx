@@ -3,7 +3,8 @@ import { IWorkhour, Segment } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import { CalendarCog, CopyCheck, Minus, PlusIcon } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { useUpdateMemberMutation } from "@/queries/members";
+import { useUpdateCompanyMutation } from "@/queries/companies";
 import {
   Select,
   SelectContent,
@@ -176,15 +177,22 @@ export const WorkhoursEditor: React.FC<{
     });
   };
 
-  const { editMember, editCompany } = useCreatingFetch();
+  const updateMemberMutation = useUpdateMemberMutation();
+  const updateCompanyMutation = useUpdateCompanyMutation();
   const handleSave = async () => {
     try {
       setUpdating(true);
       const updatedWorkhours = week.map((entry) => entry.workhour);
       if (type === "member") {
-        await editMember(id, { workhours: updatedWorkhours });
+        await updateMemberMutation.mutateAsync({
+          id,
+          changes: { workhours: updatedWorkhours },
+        });
       } else {
-        await editCompany(id, { workhours: updatedWorkhours });
+        await updateCompanyMutation.mutateAsync({
+          id,
+          changes: { workhours: updatedWorkhours },
+        });
       }
       toast({
         title: "Horarios actualizados",
@@ -198,7 +206,8 @@ export const WorkhoursEditor: React.FC<{
   };
 
   const { member } = useSession();
-  const selectIsDisabled = !hasPermission(member, Permission.UPDATE_WORKHOURS);
+  const selectIsDisabled =
+    !member || !hasPermission(member, Permission.UPDATE_WORKHOURS);
 
   return (
     <div className="flex flex-col items-start  w-full h-full justify-between gap-2  ">

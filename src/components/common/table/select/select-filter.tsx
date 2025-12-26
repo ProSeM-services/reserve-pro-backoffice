@@ -10,7 +10,9 @@ import {
 } from "@/components/ui/select";
 import { TableColumnFilterType, TableType } from "@/interfaces";
 import { LoaderSpinner } from "../../loader-spinner";
-import { useAppSelector } from "@/store/hooks";
+import { useMembersQuery } from "@/queries/members";
+import { useCustomersQuery } from "@/queries/customers";
+
 interface ISelectFilter {
   tableType?: TableType;
   onValueChange: (value: string) => void;
@@ -18,9 +20,9 @@ interface ISelectFilter {
   filterType?: TableColumnFilterType;
 }
 const SelctMembers = ({ onValueChange }: ISelectFilter) => {
-  const { members: data, loading } = useAppSelector((s) => s.member);
+  const { data: members = [], isLoading } = useMembersQuery();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div>
         <LoaderSpinner />
@@ -28,34 +30,32 @@ const SelctMembers = ({ onValueChange }: ISelectFilter) => {
     );
   }
 
-  if (data) {
-    return (
-      <Select onValueChange={(value) => onValueChange(value)}>
-        <SelectTrigger className=" bg-card text-card-foreground   text-xs ">
-          <SelectValue placeholder="Filter by Profesional" />
-        </SelectTrigger>
-        <SelectContent className="bg-card text-card-foreground  border-none text-xs">
-          <SelectGroup>
-            <SelectLabel className="px-2 py-1 font-semibold">
-              Profesionales
-            </SelectLabel>
-            <SelectItem value="all">All</SelectItem>
-            {data.map((t) => (
-              <SelectItem value={t.id} key={t.id}>
-                {t.name}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    );
-  }
+  return (
+    <Select onValueChange={(value) => onValueChange(value)}>
+      <SelectTrigger className=" bg-card text-card-foreground   text-xs ">
+        <SelectValue placeholder="Filter by Profesional" />
+      </SelectTrigger>
+      <SelectContent className="bg-card text-card-foreground  border-none text-xs">
+        <SelectGroup>
+          <SelectLabel className="px-2 py-1 font-semibold">
+            Profesionales
+          </SelectLabel>
+          <SelectItem value="all">All</SelectItem>
+          {members.map((t) => (
+            <SelectItem value={t.id} key={t.id}>
+              {t.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
 };
 
 const SelectCustomer = ({ onValueChange }: ISelectFilter) => {
-  const { customers: data, loading } = useAppSelector((s) => s.customers);
+  const { data: customers = [], isLoading } = useCustomersQuery();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div>
         <LoaderSpinner />
@@ -63,28 +63,26 @@ const SelectCustomer = ({ onValueChange }: ISelectFilter) => {
     );
   }
 
-  if (data) {
-    return (
-      <Select onValueChange={(value) => onValueChange(value)}>
-        <SelectTrigger className=" bg-card text-card-foreground  text-xs ">
-          <SelectValue placeholder="Filtrar por email" />
-        </SelectTrigger>
-        <SelectContent className="bg-card text-card-foreground border-none text-xs">
-          <SelectGroup>
-            <SelectLabel className="px-2 py-1 font-semibold">
-              Clientes
-            </SelectLabel>
-            <SelectItem value="all">All</SelectItem>
-            {data.map((t) => (
-              <SelectItem value={t.email} key={t.id}>
-                {t.email}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    );
-  }
+  return (
+    <Select onValueChange={(value) => onValueChange(value)}>
+      <SelectTrigger className=" bg-card text-card-foreground  text-xs ">
+        <SelectValue placeholder="Filtrar por email" />
+      </SelectTrigger>
+      <SelectContent className="bg-card text-card-foreground border-none text-xs">
+        <SelectGroup>
+          <SelectLabel className="px-2 py-1 font-semibold">
+            Clientes
+          </SelectLabel>
+          <SelectItem value="all">All</SelectItem>
+          {customers.map((t) => (
+            <SelectItem value={t.email} key={t.id}>
+              {t.email}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
 };
 
 export function SelectFilter({

@@ -11,7 +11,7 @@ export class SubscriptionServices {
     );
     return res.data;
   }
-  static async create(body: ICreateSubscription) {
+  static async create(body: ICreateSubscription): Promise<ISubscription> {
     const res = await axiosInstance.post(`${BASE_URL}/subscription`, body);
     return res.data;
   }

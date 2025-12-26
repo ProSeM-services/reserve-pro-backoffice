@@ -5,29 +5,31 @@ import { CompanyDetailPage } from "./company-detail-page";
 import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
 import { Permission } from "@/lib/constants/permissions";
 import { Separator } from "@/components/ui/separator";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useEffect, useState } from "react";
-import { setSelectedCompany } from "@/store/feature/company/companySlice";
 import { Label } from "@/components/ui/label";
 import { Table2, TableOfContents } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompanyTable } from "../components/table/company-table";
 import { EmptyList } from "@/components/common/emty-list";
+import { useCompaniesQuery } from "@/queries/companies";
+import { useQueryClient } from "@tanstack/react-query";
+import { CompanyDetails } from "../components/CompanyDetails";
 type PageOptions = "list" | "table";
 export function CompanyPage() {
-  const { companies } = useAppSelector((s) => s.company);
+  const { data: companies = [] } = useCompaniesQuery();
   const [pageOption, setPageOption] = useState<PageOptions>("list");
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
   useEffect(() => {
     if (companies.length < 1) return;
 
-    dispatch(setSelectedCompany(companies[0].id));
+    queryClient.setQueryData(["selectedCompanyId"], companies[0].id);
   }, [companies]);
 
   const switchPageOption = () => {
     if (pageOption === "list") setPageOption("table");
     if (pageOption === "table") setPageOption("list");
   };
+
   return (
     <>
       <div className="flex flex-col    size-full space-y-4">
@@ -66,7 +68,7 @@ export function CompanyPage() {
                   </section>
                 ) : (
                   <section className="flex max-lg:flex-col gap-2  max-h-[90%] h-[90%]">
-                    <CompanyDetailPage />
+                    <CompanyDetails companyId={companies[0].id} />
                   </section>
                 )}
               </>
@@ -82,7 +84,7 @@ export function CompanyPage() {
 
 function EmptyCompanyDetailPage() {
   return (
-    <div className="h-full w-ful grid place-items-center  ">
+    <div className="h-full w-ful grid place-items-center border  ">
       <Label className="text-xl max-md:text-lg text-center">
         Selecciona una sucursal para ver sus detalles
       </Label>

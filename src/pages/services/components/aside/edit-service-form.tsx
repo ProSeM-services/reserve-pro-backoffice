@@ -19,22 +19,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
-import { useAppSelector } from "@/store/hooks";
 import { Paperclip, TrashIcon } from "lucide-react";
 import { FilesServices } from "@/services/files.services";
 import { getS3Url } from "@/lib/utils/s3-image";
+import { IService } from "@/interfaces";
+import { useUpdateServiceMutation } from "@/queries/services";
 
-export function EditServicesForm() {
+export function EditServicesForm({ service }: { service: IService }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File[]>([]);
-  const { asideService } = useAppSelector((s) => s.service);
   const [preview, setPreview] = useState<{ name: string; src: string }[]>([]);
 
-  const originalImages = asideService?.images ? asideService.images : [];
+  const originalImages = service?.images ? service.images : [];
 
   const { toast } = useToast();
-  const { editService } = useCreatingFetch();
+  const updateServiceMutation = useUpdateServiceMutation();
   const [loading, setLoading] = useState(false);
   const [selectedProvision, setSelectedProvision] =
     useState<Provision>("Presencial");
@@ -42,13 +41,12 @@ export function EditServicesForm() {
     resolver: zodResolver(UpdateServiceZodSchema),
     mode: "onChange",
     defaultValues: {
-      ...asideService,
-      images: asideService?.images ? asideService?.images : [],
+      ...service,
+      images: service?.images ? service?.images : [],
     },
   });
 
   const onSubmit = async (values: IUpdateService) => {
-    if (!asideService) return;
     try {
       setLoading(true);
       let data = values;
@@ -59,7 +57,10 @@ export function EditServicesForm() {
         data = { ...values, images: response.map((re) => re.fileName) };
       }
 
-      await editService(asideService.id, data);
+      await updateServiceMutation.mutateAsync({
+        id: service.id,
+        changes: data,
+      });
       toast({
         title: "Servicio Actualizado!",
         description: `El servicio ${values.title} fue actualizado.`,

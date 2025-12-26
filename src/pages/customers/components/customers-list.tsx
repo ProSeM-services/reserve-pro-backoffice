@@ -1,19 +1,17 @@
 import { Label } from "@/components/ui/label";
 import { FromatedDate } from "@/lib/format-date";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { ArrowLeftFromLine, User2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { setAside } from "@/store/feature/customers/customerSlice";
+import { ICustomer } from "@/interfaces/customer.interface";
 
-export function CustoemrsList() {
-  const { customers } = useAppSelector((s) => s.customers);
-  const dispatch = useAppDispatch();
+export function CustoemrsList({
+  customers,
+  onSelect,
+}: {
+  customers: ICustomer[];
+  onSelect: (customer: ICustomer) => void;
+}) {
   return (
     <div className="flex gap-2 flex-col w-full">
       {customers.map((customer) => (
@@ -40,15 +38,7 @@ export function CustoemrsList() {
                 </p>
                 <Button
                   variant={"secondary"}
-                  onClick={() =>
-                    dispatch(
-                      setAside({
-                        open: true,
-                        customer: customer,
-                        type: "details",
-                      })
-                    )
-                  }
+                  onClick={() => onSelect(customer)}
                 >
                   <ArrowLeftFromLine className="size-4" />
                 </Button>

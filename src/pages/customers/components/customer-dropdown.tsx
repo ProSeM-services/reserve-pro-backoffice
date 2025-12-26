@@ -7,12 +7,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ICustomer } from "@/interfaces/customer.interface";
-import { setAside } from "@/store/feature/customers/customerSlice";
-import { useAppDispatch } from "@/store/hooks";
 import { EllipsisVertical } from "lucide-react";
 
-export function CustomerDropDown({ customer }: { customer: ICustomer }) {
-  const dispatch = useAppDispatch();
+export function CustomerDropDown({
+  customer,
+  onSelect,
+}: {
+  customer: ICustomer;
+  onSelect?: (customer: ICustomer) => void;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -22,11 +25,7 @@ export function CustomerDropDown({ customer }: { customer: ICustomer }) {
         <DropdownMenuLabel>{customer.fullName}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() =>
-            dispatch(
-              setAside({ open: true, customer: customer, type: "details" })
-            )
-          }
+          onClick={() => onSelect?.(customer)}
         >
           Perfil
         </DropdownMenuItem>

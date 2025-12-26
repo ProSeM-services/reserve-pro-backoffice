@@ -1,18 +1,29 @@
 import LoaderWrapper from "@/components/common/loader-wrapper";
-import { useAppSelector } from "@/store/hooks";
 import { ServiceCard } from "./service-card";
 import { EmptyList } from "@/components/common/emty-list";
+import { useServicesQuery } from "@/queries/services";
+import { IService } from "@/interfaces";
 
-export function ServicesList() {
-  const { services, loading } = useAppSelector((a) => a.service);
+type AsideType = "details" | "add-member" | "edit";
+export function ServicesList({
+  onOpenAside,
+}: {
+  onOpenAside: (service: IService, type: AsideType) => void;
+}) {
+  const { data: services = [], isLoading } = useServicesQuery();
 
   return (
-    <LoaderWrapper loading={loading} type="services">
+    <LoaderWrapper loading={isLoading} type="services">
       {services.length > 0 ? (
         <div className="max-md:flex max-md:flex-col gap-4 flex-wrap grid grid-cols-3 max-lg:grid-cols-2 ">
           {services.map((service) => (
             <div className=" flex   w-full  " key={service.id}>
-              <ServiceCard service={service} key={service.id} showMembers />
+              <ServiceCard
+                service={service}
+                key={service.id}
+                showMembers
+                onOpenAside={onOpenAside}
+              />
             </div>
           ))}
         </div>

@@ -1,34 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { ICompany, IUser } from "@/interfaces";
+import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { BarLoader } from "@/components/common/bar-loader";
-import { MemberServices } from "@/services/member.services";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { EmptyList } from "@/components/common/emty-list";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
+import {
+  useAddMemberToCompanyMutation,
+  useFreeMembersQuery,
+} from "@/queries/members";
 
 export function AddMemberAside({ company }: { company: ICompany }) {
-  const [loading, setLoading] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
-  const [members, setMembers] = useState<IUser[]>([]);
   const [selecetedMembers, setSelectedMembers] = useState<string[]>([]);
-  useEffect(() => {
-    const fetchMembers = async () => {
-      setLoading(true);
-      try {
-        const response = await MemberServices.getFree();
-        console.log({ ADD_MEMBERS: response });
-        setMembers(response);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (!isAdding) fetchMembers();
-  }, [isAdding]);
+  const { data: members = [], isLoading: membersLoading } = useFreeMembersQuery({
+    enabled: !isAdding,
+  });
+  const addMemberToCompanyMutation = useAddMemberToCompanyMutation();
   const { toast } = useToast();
   const handleSelectMember = (memberId: string) => {
     let res = [];
@@ -40,11 +28,17 @@ export function AddMemberAside({ company }: { company: ICompany }) {
 
     setSelectedMembers(res);
   };
-  const { addMembersToCompany } = useCreatingFetch();
   const handleAddMembers = async () => {
     setIsAdding(true);
     try {
-      await addMembersToCompany(selecetedMembers, company.id);
+      await Promise.all(
+        selecetedMembers.map((userId) =>
+          addMemberToCompanyMutation.mutateAsync({
+            companyId: company.id,
+            userId,
+          })
+        )
+      );
       toast({
         title: "Miembros cargados!",
         description: `Los miembros fueron agregados exitosamente a ${company.name}!`,
@@ -64,8 +58,8 @@ export function AddMemberAside({ company }: { company: ICompany }) {
 
   return (
     <div className="space-y-2 h-full max-h-full overflow-auto  ">
-      {loading ? <BarLoader /> : null}
-      {!loading && members && !members.length ? (
+      {membersLoading ? <BarLoader /> : null}
+      {!membersLoading && members && !members.length ? (
         <EmptyList type="no-members-to-add" />
       ) : (
         members?.map((member) => (

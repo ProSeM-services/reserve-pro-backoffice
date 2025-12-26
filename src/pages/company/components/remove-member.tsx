@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { memberAdpater } from "@/adapters/members.adapter";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { useRemoveMemberFromCompanyMutation } from "@/queries/members";
 /* Component to handle the action to remove one member from company */
 export function RemoveMember({
   member,
@@ -21,11 +21,14 @@ export function RemoveMember({
 }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
-  const { removeMemberFromCompany } = useCreatingFetch();
+  const removeMemberFromCompanyMutation = useRemoveMemberFromCompanyMutation();
   const handleDeleteFromCompany = async () => {
     setDeleting(true);
     try {
-      await removeMemberFromCompany(member.id, company.id);
+      await removeMemberFromCompanyMutation.mutateAsync({
+        companyId: company.id,
+        userId: member.id,
+      });
       toast({
         title: `${member.name}, ${member.lastName} elminado de ${company.name}`,
       });

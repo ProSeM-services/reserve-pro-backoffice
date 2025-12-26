@@ -6,13 +6,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { AbsenceServices } from "@/services/absence.services";
 import { IAbsence } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
-import { useAppSelector } from "@/store/hooks";
+import { useMembersQuery } from "@/queries/members";
 
 export function AbsencesTable() {
   const [absences, setAbsences] = useState<IAbsence[]>([]);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { inmutableMembers } = useAppSelector((s) => s.member);
+  const { data: members = [] } = useMembersQuery();
 
   useEffect(() => {
     const fetchAbsences = async () => {
@@ -35,14 +35,14 @@ export function AbsencesTable() {
 
   const rows = useMemo(() => {
     return absences.map((a) => {
-      const member = inmutableMembers.find((m) => m.id === a.UserId);
+      const member = members.find((m) => m.id === a.UserId);
       return {
         ...a,
         memberName: member ? member.fullName : a.UserId,
         memberEmail: member?.email,
       };
     });
-  }, [absences, inmutableMembers]);
+  }, [absences, members]);
 
   const formatRange = (start: string, end: string) => {
     const startDate = parseISO(start);

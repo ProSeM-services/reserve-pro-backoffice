@@ -2,8 +2,8 @@ import { RootTable } from "@/components/common/table";
 import { IEnterprise } from "@/interfaces/enterprise.interface";
 import { Location } from "@/interfaces/location.interface";
 import { FromatedDate } from "@/lib/format-date";
-import { useAppSelector } from "@/store/hooks";
 import { ColumnDef } from "@tanstack/react-table";
+import { useEnterprisesQuery } from "@/queries/enterprises";
 
 export const columns: ColumnDef<IEnterprise>[] = [
   {
@@ -20,7 +20,7 @@ export const columns: ColumnDef<IEnterprise>[] = [
   },
   {
     accessorKey: "address",
-    header: "Dirección",
+    header: "Direccion",
     cell: ({ getValue }) => <>{getValue<Location>().value}</>,
   },
   {
@@ -30,7 +30,7 @@ export const columns: ColumnDef<IEnterprise>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Fecha de creación",
+    header: "Fecha de creacion",
     cell: ({ getValue }) => (
       <FromatedDate date={new Date(getValue<string>()).toISOString()} />
     ),
@@ -38,10 +38,7 @@ export const columns: ColumnDef<IEnterprise>[] = [
 ];
 
 export function EnterpriseTable() {
-  const { enterprises } = useAppSelector((s) => s.enterprise);
-
-  // Aquí deberías usar un componente de tabla, por ejemplo, react-table o tu propio componente
-  // Ejemplo básico:
+  const { data: enterprises = [] } = useEnterprisesQuery();
 
   const sortedEnterprises = [...enterprises].sort((a, b) => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();

@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
-import { useAppSelector } from "@/store/hooks";
+import { useMembersQuery } from "@/queries/members";
 
 export function PaymentByCell({ payment_by }: { payment_by: string }) {
-  const { members } = useAppSelector((s) => s.member);
+  const { data: members = [] } = useMembersQuery();
   const member = members.find((e) => e.id === payment_by);
 
   if (!member) return <Badge variant={"secondary"}>No data</Badge>;
@@ -11,4 +11,4 @@ export function PaymentByCell({ payment_by }: { payment_by: string }) {
       {member.name} {member.lastName}
     </Badge>
   );
-}
+} 

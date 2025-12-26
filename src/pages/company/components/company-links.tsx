@@ -1,4 +1,3 @@
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { Link } from "react-router";
 import { CompanyCard } from "../components/company-card";
 import { EmptyList } from "@/components/common/emty-list";
@@ -12,18 +11,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ICompany } from "@/interfaces";
-import { setSelectedCompany } from "@/store/feature/company/companySlice";
+import { useCompaniesQuery } from "@/queries/companies";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function CompanyLinks() {
-  const { companies, loading } = useAppSelector((s) => s.company);
-  const dispatch = useAppDispatch();
+  const { data: companies = [], isLoading } = useCompaniesQuery();
+  const queryClient = useQueryClient();
   const handleSelectCompany = (company: ICompany) => {
-    dispatch(setSelectedCompany(company.id));
+    queryClient.setQueryData(["selectedCompanyId"], company.id);
   };
   return (
     <>
       <section className="max-lg:hidden">
-        <LoaderWrapper loading={loading} type="company">
+        <LoaderWrapper loading={isLoading} type="company">
           {companies.length === 0 ? (
             <EmptyList type="company" />
           ) : (
@@ -43,7 +43,7 @@ export function CompanyLinks() {
         </LoaderWrapper>
       </section>
       <section className="lg:hidden">
-        <LoaderWrapper loading={loading} type="company">
+        <LoaderWrapper loading={isLoading} type="company">
           {companies.length === 0 ? (
             <EmptyList type="company" />
           ) : (

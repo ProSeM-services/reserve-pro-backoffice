@@ -1,3 +1,7 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { BaselineIcon, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,9 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -19,11 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BaselineIcon, ShieldCheck } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { ROLES_VALUES } from "@/lib/constants/role";
 import { CreatUserSchema, ICreateUser } from "@/interfaces";
+import { useCreateMemberMutation } from "@/queries/members";
+
 const INITIAL_MEMBER_DATA: ICreateUser = {
   email: "",
   lastName: "",
@@ -37,36 +38,37 @@ const INITIAL_MEMBER_DATA: ICreateUser = {
   workhours: [],
   EnterpriseId: "",
 };
+
 export function MemberForm() {
   const { toast } = useToast();
-  const { createMember } = useCreatingFetch();
+  const createMemberMutation = useCreateMemberMutation();
   const [loading, setLoading] = useState(false);
   const form = useForm<ICreateUser>({
     resolver: zodResolver(CreatUserSchema),
     defaultValues: INITIAL_MEMBER_DATA,
   });
+
   const onSubmit = async (values: ICreateUser) => {
     try {
       setLoading(true);
-      await createMember(values);
+      await createMemberMutation.mutateAsync(values);
       toast({
         title: "Miembro agregado exitosamente!",
-        description: `Se agregó ${values.name} a tu lista de miembros`,
+        description: `Se agrego ${values.name} a tu lista de miembros`,
         variant: "default",
       });
       form.reset();
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error al crear un miembro!",
-        // @ts-ignore
-        description: error.response.data.message,
+        description: error?.response?.data?.message,
         variant: "destructive",
       });
-      console.log("Error creating Member, ", error);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <Form {...form}>
       <form
@@ -78,8 +80,7 @@ export function MemberForm() {
           <div className="flex flex-col text-sm ">
             <p className="font-medium">Informacion personal</p>
             <span className="font-light ">
-              {" "}
-              Completar con la información personal del nuevo miembro
+              Completar con la informacion personal del nuevo miembro
             </span>
           </div>
 
@@ -137,7 +138,7 @@ export function MemberForm() {
               name="phone"
               render={({ field }) => (
                 <FormItem className="w-1/2">
-                  <FormLabel>Núemro de celular</FormLabel>
+                  <FormLabel>Numero de celular</FormLabel>
                   <FormControl>
                     <PhoneInput {...field} />
                   </FormControl>
@@ -150,11 +151,11 @@ export function MemberForm() {
           <FormField
             control={form.control}
             name="role"
-            render={() => (
+            render={({ field }) => (
               <FormItem>
                 <FormLabel>Rol</FormLabel>
                 <FormControl>
-                  <Select>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="">
                       <SelectValue placeholder="Role" />
                     </SelectTrigger>
@@ -162,11 +163,7 @@ export function MemberForm() {
                       {ROLES_VALUES.map((role) => (
                         <SelectItem value={role} key={role}>
                           <div className="flex gap-1 items-center">
-                            {role === "ADMIN" ? (
-                              <ShieldCheck />
-                            ) : (
-                              <BaselineIcon />
-                            )}
+                            {role === "ADMIN" ? <ShieldCheck /> : <BaselineIcon />}
                             {role}
                           </div>
                         </SelectItem>
@@ -185,10 +182,9 @@ export function MemberForm() {
 
         <section className=" space-y-3">
           <div className="flex flex-col  text-sm ">
-            <p className="font-medium">Informacion de accesso</p>
+            <p className="font-medium">Informacion de acceso</p>
             <span className="font-light">
-              {" "}
-              Definir las claves de accesso para {form.getValues("name")}{" "}
+              Definir las claves de acceso para {form.getValues("name")}{" "}
               {form.getValues("lastName")}
             </span>
           </div>
@@ -216,7 +212,7 @@ export function MemberForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Contraseña</FormLabel>
+                <FormLabel>Contrasena</FormLabel>
                 <FormControl>
                   <Input
                     type="password"

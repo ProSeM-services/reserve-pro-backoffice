@@ -1,15 +1,17 @@
 import { MemberAvatar } from "@/components/common/members/member-avatar";
 import { Label } from "@/components/ui/label";
 import { FromatedDate } from "@/lib/format-date";
-import { useAppSelector } from "@/store/hooks";
 import { ServiceCell } from "./service-cell";
 import { AppointmentsTableActions } from "./table/appointmnet-cell-actions";
 import { EmptyList } from "@/components/common/emty-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAppointmentsQuery } from "@/queries/appointments";
+import { useMembersQuery } from "@/queries/members";
 
 export function AppointmentList() {
-  const { appointmentsTable } = useAppSelector((s) => s.appointments);
-  const { members } = useAppSelector((s) => s.member);
+  const { data } = useAppointmentsQuery();
+  const { data: members = [] } = useMembersQuery();
+  const appointmentsTable = data?.appointments || [];
 
   if (!appointmentsTable.length) {
     return (
