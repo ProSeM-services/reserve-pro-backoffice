@@ -1,4 +1,3 @@
-import { useAppSelector } from "@/store/hooks";
 import { PaymentsTable } from "../components/payments/payment-table";
 import { PaymentStatusCell } from "../components/payments/payment-status-cell";
 import { useState } from "react";
@@ -6,14 +5,18 @@ import { EnterpriseTable } from "../components/enterprise/enterprises-table";
 import { CompanyTable } from "@/pages/company/components/table/company-table";
 import { UsersTable } from "../components/members/members-table";
 import { formatCurrency } from "@/lib/utils/format-currency";
+import { useCompaniesQuery } from "@/queries/companies";
+import { useMembersQuery } from "@/queries/members";
+import { useEnterprisesQuery } from "@/queries/enterprises";
+import { usePaymentsQuery } from "@/queries/payments";
 
 type TPage = "payments" | "enterprise" | "companies" | "accounts";
 
 export function AdminDashboardPage() {
-  const { companies } = useAppSelector((s) => s.company);
-  const { members } = useAppSelector((s) => s.member);
-  const { enterprises } = useAppSelector((s) => s.enterprise);
-  const { payments } = useAppSelector((s) => s.payments);
+  const { data: companies = [] } = useCompaniesQuery();
+  const { data: members = [] } = useMembersQuery();
+  const { data: enterprises = [] } = useEnterprisesQuery();
+  const { data: payments = [] } = usePaymentsQuery();
 
   const [pageType, setPageTpye] = useState<TPage>("payments");
   const total_pending = payments

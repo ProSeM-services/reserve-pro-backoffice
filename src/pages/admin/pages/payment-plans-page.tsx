@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { CreatePaymentPlanForm } from "../components/form/create-payment-plan-form";
-import { useAppSelector } from "@/store/hooks";
 import { useState } from "react";
 import { PaymentPlanServices } from "@/services/payment-plans.service";
 import { useToast } from "@/components/ui/use-toast";
+import { usePaymentPlansQuery } from "@/queries/paymentPlans";
+import { useEnterprisesQuery } from "@/queries/enterprises";
 
 export function PaymentPlansPage() {
-  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
-  const { enterprises } = useAppSelector((s) => s.enterprise);
+  const { data: paymentsPlans = [], refetch } = usePaymentPlansQuery();
+  const { data: enterprises = [] } = useEnterprisesQuery();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const handleDeletePlan = async (id: string) => {
@@ -31,6 +32,7 @@ export function PaymentPlansPage() {
       }
 
       await PaymentPlanServices.delete(id);
+      await refetch();
       toast({
         title: "Plan borrado",
         description: "",

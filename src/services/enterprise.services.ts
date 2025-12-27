@@ -1,9 +1,8 @@
 import { axiosInstance, BASE_URL } from "@/config/axios.config";
-import { IApiEnterprise } from "@/interfaces/api/enterprise.interface";
 import { IEnterprise } from "@/interfaces/enterprise.interface";
 
 export class EnterpiseServices {
-  static async getAll(): Promise<IApiEnterprise[]> {
+  static async getAll(): Promise<IEnterprise[]> {
     const res = await axiosInstance.get(`${BASE_URL}/enterprise`);
     return res.data;
   }
@@ -12,11 +11,14 @@ export class EnterpiseServices {
     return res.data;
   }
 
-  static async create(data: IEnterprise) {
+  static async create(data: IEnterprise): Promise<IEnterprise> {
     const res = await axiosInstance.post(`${BASE_URL}/enterprise`, data);
     return res.data;
   }
-  static async update(id: string, data: Partial<IEnterprise>) {
+  static async update(
+    id: string,
+    data: Partial<IEnterprise>
+  ): Promise<IEnterprise> {
     const res = await axiosInstance.patch(`${BASE_URL}/enterprise/${id}`, data);
     return res.data;
   }

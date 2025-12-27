@@ -8,41 +8,42 @@ import {
 } from "@/components/ui/select";
 import useSession from "@/hooks/useSession";
 import { IUser } from "@/interfaces";
-import { setSelectedMemberForAppointments } from "@/store/feature/appointnments/appointmentsSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { UsersRound } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useMembersQuery } from "@/queries/members";
 
-export function MemberSelector() {
+export function MemberSelector({
+  onChange,
+}: {
+  onChange: (member: IUser | "all") => void;
+}) {
   const { member } = useSession();
-  const { members } = useAppSelector((s) => s.member);
-  const { selectedMemberForAppointments } = useAppSelector(
-    (s) => s.appointments
-  );
+  const { data: members = [] } = useMembersQuery();
   const [ableToSelect, setAbleToSelect] = useState(false);
-  const dispatch = useAppDispatch();
+  const [selected, setSelected] = useState<IUser | "all" | undefined>();
 
   useEffect(() => {
     if (!member) return;
     if (member.role === "ADMIN" || member.role === "OWNER") {
       setAbleToSelect(true);
-
       return;
     }
-    if (!member) return;
-    dispatch(setSelectedMemberForAppointments(member as IUser));
+    onChange(member as IUser);
+    setSelected(member as IUser);
     setAbleToSelect(false);
-  }, []);
+  }, [member]);
 
   const handleSelectMember = (id: string) => {
     if (id === "all") {
-      dispatch(setSelectedMemberForAppointments(id));
+      setSelected("all");
+      onChange("all");
       return;
     }
 
-    const member = members.find((e) => e.id === id);
-    if (!member) return;
-    dispatch(setSelectedMemberForAppointments(member));
+    const selectedMember = members.find((e) => e.id === id);
+    if (!selectedMember) return;
+    setSelected(selectedMember);
+    onChange(selectedMember);
   };
   return (
     <Select
@@ -50,7 +51,7 @@ export function MemberSelector() {
       disabled={!ableToSelect}
     >
       <SelectTrigger className="h-12 px-4 space-x-4 w-full">
-        {selectedMemberForAppointments === "all" ? (
+        {selected === "all" ? (
           <div className="flex gap-2 cursor-pointer">
             <UsersRound />
             <div className="flex flex-col items-start">
@@ -58,17 +59,15 @@ export function MemberSelector() {
               <span>turnos de todos los miembros</span>
             </div>
           </div>
-        ) : (
-          selectedMemberForAppointments && (
-            <div className="flex gap-2 ">
-              <MemberAvatar member={selectedMemberForAppointments} size="xs" />
-              <div className="flex flex-col items-start">
-                <Label>{selectedMemberForAppointments.fullName}</Label>
-                <span>{selectedMemberForAppointments.email}</span>
-              </div>
+        ) : selected ? (
+          <div className="flex gap-2 ">
+            <MemberAvatar member={selected} size="xs" />
+            <div className="flex flex-col items-start">
+              <Label>{selected.fullName}</Label>
+              <span>{selected.email}</span>
             </div>
-          )
-        )}
+          </div>
+        ) : null}
       </SelectTrigger>
       <SelectContent>
         <SelectItem value={"all"}>
@@ -81,7 +80,7 @@ export function MemberSelector() {
           </div>
         </SelectItem>
         {members.map((member) => (
-          <SelectItem value={member.id}>
+          <SelectItem value={member.id} key={member.id}>
             <div className="flex items-center gap-2 cursor-pointer">
               <MemberAvatar member={member} size="xs" />
               <Label>{member.fullName}</Label>

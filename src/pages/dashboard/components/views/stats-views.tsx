@@ -13,6 +13,7 @@ import {
 import { AppointmentList } from "@/pages/appointments/components/appointment-list";
 export function DashboardStats() {
   const { member } = useSession();
+  if (!member) return null;
   return (
     <div className=" size-full flex flex-col gap-4  ">
       <div className="max-md:hidden flex  gap-2   text-gray-800 ">

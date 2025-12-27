@@ -7,11 +7,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useAppSelector } from "@/store/hooks";
 import { UserCircle } from "lucide-react";
+import { useAppointmentsQuery } from "@/queries/appointments";
+import { useServicesQuery } from "@/queries/services";
 
 export function SalesStats() {
-  const { appointments } = useAppSelector((s) => s.appointments);
+  const { data: appointmentsData } = useAppointmentsQuery();
+  const appointments = appointmentsData?.appointments || [];
   const confirmedAppointments = appointments.filter((app) => app.confirmed);
   if (confirmedAppointments.length === 0) {
     return (
@@ -63,7 +65,7 @@ export function SalesStats() {
 }
 
 function PriceFromServices({ serviceId }: { serviceId: string }) {
-  const { services } = useAppSelector((s) => s.service);
+  const { data: services = [] } = useServicesQuery();
 
   const service = services.find((serv) => serv.id === serviceId);
 

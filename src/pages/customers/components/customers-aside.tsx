@@ -1,31 +1,27 @@
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { XIcon } from "lucide-react";
-import { closeAside } from "@/store/feature/customers/customerSlice";
 import { CustomerDetails } from "./customers-details";
+import { ICustomer } from "@/interfaces/customer.interface";
 
-export function CustomerAside() {
-  const { asideOpen, asideCustomer, asideType } = useAppSelector(
-    (s) => s.customers
-  );
-  const dispatch = useAppDispatch();
+export function CustomerAside({
+  open,
+  customer,
+  onClose,
+}: {
+  open: boolean;
+  customer?: ICustomer;
+  onClose: () => void;
+}) {
   return (
-    <Sheet open={asideOpen}>
+    <Sheet open={open}>
       <SheetContent>
-        <div
-          className="absolute right-6 cursor-pointer "
-          onClick={() => dispatch(closeAside())}
-        >
+        <div className="absolute right-6 cursor-pointer " onClick={onClose}>
           <XIcon className="size-4" />
         </div>
-        <SheetTitle>
-          {asideType === "details" && "Detalles del Cliente"}
-        </SheetTitle>
+        <SheetTitle>{open && "Detalles del Cliente"}</SheetTitle>
         <hr />
         <div className="flex-grow h-[95%]  space-y-3">
-          {asideCustomer && asideType === "details" && (
-            <CustomerDetails customer={asideCustomer} />
-          )}
+          {customer && <CustomerDetails customer={customer} />}
         </div>
       </SheetContent>
     </Sheet>

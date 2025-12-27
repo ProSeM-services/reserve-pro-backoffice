@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/store/hooks";
 import { Bell, XIcon } from "lucide-react";
 import {
   Sheet,
@@ -12,9 +11,10 @@ import {
 } from "@/components/ui/sheet";
 import { NotificationCard } from "./notification-card";
 import { useState } from "react";
+import { useNotificationsQuery } from "@/queries/notifications";
 
 export function NotificationsButton() {
-  const { notifications } = useAppSelector((s) => s.notifications);
+  const { data: notifications = [] } = useNotificationsQuery();
 
   const [allNotifications, setShowAllNotifications] = useState(false);
   const notReadNotifications = notifications.filter((n) => !n.read);

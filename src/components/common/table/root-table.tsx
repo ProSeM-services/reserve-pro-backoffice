@@ -38,6 +38,7 @@ interface DataTableProps<TData, TValue> {
   renderSubComponent?: (row: TData) => ReactNode;
   pageSize?: number;
   tableNameRef?: string;
+  onRowClick?: (row: TData) => void;
 }
 
 export function RootTable<TData, TValue>({
@@ -45,6 +46,7 @@ export function RootTable<TData, TValue>({
   data,
   tableType,
   pageSize = 10,
+  onRowClick,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -133,7 +135,11 @@ export function RootTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
-                <TableRow key={row.id} className={`  text-md    text-left  `}>
+                <TableRow
+                  key={row.id}
+                  className={`  text-md    text-left  `}
+                  onClick={() => onRowClick?.(row.original as TData)}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="text-xs  ">
                       {flexRender(

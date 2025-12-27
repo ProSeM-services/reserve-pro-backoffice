@@ -1,6 +1,6 @@
 import { Label } from "@/components/ui/label";
-import { useAppSelector } from "@/store/hooks";
 import { HandPlatter } from "lucide-react";
+import { useServicesQuery } from "@/queries/services";
 
 export function ServiceCell({
   serviceId,
@@ -9,7 +9,7 @@ export function ServiceCell({
   serviceId: string;
   icon?: boolean;
 }) {
-  const { services } = useAppSelector((s) => s.service);
+  const { data: services = [] } = useServicesQuery();
   const service = services.find((s) => s.id === serviceId);
   return (
     <div className="h-10 flex items-center gap-2    ">

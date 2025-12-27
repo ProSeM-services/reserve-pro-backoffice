@@ -1,8 +1,10 @@
 import { Card } from "@/components/ui/card";
 import { IAppointment } from "@/interfaces/appointments.interface";
 import { formatCurrency } from "@/lib/utils/format-currency";
-import { useAppSelector } from "@/store/hooks";
 import { Book, DollarSign, SquareUser } from "lucide-react";
+import { useAppointmentsQuery } from "@/queries/appointments";
+import { useCustomersQuery } from "@/queries/customers";
+import { useServicesQuery } from "@/queries/services";
 type ICardType = "sales" | "customers" | "appointments";
 interface ICardBody {
   title: string;
@@ -15,9 +17,10 @@ interface RevenueCardProps {
 }
 
 export function RevenueCard({ type }: RevenueCardProps) {
-  const { appointments } = useAppSelector((s) => s.appointments);
-  const { customers } = useAppSelector((s) => s.customers);
-  const { services } = useAppSelector((s) => s.service);
+  const { data: appointmentsData } = useAppointmentsQuery();
+  const { data: customers = [] } = useCustomersQuery();
+  const { data: services = [] } = useServicesQuery();
+  const appointments = appointmentsData?.appointments || [];
 
   const pendingAppointments = appointments.filter(
     (a) => !a.canceled && !a.confirmed

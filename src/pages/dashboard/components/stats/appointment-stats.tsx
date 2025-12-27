@@ -1,5 +1,5 @@
+import { useMemo, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
 import {
   Card,
   CardContent,
@@ -14,10 +14,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useEffect, useState } from "react";
-
-import { StatsServices } from "@/services/stats.services";
-import { setAuthInterceptor } from "@/config/axios.config";
 import { createChartConfig } from "../../utils/generateCharConfig";
 import { BarLoader } from "@/components/common/bar-loader";
 import {
@@ -30,85 +26,46 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import {
-  setAppointmentsStats,
-  setAppointmentsStatsDateLimits,
-  setINITIAL_DATE_LIMIT,
-} from "@/store/feature/stats/statsSlices";
 import { MonthlyData } from "@/interfaces/stats.interface";
 import useSession from "@/hooks/useSession";
 import { MONTHS } from "../../constants";
 import { EmptyList } from "@/components/common/emty-list";
+import { useAppointmentStatsQuery } from "@/queries/stats";
+import { useAppointmentsQuery } from "@/queries/appointments";
 
 export function AppointmentStats() {
   const { session } = useSession();
-  const [data, setData] = useState<MonthlyData[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [fetched, setFetched] = useState(false);
-  const [chartConfig, setChartConfig] = useState<ChartConfig>({});
+  const [dateLimits, setDateLimits] = useState({
+    start: 0,
+    end: 11,
+    year: 2025,
+  });
 
-  const dispatch = useAppDispatch();
-  const { appointmentStats, dateLimits, INITIAL_DATE_LIMIT } = useAppSelector(
-    (s) => s.stats
-  );
-  const { appointments, fetched: allAppointmentFetched } = useAppSelector(
-    (s) => s.appointments
-  );
-  const { end, start, year } = dateLimits;
-  useEffect(() => {
-    if (
-      appointmentStats.length > 0 &&
-      INITIAL_DATE_LIMIT.start === start &&
-      INITIAL_DATE_LIMIT.end === end &&
-      INITIAL_DATE_LIMIT.year === year
-    ) {
-      setData(appointmentStats);
-      setChartConfig(createChartConfig(appointmentStats));
+  const { data: appointmentsData, isLoading: loadingAppointments } =
+    useAppointmentsQuery();
+  const { data: statsData, isLoading } = useAppointmentStatsQuery({
+    start: dateLimits.start,
+    end: dateLimits.end,
+    year: dateLimits.year,
+    enabled: !!session,
+  });
 
-      return;
-    }
+  const data: MonthlyData[] = statsData || [];
+  const chartConfig: ChartConfig = useMemo(() => {
+    if (data.length === 0) return {};
+    return createChartConfig(data);
+  }, [data]);
+  if (!session) return null;
 
-    if (!session || !session) return;
-    const fetch = async () => {
-      const accessToken = localStorage.getItem("accessToken");
-      try {
-        setLoading(true);
-        setFetched(false);
-        await setAuthInterceptor(accessToken);
-        const res = await StatsServices.getAppointmentStats(
-          dateLimits.start,
-          dateLimits.end,
-          dateLimits.year
-        );
-        setChartConfig(createChartConfig(res));
+  const appointments = appointmentsData?.appointments || [];
 
-        setData(res);
-        dispatch(setAppointmentsStats(res));
-        dispatch(setINITIAL_DATE_LIMIT(dateLimits));
-      } catch (error) {
-        console.log("Error fetching today appointments : ", error);
-      } finally {
-        setFetched(true);
-        setLoading(false);
-      }
-    };
-
-    fetch();
-  }, [session, dateLimits]);
-
-  if (!session) {
-    return null; // Evitar renderizado hasta que la sesión esté disponible
-  }
-
-  if (appointments.length === 0 && allAppointmentFetched && fetched)
+  if (appointments.length === 0 && !loadingAppointments && !isLoading)
     return (
       <Card className="size-full ">
         <div className="bg-card rounded h-full w-full  p-4 flex flex-col  ">
           <div className="flex items-center justify-between font-bold text-lg">
             <CardTitle>Turnos Agendados</CardTitle>
           </div>
-
           <EmptyList type="appointments" />
         </div>
       </Card>
@@ -124,25 +81,21 @@ export function AppointmentStats() {
           <div className="flex gap-2 items-center">
             <Input
               type="number"
-              value={year}
+              value={dateLimits.year}
               onChange={(e) =>
-                dispatch(
-                  setAppointmentsStatsDateLimits({
-                    key: "year",
-                    value: parseInt(e.target.value),
-                  })
-                )
+                setDateLimits((prev) => ({
+                  ...prev,
+                  year: parseInt(e.target.value),
+                }))
               }
             />
             <Select
-              value={`${start}`}
+              value={`${dateLimits.start}`}
               onValueChange={(value) =>
-                dispatch(
-                  setAppointmentsStatsDateLimits({
-                    key: "start",
-                    value: parseInt(value),
-                  })
-                )
+                setDateLimits((prev) => ({
+                  ...prev,
+                  start: parseInt(value),
+                }))
               }
             >
               <SelectTrigger>
@@ -161,14 +114,12 @@ export function AppointmentStats() {
             </Select>
             <span> - </span>
             <Select
-              value={`${end}`}
+              value={`${dateLimits.end}`}
               onValueChange={(value) =>
-                dispatch(
-                  setAppointmentsStatsDateLimits({
-                    key: "end",
-                    value: parseInt(value),
-                  })
-                )
+                setDateLimits((prev) => ({
+                  ...prev,
+                  end: parseInt(value),
+                }))
               }
             >
               <SelectTrigger>
@@ -181,7 +132,7 @@ export function AppointmentStats() {
                     <SelectItem
                       key={value}
                       value={`${value}`}
-                      disabled={value <= start}
+                      disabled={value <= dateLimits.start}
                     >
                       {month}
                     </SelectItem>
@@ -193,7 +144,7 @@ export function AppointmentStats() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {loading ? (
+        {isLoading ? (
           <div className=" w-full h-full bg-accent relative rounded-xl">
             <BarLoader />
           </div>
@@ -215,7 +166,6 @@ export function AppointmentStats() {
                 cursor={false}
                 content={<ChartTooltipContent indicator="dashed" />}
               />
-              {/* Generamos las barras dinámicamente */}
               {Object.keys(chartConfig).map((serviceKey) => (
                 <Bar
                   key={serviceKey}
@@ -233,7 +183,7 @@ export function AppointmentStats() {
           Visualiza en cada mes tus serivicos
         </div>
         <div className="leading-none text-muted-foreground">
-          Desde {MONTHS[start]} - {MONTHS[end]}
+          Desde {MONTHS[dateLimits.start]} - {MONTHS[dateLimits.end]}
         </div>
       </CardFooter>
     </Card>

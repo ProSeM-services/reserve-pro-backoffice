@@ -9,14 +9,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import useDeletingFetch from "@/hooks/useDeletingFetch";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { useDeleteServiceMutation } from "@/queries/services";
 
 export function DeleteService({ service }: { service: IService }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
-  const { deleteService } = useDeletingFetch();
+  const deleteServiceMutation = useDeleteServiceMutation();
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -37,7 +37,7 @@ export function DeleteService({ service }: { service: IService }) {
         });
         return;
       }
-      await deleteService(service.id);
+      await deleteServiceMutation.mutateAsync(service.id);
 
       toast({
         title: "Servicio eliminado!",

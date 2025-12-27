@@ -11,13 +11,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useAppSelector } from "@/store/hooks";
 import { PlanSelector } from "./plan-selector";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
 import { FromatedDate } from "@/lib/format-date";
 import { ISubscription } from "@/interfaces/subscription.schema";
 import { EmptyList } from "@/components/common/emty-list";
+import { usePaymentPlansQuery } from "@/queries/paymentPlans";
+import { useSubscriptionQuery } from "@/queries/subscription";
 type TPlanOption = {
   period: string;
   amount: number;
@@ -25,8 +26,11 @@ type TPlanOption = {
   discount?: number;
 };
 export function PlanInformation() {
-  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
-  const { currentSubscription } = useAppSelector((s) => s.subscription);
+  const enterpriseId = localStorage.getItem("enterpriseId") || "";
+  const { data: paymentsPlans = [] } = usePaymentPlansQuery();
+  const { data: currentSubscription } = useSubscriptionQuery(enterpriseId, {
+    enabled: !!enterpriseId,
+  });
 
   const paymentPlan = paymentsPlans.filter(
     (plan) => plan.id === currentSubscription?.PlanId

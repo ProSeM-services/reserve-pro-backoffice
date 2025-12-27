@@ -26,7 +26,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Permission } from "@/lib/constants/permissions";
-import { useAppSelector } from "@/store/hooks";
+import { useEnterprisesQuery } from "@/queries/enterprises";
 
 const routes = {
   user: {
@@ -133,7 +133,9 @@ const routes = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open } = useSidebar();
-  const { enterprise } = useAppSelector((s) => s.enterprise);
+  const enterpriseId = localStorage.getItem("enterpriseId");
+  const { data: enterprises = [] } = useEnterprisesQuery();
+  const enterprise = enterprises.find((e) => e.id === enterpriseId);
 
   const inactiveRoutes = {
     user: {
@@ -158,7 +160,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     ],
   };
   const routesList =
-    enterprise.status === "INACTIVE" ? inactiveRoutes.navMain : routes.navMain;
+    enterprise && enterprise.status === "INACTIVE"
+      ? inactiveRoutes.navMain
+      : routes.navMain;
 
   return (
     <Sidebar collapsible="icon" {...props}>

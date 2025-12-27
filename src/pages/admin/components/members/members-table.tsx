@@ -1,12 +1,19 @@
 import { RootTable } from "@/components/common/table";
 import { IUser } from "@/interfaces";
-import { useAppSelector } from "@/store/hooks";
 import { ColumnDef } from "@tanstack/react-table";
-import { EnterpriseCell } from "../payments/enteprise-cell";
 import { UserIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import CompanyDetailCell from "@/pages/appointments/components/table/company-detail-cell";
 import { FromatedDate } from "@/lib/format-date";
+import { useMembersQuery } from "@/queries/members";
+import { useEnterprisesQuery } from "@/queries/enterprises";
+
+const EnterpriseCell = ({ EnterpriseId }: { EnterpriseId?: string }) => {
+  const { data: enterprises = [] } = useEnterprisesQuery();
+  const enterprise = enterprises.find((e) => e.id === EnterpriseId);
+  if (!EnterpriseId) return <i>NO ASIGNADO</i>;
+  return <span>{enterprise?.name || "NO ASIGNADO"}</span>;
+};
 
 const columns: ColumnDef<IUser>[] = [
   {
@@ -66,7 +73,7 @@ const columns: ColumnDef<IUser>[] = [
 ];
 
 export function UsersTable() {
-  const { members } = useAppSelector((s) => s.member);
+  const { data: members = [] } = useMembersQuery();
 
   return <RootTable data={members} columns={columns} />;
 }

@@ -23,7 +23,7 @@ export class StatsServices {
     const res = await axiosInstance.get(
       `${BASE_URL}/stats/appointmets-by-month?start=${start || "01"}&end=${
         end || "11"
-      }&year=${year || "2024"}`
+      }&year=${year || "2025"}`
     );
     return res.data;
   }

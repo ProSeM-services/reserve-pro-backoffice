@@ -31,7 +31,6 @@ export const sessionSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setSession, setAccesToken } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

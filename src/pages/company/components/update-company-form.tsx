@@ -17,12 +17,12 @@ import { Category, CATEGORY_VALUES } from "@/interfaces/categeory.interface";
 
 import { useToast } from "@/components/ui/use-toast";
 import { Location } from "@/interfaces/location.interface";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { EditAddressInput } from "./edit-address-input";
 import { CategoryCard } from "@/components/common/category-card";
 import { PAYMENTS_VALUES } from "@/lib/constants/payments";
 import { PaymentCard } from "@/components/common/payment-card";
 import { Check } from "lucide-react";
+import { useUpdateCompanyMutation } from "@/queries/companies";
 interface UpdateCompanyFormProps {
   company: ICompany;
 }
@@ -34,7 +34,7 @@ export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
     company.payment_methods ? company.payment_methods : []
   );
   const [loading, setLoading] = useState(false);
-  const { editCompany } = useCreatingFetch();
+  const updateCompanyMutation = useUpdateCompanyMutation();
   const { toast } = useToast();
 
   const form = useForm<Partial<IEditCompany>>({
@@ -46,7 +46,10 @@ export function UpdateCompanyForm({ company }: UpdateCompanyFormProps) {
   const onSubmit = async (values: Partial<IEditCompany>) => {
     try {
       setLoading(true);
-      await editCompany(company.id, values);
+      await updateCompanyMutation.mutateAsync({
+        id: company.id,
+        changes: values,
+      });
       toast({
         title: "Sucursal actualizada correctamente!",
         description: `Se actualiazron los datos de ${values.name}, recargar la pagina para ver los cambios.`,

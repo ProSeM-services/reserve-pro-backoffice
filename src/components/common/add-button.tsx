@@ -10,12 +10,14 @@ import { MemberForm } from "./forms/crate-member-form";
 import { CompanyForm } from "./forms/create-company-form";
 import { Button } from "@/components/ui/button";
 import { CreateServicesForm } from "./forms/create-service-form";
-import { useAppSelector } from "@/store/hooks";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useCompaniesQuery } from "@/queries/companies";
+import { usePaymentPlansQuery } from "@/queries/paymentPlans";
+import { useEnterprisesQuery } from "@/queries/enterprises";
 export type ICreateType = "member" | "company" | "services";
 export type Size = "lg" | "sm";
 
@@ -45,15 +47,17 @@ const config: Record<
 };
 export function AddButton({ type, size = "lg" }: AddButtonProps) {
   const { title, Content, btnText } = config[type];
-  const { enterprise } = useAppSelector((s) => s.enterprise);
-  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
-  const { companies } = useAppSelector((s) => s.company);
+  const { data: companies = [] } = useCompaniesQuery();
+  const { data: paymentsPlans = [] } = usePaymentPlansQuery();
+  const { data: enterprises = [] } = useEnterprisesQuery();
+  const enterpriseId = localStorage.getItem("enterpriseId");
+  const enterprise = enterprises.find((e) => e.id === enterpriseId);
 
   const ableToCreateCompany = (): boolean => {
     if (type !== "company") return true;
 
     const paymentPlan = paymentsPlans.filter(
-      (p) => p.id === enterprise.payment_plan
+      (p) => p.id === enterprise?.payment_plan
     )[0];
     if (!paymentPlan) {
       //SI NO TIENE PLAN SOLAMENTE SE PUEDE SI NO TIENE COMPANIES!

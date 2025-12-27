@@ -5,52 +5,44 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
-import { setSelectedCompanyForAppointments } from "@/store/feature/appointnments/appointmentsSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { HouseIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useCompaniesQuery } from "@/queries/companies";
 
-export function CompanySelector() {
-  const { companies, inmutablesCompanies } = useAppSelector((s) => s.company);
-  const { crossCompanyId } = useAppSelector((s) => s.main);
-
-  const { selectedCompanyForAppointments } = useAppSelector(
-    (s) => s.appointments
-  );
-  const [ableToSelect, setAbleToSelect] = useState(true);
-  const dispatch = useAppDispatch();
+export function CompanySelector({
+  onChange,
+}: {
+  onChange: (companyId: string | "all") => void;
+}) {
+  const { data: companies = [] } = useCompaniesQuery();
+  const [selected, setSelected] = useState<string | "all">("all");
+  const companyFilter = localStorage.getItem("companyFilterId");
 
   useEffect(() => {
-    if (crossCompanyId) {
-      if (crossCompanyId === "all") {
-        setAbleToSelect(true);
-        return;
-      }
-
-      const company = inmutablesCompanies.find((e) => e.id === crossCompanyId);
-      if (!company) return;
-      dispatch(setSelectedCompanyForAppointments(company));
-      setAbleToSelect(false);
+    if (companyFilter) {
+      setSelected(companyFilter);
+      onChange(companyFilter);
     }
-  }, [crossCompanyId]);
+  }, []);
 
   const handleSelectCompany = (id: string) => {
     if (id === "all") {
-      dispatch(setSelectedCompanyForAppointments(id));
+      localStorage.removeItem("companyFilterId");
+      setSelected("all");
+      onChange("all");
       return;
     }
-
-    const company = companies.find((e) => e.id === id);
-    if (!company) return;
-    dispatch(setSelectedCompanyForAppointments(company));
+    localStorage.setItem("companyFilterId", id);
+    setSelected(id);
+    onChange(id);
   };
   return (
     <Select
       onValueChange={(value) => handleSelectCompany(value)}
-      disabled={!ableToSelect || companies.length === 1}
+      disabled={companies.length === 1}
     >
       <SelectTrigger className="h-12 px-4 space-x-4 w-full">
-        {selectedCompanyForAppointments === "all" ? (
+        {selected === "all" ? (
           <div className="flex items-center gap-2 cursor-pointer">
             <HouseIcon />
             <div className="flex flex-col items-start">
@@ -58,10 +50,10 @@ export function CompanySelector() {
             </div>
           </div>
         ) : (
-          selectedCompanyForAppointments && (
+          selected && (
             <div className="flex items-center gap-2 cursor-pointer font-medium">
               <HouseIcon />
-              <p>{selectedCompanyForAppointments.name}</p>
+              <p>{companies.find((c) => c.id === selected)?.name}</p>
             </div>
           )
         )}
@@ -77,7 +69,7 @@ export function CompanySelector() {
           </div>
         </SelectItem>
         {companies.map((company) => (
-          <SelectItem value={company.id}>
+          <SelectItem value={company.id} key={company.id}>
             <div className="flex items-center gap-2 cursor-pointer font-medium">
               <HouseIcon />
               <p>{company.name}</p>

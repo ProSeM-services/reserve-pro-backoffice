@@ -3,7 +3,6 @@ import { IAppointment } from "@/interfaces/appointments.interface";
 import { FromatedDate } from "@/lib/format-date";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { ServiceCard } from "@/pages/services/components/service-card";
-import { useAppSelector } from "@/store/hooks";
 import {
   Accordion,
   AccordionContent,
@@ -11,13 +10,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AppointmentStatusCell } from "@/pages/appointments/components/table/appointmnet-status";
+import { useServicesQuery } from "@/queries/services";
+import { useMembersQuery } from "@/queries/members";
 export function AppointmentList({
   appointments,
 }: {
   appointments: IAppointment[];
 }) {
-  const { services } = useAppSelector((s) => s.service);
-  const { members } = useAppSelector((s) => s.member);
+  const { data: services = [] } = useServicesQuery();
+  const { data: members = [] } = useMembersQuery();
   return (
     <div className="flex flex-col gap-4   md:p-2   ">
       {appointments.map((app) => (

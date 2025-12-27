@@ -1,7 +1,7 @@
-import { CreateCompanyZodSchema, ICreateCompany } from "@/interfaces";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -13,16 +13,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Category, CATEGORY_VALUES } from "@/interfaces/categeory.interface";
-import { CategoryCard } from "../category-card";
-import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { AddressInput } from "../address-input";
-import { PAYMENTS_VALUES } from "@/lib/constants/payments";
-import { PaymentCard } from "../payment-card";
-import { useAppSelector } from "@/store/hooks";
+import { CategoryCard } from "../category-card";
 import { MemberAvatar } from "../members/member-avatar";
-import { Check } from "lucide-react";
+import { PaymentCard } from "../payment-card";
+import { useToast } from "@/components/ui/use-toast";
+import { Category, CATEGORY_VALUES } from "@/interfaces/categeory.interface";
+import { CreateCompanyZodSchema, ICreateCompany } from "@/interfaces";
+import { PAYMENTS_VALUES } from "@/lib/constants/payments";
+import { useCreateCompanyMutation } from "@/queries/companies";
+import {
+  useAddMemberToCompanyMutation,
+  useMembersQuery,
+} from "@/queries/members";
+import {
+  useAddServiceToCompanyMutation,
+  useServicesQuery,
+} from "@/queries/services";
 
 const INITIAL_COMPANY_DATA: ICreateCompany = {
   address: "",
@@ -34,21 +41,24 @@ const INITIAL_COMPANY_DATA: ICreateCompany = {
   apartment: "",
   floor: "",
 };
+
 export function CompanyForm() {
-  const { inmutableMembers } = useAppSelector((state) => state.member);
-  const { inmutableServices } = useAppSelector((state) => state.service);
+  const { data: members = [] } = useMembersQuery();
+  const { data: services = [] } = useServicesQuery();
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [paymentMethods, setPaymentMethos] = useState<string[]>([]);
   const [usersToAdd, setUsersToAdd] = useState<string[]>([]);
   const [servicesToAdd, setServicesToAdd] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
-  const {
-    createCompany,
-    editMember,
-    addMembersToCompany,
-    addServicesToCompany,
-    editService,
-  } = useCreatingFetch();
+
+  const createCompanyMutation = useCreateCompanyMutation();
+  const addMembersToCompanyMutation = useAddMemberToCompanyMutation();
+  const addServicesToCompanyMutation = useAddServiceToCompanyMutation();
+
+  const availableMembers = useMemo(
+    () => members.filter((m) => !m.CompanyId),
+    [members]
+  );
 
   const { toast } = useToast();
   const form = useForm<
@@ -79,23 +89,30 @@ export function CompanyForm() {
   const onSubmit = async (values: ICreateCompany) => {
     try {
       setLoading(true);
-      const newCompany = await createCompany(values);
-      console.log("res", newCompany);
+      const newCompany = await createCompanyMutation.mutateAsync(values);
       if (usersToAdd.length > 0 && newCompany) {
-        await addMembersToCompany(usersToAdd, newCompany.id);
-        usersToAdd.forEach((memberId) => {
-          editMember(memberId, { CompanyId: newCompany.id });
-        });
+        await Promise.all(
+          usersToAdd.map((userId) =>
+            addMembersToCompanyMutation.mutateAsync({
+              companyId: newCompany.id,
+              userId,
+            } as any)
+          )
+        );
       }
       if (servicesToAdd.length > 0 && newCompany) {
-        await addServicesToCompany(servicesToAdd, newCompany.id);
-        servicesToAdd.forEach((serviceId) => {
-          editService(serviceId, { companyId: newCompany.id });
-        });
+        await Promise.all(
+          servicesToAdd.map((serviceId) =>
+            addServicesToCompanyMutation.mutateAsync({
+              companyId: newCompany.id,
+              serviceId,
+            } as any)
+          )
+        );
       }
       toast({
         title: "Sucursal creada exitosamente!",
-        description: `Se agregó ${values.name} a tu lista de sucursales`,
+        description: `Se agrego ${values.name} a tu lista de sucursales`,
         variant: "default",
       });
       form.reset();
@@ -120,7 +137,7 @@ export function CompanyForm() {
     } else {
       if (categoryList.length === 3) {
         return form.setError("category", {
-          message: "Sólo puedas seleccionar hasta 3 categorías.",
+          message: "Solo puedas seleccionar hasta 3 categorias.",
         });
       }
       res = [...categoryList, newCategory];
@@ -189,7 +206,7 @@ export function CompanyForm() {
             name="address"
             render={() => (
               <FormItem>
-                <FormLabel>Dirección</FormLabel>
+                <FormLabel>Direccion</FormLabel>
                 <FormControl>
                   <AddressInput
                     value={form.getValues("address")}
@@ -238,45 +255,43 @@ export function CompanyForm() {
               <FormItem>
                 <FormLabel>Agregar miembros</FormLabel>
                 <FormDescription className="text-sm">
-                  Seleccionar los miembros que serán parte de esta sucursal
+                  Seleccionar los miembros que seran parte de esta sucursal
                 </FormDescription>
                 <div className="flex flex-col gap-2">
-                  {inmutableMembers
-                    .filter((m) => !m.CompanyId)
-                    .map((member) => (
+                  {availableMembers.map((member) => (
+                    <div
+                      className="flex items-center gap-2 cursor-pointer pr-4"
+                      key={member.id}
+                      onClick={() => handleAddUsers(member.id)}
+                    >
                       <div
-                        className="flex items-center gap-2 cursor-pointer pr-4"
-                        key={member.id}
-                        onClick={() => handleAddUsers(member.id)}
+                        className={` rounded transition-all duration-300 ${
+                          usersToAdd.includes(member.id)
+                            ? "   bg-blue-200 p-2 "
+                            : " p-0"
+                        }`}
                       >
-                        <div
-                          className={` rounded transition-all duration-300 ${
+                        <Check
+                          className={`rounded transition-all duration-300 ${
                             usersToAdd.includes(member.id)
-                              ? "   bg-blue-200 p-2 "
-                              : " p-0"
+                              ? "size-4 text-blue-500"
+                              : "size-0"
                           }`}
-                        >
-                          <Check
-                            className={`rounded transition-all duration-300 ${
-                              usersToAdd.includes(member.id)
-                                ? "size-4 text-blue-500"
-                                : "size-0"
-                            }`}
-                          />
-                        </div>
-                        <div className="flex items-center gap-2 border flex-grow rounded-xl bg-muted">
-                          <MemberAvatar member={member} size="sm" />
-                          <p>{member.fullName}</p>
-                        </div>
+                        />
                       </div>
-                    ))}
+                      <div className="flex items-center gap-2 border flex-grow rounded-xl bg-muted">
+                        <MemberAvatar member={member} size="sm" />
+                        <p>{member.fullName}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 <FormMessage />
               </FormItem>
             )}
           />
-          {inmutableServices.length === 0 ? null : (
+          {services.length === 0 ? null : (
             <FormField
               control={form.control}
               name="servicesIds"
@@ -284,10 +299,10 @@ export function CompanyForm() {
                 <FormItem>
                   <FormLabel>Agregar servicios</FormLabel>
                   <FormDescription className="text-sm">
-                    Seleccionar los servicios que serán parte de esta sucursal
+                    Seleccionar los servicios que seran parte de esta sucursal
                   </FormDescription>
                   <div className="flex flex-col gap-2">
-                    {inmutableServices.map((service) => (
+                    {services.map((service) => (
                       <div
                         key={service.id}
                         onClick={() => handleAddService(service.id)}
@@ -327,7 +342,7 @@ export function CompanyForm() {
             name="category"
             render={() => (
               <FormItem>
-                <FormLabel>Categorías</FormLabel>
+                <FormLabel>Categorias</FormLabel>
                 <FormDescription className="text-sm">
                   Min 1 - Max 3
                 </FormDescription>
@@ -372,9 +387,9 @@ export function CompanyForm() {
             name="payment_methods"
             render={() => (
               <FormItem>
-                <FormLabel>Métodos de pago</FormLabel>
+                <FormLabel>Metodos de pago</FormLabel>
                 <FormDescription className="text-sm">
-                  Seleccion los métodos de pago aceptados por esta sucursal
+                  Seleccion los metodos de pago aceptados por esta sucursal
                 </FormDescription>
                 <div className="flex flex-col gap-4">
                   {PAYMENTS_VALUES.map((method) => (

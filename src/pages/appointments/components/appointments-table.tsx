@@ -1,6 +1,5 @@
 import { RootTable } from "@/components/common/table/root-table";
 import { ColumnDef } from "@tanstack/react-table";
-import { useAppSelector } from "@/store/hooks";
 import LoaderWrapper from "@/components/common/loader-wrapper";
 import { UserIcon } from "lucide-react";
 import { MemberAvatar } from "@/components/common/members/member-avatar";
@@ -12,6 +11,7 @@ import { EmptyList } from "@/components/common/emty-list";
 import { AppointmentsTableActions } from "./table/appointmnet-cell-actions";
 import { AppointmentStatusCell } from "./table/appointmnet-status";
 import CompanyDetailCell from "./table/company-detail-cell";
+import { useAppointmentsQuery } from "@/queries/appointments";
 const columns: ColumnDef<IAppointment>[] = [
   {
     accessorKey: "canceled",
@@ -112,18 +112,17 @@ const columns: ColumnDef<IAppointment>[] = [
   },
 ];
 export function AppointmentsTable() {
-  const { appointmentsTable, loading, fetched, appointmentsFilterDate } =
-    useAppSelector((s) => s.appointments);
-  const today = new Date().toDateString();
-  const todayAppointments = appointmentsTable.filter(
-    (app) => new Date(app.date).toDateString() === today
-  );
-
-  const data =
-    appointmentsFilterDate === "today" ? todayAppointments : appointmentsTable;
+  const {
+    data: appointmentsData,
+    isLoading,
+    isFetching,
+  } = useAppointmentsQuery();
+  const appointmentsTable = appointmentsData?.appointments || [];
+  const loading = !appointmentsData && (isLoading || isFetching);
+  const data = appointmentsTable;
 
   return (
-    <LoaderWrapper loading={loading && !fetched} type="appointments">
+    <LoaderWrapper loading={loading} type="appointments">
       {data.length === 0 ? (
         <div className="size-full flex justify-center items-center">
           <EmptyList type="appointments" />

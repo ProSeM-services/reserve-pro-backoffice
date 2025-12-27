@@ -1,10 +1,10 @@
-import { useAppSelector } from "@/store/hooks";
+import { useServicesQuery } from "@/queries/services";
 
 export function ServiceDetail({ serviceId }: { serviceId: string }) {
-  const { inmutableServices } = useAppSelector((s) => s.service);
+  const { data: services = [] } = useServicesQuery();
 
-  const service = inmutableServices.find((s) => s.id === serviceId);
-  if (!service) return;
+  const service = services.find((s) => s.id === serviceId);
+  if (!service) return null;
   return (
     <div className="flex gap-2 w-full">
       <div className="flex gap-2 items-center font-medium">
