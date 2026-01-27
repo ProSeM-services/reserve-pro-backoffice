@@ -1,14 +1,14 @@
 import { LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router";
-import useFetchData from "@/hooks/useFetchData";
 import { setAuthInterceptor } from "@/config/axios.config";
+import { useQueryClient } from "@tanstack/react-query";
 export function LogOutButton() {
   const nav = useNavigate();
-  const { clearStore } = useFetchData();
+  const queryClient = useQueryClient();
   const handleLogOut = async () => {
     await setAuthInterceptor(null);
-    clearStore();
+    queryClient.clear();
     nav("/login");
     localStorage.clear();
   };

@@ -5,6 +5,7 @@ import useSession from "@/hooks/useSession";
 
 export function DashboardPage() {
   const { member } = useSession();
+  if (!member) return null;
   return (
     <div className="md:size-full max-md:w-full   ">
       <Tabs defaultValue="stats" className=" md:h-[80vh] ">

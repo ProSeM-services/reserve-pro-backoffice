@@ -11,7 +11,7 @@ export function AppointmentPage() {
         <AppointmentsFilter />
       </header>
       <Separator />
-      <section className="flex flex-grow max-h-[90%] h-[90%]  overflow-auto gap-2 max-md:hidden">
+      <section className="flex flex-grow max-h-[90%] h-[90%]  overflow-auto gap-2 max-md:hidden border">
         <AppointmentsTable />
       </section>
       <section className="md:hidden">

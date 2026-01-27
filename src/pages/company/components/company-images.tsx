@@ -4,11 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { ICompany } from "@/interfaces";
 import { FilesServices } from "@/services/files.services";
 import { PlusCircle, TrashIcon } from "lucide-react";
 import { useRef, useState } from "react";
+import { useUpdateCompanyMutation, useCompanyQuery } from "@/queries/companies";
 
 interface CompanyImagesProps {
   company: ICompany;
@@ -45,13 +45,17 @@ export function CompanyImages({ company }: CompanyImagesProps) {
     setPreview((s) => s.filter((f) => f.name !== value));
   };
 
-  const { editCompany } = useCreatingFetch();
+  const updateCompanyMutation = useUpdateCompanyMutation();
+  useCompanyQuery(company.id, { enabled: false });
 
   const handleDeleteImageFromDb = async (image: string) => {
     try {
       await FilesServices.detele(image);
-      await editCompany(company.id, {
-        images: company.images.filter((e) => e !== image),
+      await updateCompanyMutation.mutateAsync({
+        id: company.id,
+        changes: {
+          images: company.images.filter((e) => e !== image),
+        },
       });
       toast({
         title: "Imagen elimanda correctamente",
@@ -72,7 +76,10 @@ export function CompanyImages({ company }: CompanyImagesProps) {
         images: [...company.images, ...response.map((re) => re.fileName)],
       };
 
-      await editCompany(company.id, data);
+      await updateCompanyMutation.mutateAsync({
+        id: company.id,
+        changes: data,
+      });
 
       setPreview([]);
       toast({

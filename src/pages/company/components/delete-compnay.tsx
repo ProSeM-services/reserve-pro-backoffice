@@ -12,12 +12,12 @@ import { TrashIcon } from "lucide-react";
 import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router";
-import useDeletingFetch from "@/hooks/useDeletingFetch";
+import { useDeleteCompanyMutation } from "@/queries/companies";
 export function DeleteCompany({ company }: { company: ICompany }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
   const router = useNavigate();
-  const { deleteCompany } = useDeletingFetch();
+  const deleteCompanyMutation = useDeleteCompanyMutation();
   const handleDelete = async () => {
     setDeleting(true);
     try {
@@ -28,8 +28,7 @@ export function DeleteCompany({ company }: { company: ICompany }) {
           variant: "destructive",
         });
       }
-      const res = await deleteCompany(company.id);
-      console.log("RES", res);
+      await deleteCompanyMutation.mutateAsync(company.id);
       toast({
         title: "Sucursal elimnada!",
       });

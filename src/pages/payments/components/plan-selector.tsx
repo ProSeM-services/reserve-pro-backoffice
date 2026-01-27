@@ -2,15 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PaymentPlan } from "@/interfaces/payment-plans.interface";
 import { formatCurrency } from "@/lib/utils/format-currency";
-import { useAppSelector } from "@/store/hooks";
 import { useState } from "react";
+import { usePaymentPlansQuery } from "@/queries/paymentPlans";
 
 export function PlanSelector({
   selectPlan,
 }: {
   selectPlan: (data: PaymentPlan) => void;
 }) {
-  const { paymentsPlans } = useAppSelector((s) => s.paymentsPlans);
+  const { data: paymentsPlans = [] } = usePaymentPlansQuery();
 
   const [selectedPlan, setSelectedPlan] = useState<PaymentPlan>();
 

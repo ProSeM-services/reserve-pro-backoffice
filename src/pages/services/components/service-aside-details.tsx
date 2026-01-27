@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { BarLoader } from "@/components/common/bar-loader";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { Label } from "@/components/ui/label";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { useRemoveMemberFromServiceMutation } from "@/queries/services";
 import { EmptyList } from "@/components/common/emty-list";
 
 export default function ServiceAsideDetails({
@@ -16,11 +16,14 @@ export default function ServiceAsideDetails({
   service: IService;
 }) {
   const [deleting, setDeleting] = useState(false);
-  const { removeMemberFromService } = useCreatingFetch();
+  const removeMemberFromServiceMutation = useRemoveMemberFromServiceMutation();
   const handleDeleteMember = async (userId: string) => {
     try {
       setDeleting(true);
-      await removeMemberFromService(userId, service.id);
+      await removeMemberFromServiceMutation.mutateAsync({
+        serviceId: service.id,
+        userId,
+      });
     } catch (error) {
       console.log("Error");
     } finally {

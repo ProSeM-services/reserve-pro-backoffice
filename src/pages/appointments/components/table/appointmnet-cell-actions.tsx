@@ -24,15 +24,18 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useAppSelector } from "@/store/hooks";
 import { PaymentCard } from "@/components/common/payment-card";
 import { useState } from "react";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { AppointmentStatusComponent } from "./appointmnet-status";
 import { ContactButton } from "../contact-button";
-import { AppointmentServices } from "@/services/appointment.services";
 import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
 import { Permission } from "@/lib/constants/permissions";
+import { useCompaniesQuery } from "@/queries/companies";
+import {
+  useCancelAppointmentMutation,
+  useReactivateAppointmentMutation,
+  useUpdateAppointmentMutation,
+} from "@/queries/appointments";
 
 interface AppointmentsTableActionsProps {
   appointment: IAppointment;
@@ -44,20 +47,25 @@ export function AppointmentsTableActions({
 
   const [loading, setLoading] = useState(false);
 
-  const { companies } = useAppSelector((s) => s.company);
+  const { data: companies = [] } = useCompaniesQuery();
   const companyId = appointment.companyId;
   const paymentOptions = companies.find(
     (e) => e.id === companyId
   )?.payment_methods;
 
-  const { updateAppointment } = useCreatingFetch();
+  const updateAppointmentMutation = useUpdateAppointmentMutation();
+  const cancelAppointmentMutation = useCancelAppointmentMutation();
+  const reactivateAppointmentMutation = useReactivateAppointmentMutation();
   const handleConfirmAppointment = async () => {
     if (!selectedPayment) return;
     try {
       setLoading(true);
-      await updateAppointment(appointment.id, {
-        confirmed: true,
-        payment_method: selectedPayment,
+      await updateAppointmentMutation.mutateAsync({
+        id: appointment.id,
+        changes: {
+          confirmed: true,
+          payment_method: selectedPayment,
+        },
       });
     } catch (error) {
     } finally {
@@ -68,13 +76,10 @@ export function AppointmentsTableActions({
     try {
       setLoading(true);
       if (!appointment.canceled) {
-        await AppointmentServices.cancelAppointment(appointment.id);
+        await cancelAppointmentMutation.mutateAsync(appointment.id);
       } else {
-        await AppointmentServices.reactiveAppointment(appointment.id);
+        await reactivateAppointmentMutation.mutateAsync(appointment.id);
       }
-      await updateAppointment(appointment.id, {
-        canceled: !appointment.canceled,
-      });
     } catch (error) {
     } finally {
       setLoading(false);

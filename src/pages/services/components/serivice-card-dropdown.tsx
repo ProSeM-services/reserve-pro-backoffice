@@ -8,13 +8,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useAppDispatch } from "@/store/hooks";
-import { setAside } from "@/store/feature/services/servicesSlice";
 import { DeleteService } from "./delete-service";
 
-export function ServiceCardDropDown({ service }: { service: IService }) {
-  const dispatch = useAppDispatch();
-
+export function ServiceCardDropDown({
+  service,
+  onOpenAside,
+}: {
+  service: IService;
+  onOpenAside?: (
+    service: IService,
+    type: "details" | "add-member" | "edit"
+  ) => void;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -25,16 +30,12 @@ export function ServiceCardDropDown({ service }: { service: IService }) {
         <DropdownMenuSeparator />
 
         <DropdownMenuItem
-          onClick={() =>
-            dispatch(setAside({ open: true, service, type: "details" }))
-          }
+          onClick={() => onOpenAside?.(service, "details")}
         >
           Agregar Miembro
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() =>
-            dispatch(setAside({ open: true, service, type: "edit" }))
-          }
+          onClick={() => onOpenAside?.(service, "edit")}
         >
           Editar
         </DropdownMenuItem>

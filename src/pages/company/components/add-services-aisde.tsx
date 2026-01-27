@@ -3,18 +3,17 @@ import { CheckCircleIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ICompany } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
-import { useAppSelector } from "@/store/hooks";
 import { BarLoader } from "@/components/common/bar-loader";
 import { ServiceCard } from "@/pages/services/components/service-card";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { EmptyList } from "@/components/common/emty-list";
+import { useServicesQuery, useAddServiceToCompanyMutation } from "@/queries/services";
 
 export function AddServicesAside({ company }: { company: ICompany }) {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false); // Added state for loading
 
-  const { services } = useAppSelector((s) => s.service);
-  const { addServicesToCompany } = useCreatingFetch();
+  const { data: services = [], isLoading: servicesLoading } = useServicesQuery();
+  const addServiceToCompanyMutation = useAddServiceToCompanyMutation();
   const { toast } = useToast();
   const handleSelectService = (memberId: string) => {
     let res = [];
@@ -30,7 +29,14 @@ export function AddServicesAside({ company }: { company: ICompany }) {
   const handleAddServices = async () => {
     setLoading(true); // Set loading to true when adding services
     try {
-      await addServicesToCompany(selectedServices, company.id);
+      await Promise.all(
+        selectedServices.map((serviceId) =>
+          addServiceToCompanyMutation.mutateAsync({
+            companyId: company.id,
+            serviceId,
+          })
+        )
+      );
       toast({
         title: "Servicios cargados!",
         description: `Los servicios fueron agregados exitosamente a ${company.name}!`,
@@ -48,12 +54,14 @@ export function AddServicesAside({ company }: { company: ICompany }) {
   };
   if (!company.id) return null;
 
-  const servicesToShow = services.filter((s) =>
-    company.Services?.find((value) => value.id === s.id) ? false : true
+  const servicesToShow = services.filter(
+    (s) => !company.Services?.some((value) => value.id === s.id)
   );
   return (
     <div className="space-y-2 h-full max-h-full overflow-auto  ">
-      {servicesToShow.length === 0 ? (
+      {servicesLoading ? (
+        <BarLoader />
+      ) : servicesToShow.length === 0 ? (
         <EmptyList type="no-services-to-add" />
       ) : (
         <div>

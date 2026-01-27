@@ -17,10 +17,8 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatCurrency } from "@/lib/utils/format-currency";
 import { useState } from "react";
-import { PaymentPlanServices } from "@/services/payment-plans.service";
 import { useToast } from "@/components/ui/use-toast";
-import { useAppDispatch } from "@/store/hooks";
-import { addPaymentPlan } from "@/store/feature/payment-plans/paymentPlanSlice";
+import { useCreatePaymentPlanMutation } from "@/queries/paymentPlans";
 
 export function CreatePaymentPlanForm() {
   const form = useForm<CreatePaymentPlan>({
@@ -36,19 +34,17 @@ export function CreatePaymentPlanForm() {
   });
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-
-  const dispatch = useAppDispatch();
+  const createPaymentPlanMutation = useCreatePaymentPlanMutation();
   const onSubmit = async (data: CreatePaymentPlan) => {
     try {
       setLoading(true);
 
-      const newPlan = await PaymentPlanServices.create(data);
+      await createPaymentPlanMutation.mutateAsync(data);
       toast({
         title: "Plan Nuevo creado",
         description: "",
       });
 
-      dispatch(addPaymentPlan(newPlan));
       form.reset();
     } catch (error) {
       console.log("Error creating new plan", error);

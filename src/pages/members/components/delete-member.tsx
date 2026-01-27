@@ -11,15 +11,15 @@ import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
 import { IUser } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
-import useDeletingFetch from "@/hooks/useDeletingFetch";
+import { useDeleteMemberMutation } from "@/queries/members";
 export function DeleteMember({ member }: { member: IUser }) {
   const [deleting, setDeleting] = useState(false);
   const { toast } = useToast();
-  const { deletMember } = useDeletingFetch();
+  const deleteMemberMutation = useDeleteMemberMutation();
   const handleDelete = async () => {
     setDeleting(true);
     try {
-      await deletMember(member.id);
+      await deleteMemberMutation.mutateAsync(member.id);
       toast({
         title: "Miembro elimnado!",
       });

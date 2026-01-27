@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
-import useFetchData from "@/hooks/useFetchData";
 import { CompanyEditSchema, ICompany, IEditCompany } from "@/interfaces";
 import { getS3Url } from "@/lib/utils/s3-image";
 import { FilesServices } from "@/services/files.services";
@@ -10,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { HomeIcon, Paperclip, TrashIcon, XIcon } from "lucide-react";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useUpdateCompanyMutation, useCompanyQuery } from "@/queries/companies";
 import {
   Dialog,
   DialogClose,
@@ -32,8 +31,8 @@ export function AddImageCompany({ company }: { company: ICompany }) {
   );
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { editCompany } = useCreatingFetch();
-  const { fetchCompanyData } = useFetchData();
+  const updateCompanyMutation = useUpdateCompanyMutation();
+  useCompanyQuery(company.id, { enabled: false }); // ensure detail cache exists for optimistic updates
 
   const form = useForm<IEditCompany>({
     resolver: zodResolver(CompanyEditSchema),
@@ -77,8 +76,7 @@ export function AddImageCompany({ company }: { company: ICompany }) {
         data.image = imageData.fileName;
       }
 
-      await editCompany(company.id, data);
-      await fetchCompanyData(company.id);
+      await updateCompanyMutation.mutateAsync({ id: company.id, changes: data });
       toast({
         title: "Imagen(es) actualizada(s)!",
       });
@@ -104,7 +102,10 @@ export function AddImageCompany({ company }: { company: ICompany }) {
       setDeletingImage(true);
       if (company.image) {
         await FilesServices.detele(company.image);
-        await editCompany(company.id, { image: "" });
+        await updateCompanyMutation.mutateAsync({
+          id: company.id,
+          changes: { image: "" },
+        });
       }
       setPreview(null);
       setFiles(null);

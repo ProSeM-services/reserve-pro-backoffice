@@ -3,14 +3,15 @@ import { io } from "socket.io-client";
 import { useToast } from "../ui/use-toast";
 import { API_BASE_URL } from "@/config/axios.config";
 import { IAppointment } from "@/interfaces/appointments.interface";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addAppointment } from "@/store/feature/appointnments/appointmentsSlice";
+import { useQueryClient } from "@tanstack/react-query";
 import { appointmentAdapter } from "@/adapters/appointments.adpater";
+import { queryKeys } from "@/queries/queryKeys";
+import { useMembersQuery } from "@/queries/members";
 const token = localStorage.getItem("accessToken");
 export function NotificationsProvider({ children }: PropsWithChildren) {
   const { toast } = useToast();
-  const dispatch = useAppDispatch();
-  const { members } = useAppSelector((state) => state.member);
+  const { data: members = [] } = useMembersQuery({ enabled: !!token });
+  const queryClient = useQueryClient();
   useEffect(() => {
     if (!token) return;
     const socket = io(API_BASE_URL, {
@@ -22,7 +23,18 @@ export function NotificationsProvider({ children }: PropsWithChildren) {
     socket.on("nuevo-turno", (turno: IAppointment) => {
       const User = members.find((member) => member.id === turno.UserId);
       if (User) {
-        dispatch(addAppointment(appointmentAdapter({ ...turno, User })));
+        queryClient.setQueryData(queryKeys.appointments.all, (prev: any) => {
+          if (!prev?.appointments) {
+            return { appointments: [appointmentAdapter({ ...turno, User })] };
+          }
+          return {
+            ...prev,
+            appointments: [
+              appointmentAdapter({ ...turno, User }),
+              ...prev.appointments,
+            ],
+          };
+        });
       }
 
       toast({

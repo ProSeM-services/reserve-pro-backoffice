@@ -1,15 +1,12 @@
 import { setAuthInterceptor } from "@/config/axios.config";
-import useFetchData from "@/hooks/useFetchData";
 import { AuthServices } from "@/services/auth.services";
-import { EnterpiseServices } from "@/services/enterprise.services";
-import { setEnterprise } from "@/store/feature/enterprise/enterpriseSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { Fragment, PropsWithChildren, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { setSession } from "@/store/feature/session/sessionSlice";
 
 export function SessionProvider({ children }: PropsWithChildren) {
   const nav = useNavigate();
-  const { fetchMemberLogged } = useFetchData();
   const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(false);
   const accessToken = localStorage.getItem("accessToken");
@@ -19,7 +16,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
         setLoading(true);
         await setAuthInterceptor(accessToken);
         const res = await AuthServices.me();
-        fetchMemberLogged(res);
+        dispatch(setSession(res));
         if (res.role === "MASTER") {
           nav("/admin");
           return;
@@ -37,13 +34,9 @@ export function SessionProvider({ children }: PropsWithChildren) {
           nav("/pool");
           return;
         }
-        const enterprise = await EnterpiseServices.getById(res.EnterpriseId);
-
-        if (!enterprise) {
-          nav("/create-business");
-          return;
+        if (res.EnterpriseId) {
+          localStorage.setItem("enterpriseId", res.EnterpriseId);
         }
-        dispatch(setEnterprise(enterprise));
         setLoading(false);
       } catch (error) {
         setLoading(false);

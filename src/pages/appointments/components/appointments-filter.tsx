@@ -1,8 +1,6 @@
-import { useAppDispatch } from "@/store/hooks";
 import { CompanySelector } from "./company-selector";
 import { MemberSelector } from "./member-selector";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { setAppointmentsFilterDate } from "@/store/feature/appointnments/appointmentsSlice";
 import {
   Sheet,
   SheetContent,
@@ -16,30 +14,26 @@ import AuthorizationWrapper from "@/components/auth/authorization-wrapper";
 import { Permission } from "@/lib/constants/permissions";
 
 function Filters() {
-  const dispatch = useAppDispatch();
+  const handleMemberChange = () => {};
+  const handleCompanyChange = () => {};
+
   return (
     <div className="flex max-md:flex-col  gap-4 ">
       <div className="w-[350px] max-md:w-full">
-        <MemberSelector />
+        <MemberSelector onChange={handleMemberChange} />
       </div>
       <AuthorizationWrapper permission={Permission.VIEW_COMPANY}>
         <div className="w-[300px] max-md:w-full ">
-          <CompanySelector />
+          <CompanySelector onChange={handleCompanyChange} />
         </div>
       </AuthorizationWrapper>
 
       <Tabs defaultValue="all">
         <TabsList>
-          <TabsTrigger
-            value="all"
-            onClick={() => dispatch(setAppointmentsFilterDate("all"))}
-          >
+          <TabsTrigger value="all">
             Ver Todos los turnos
           </TabsTrigger>
-          <TabsTrigger
-            value="today"
-            onClick={() => dispatch(setAppointmentsFilterDate("today"))}
-          >
+          <TabsTrigger value="today">
             Ver turnos de Hoy
           </TabsTrigger>
         </TabsList>

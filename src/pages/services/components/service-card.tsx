@@ -9,23 +9,28 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useAppSelector } from "@/store/hooks";
+import { useCompaniesQuery } from "@/queries/companies";
 interface ServiceCardProps {
   service: IService;
   readonly?: boolean;
   selectedCompany?: ICompany;
   selectable?: boolean;
   showMembers?: boolean;
+  onOpenAside?: (
+    service: IService,
+    type: "details" | "add-member" | "edit"
+  ) => void;
 }
 
 export const ServiceCard = ({
   service,
   readonly = false,
   showMembers = false,
+  onOpenAside,
 }: ServiceCardProps) => {
-  const { inmutablesCompanies } = useAppSelector((s) => s.company);
+  const { data: companies = [] } = useCompaniesQuery();
 
-  const servicesCompanies = inmutablesCompanies.filter((s) =>
+  const servicesCompanies = companies.filter((s) =>
     s.Services?.some((s) => s.id === service.id)
   );
   return (
@@ -47,7 +52,9 @@ export const ServiceCard = ({
             )}
           </CardTitle>
 
-          {!readonly && <ServiceCardDropDown service={service} />}
+          {!readonly && (
+            <ServiceCardDropDown service={service} onOpenAside={onOpenAside} />
+          )}
         </div>
       </CardHeader>
       <hr className="w-5/6 mx-auto" />

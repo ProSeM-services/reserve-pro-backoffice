@@ -3,8 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { INotification } from "@/interfaces/notifications.interface";
 import { NotificationServices } from "@/services/notification.service";
-import { updateNotification } from "@/store/feature/notifications/notificationsSlice";
-import { useAppDispatch } from "@/store/hooks";
 import {
   Tooltip,
   TooltipContent,
@@ -14,13 +12,14 @@ import {
 
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
+import { useUpdateNotificationMutation } from "@/queries/notifications";
 
 interface NotificationCardProps {
   notification: INotification;
 }
 
 export function NotificationCard({ notification }: NotificationCardProps) {
-  const dispatch = useAppDispatch();
+  const updateNotificationMutation = useUpdateNotificationMutation();
   const [loading, setLoading] = useState(false);
   const handleReadNotification = async () => {
     try {
@@ -33,15 +32,10 @@ export function NotificationCard({ notification }: NotificationCardProps) {
         },
       });
 
-      dispatch(
-        updateNotification({
-          id: notification.id,
-          changes: {
-            ...notification,
-            read: true,
-          },
-        })
-      );
+      await updateNotificationMutation.mutateAsync({
+        id: notification.id,
+        changes: { read: true },
+      });
     } catch (error) {
       console.log("Error updating notificaction : ", error);
     } finally {

@@ -3,10 +3,9 @@ import { CheckCircleIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IService } from "@/interfaces";
 import { useToast } from "@/components/ui/use-toast";
-import { useAppSelector } from "@/store/hooks";
 import { EmptyList } from "@/components/common/emty-list";
 import { MemberAvatar } from "@/components/common/members/member-avatar";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
+import { useAddMemberToServiceMutation, useMembersQuery } from "@/queries";
 
 export default function AddMembertoServiceAside({
   service,
@@ -16,8 +15,8 @@ export default function AddMembertoServiceAside({
 }) {
   const [isAdding, setIsAdding] = useState(false);
   const [selecetedMembers, setSelectedMembers] = useState<string[]>([]);
-  const { members } = useAppSelector((s) => s.member);
-  const { addMemberToService } = useCreatingFetch();
+  const { data: members = [] } = useMembersQuery();
+  const addMemberToServiceMutation = useAddMemberToServiceMutation();
   const { toast } = useToast();
   const handleSelectMember = (memberId: string) => {
     let res = [];
@@ -32,7 +31,14 @@ export default function AddMembertoServiceAside({
   const handleAddSelectedMembers = async () => {
     setIsAdding(true);
     try {
-      await addMemberToService(selecetedMembers, service.id);
+      await Promise.all(
+        selecetedMembers.map((userId) =>
+          addMemberToServiceMutation.mutateAsync({
+            serviceId: service.id,
+            userId,
+          })
+        )
+      );
       toast({
         title: "Miembros cargados!",
         description: `Los miembros fueron agregados exitosamente a ${service.title}!`,

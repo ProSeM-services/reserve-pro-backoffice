@@ -1,12 +1,12 @@
 import { ICustomer } from "@/interfaces/customer.interface";
 import { ColumnDef } from "@tanstack/react-table";
 import { RootTable } from "@/components/common/table/root-table";
-import { useAppSelector } from "@/store/hooks";
 import LoaderWrapper from "@/components/common/loader-wrapper";
 import { UserIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { WhatsAppIcon } from "@/components/icons/whatsApp-icon";
 import { CustomerDropDown } from "./customer-dropdown";
+import { useCustomersQuery } from "@/queries/customers";
 const customerColumns: ColumnDef<ICustomer>[] = [
   {
     accessorKey: "email",
@@ -59,15 +59,21 @@ const customerColumns: ColumnDef<ICustomer>[] = [
     ),
   },
 ];
-export function CustomerTable() {
-  const { loading, customers, fetched } = useAppSelector((s) => s.customers);
+export function CustomerTable({
+  onSelect,
+}: {
+  onSelect: (customer: ICustomer) => void;
+}) {
+  const { data: customers = [], isLoading, isFetching } = useCustomersQuery();
 
+  const isLoadingData = !customers && (isLoading || isFetching);
   return (
-    <LoaderWrapper loading={loading && !fetched} type="customers">
+    <LoaderWrapper loading={isLoadingData} type="customers">
       <RootTable
         columns={customerColumns}
         data={customers}
         tableType="customers"
+        onRowClick={(row) => onSelect(row)}
       />
     </LoaderWrapper>
   );

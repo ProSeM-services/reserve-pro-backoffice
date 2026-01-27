@@ -19,8 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { formatCurrency } from "@/lib/utils/format-currency";
+import { useCreateServiceMutation } from "@/queries/services";
 const INITIAL_SERVICE_DATA: ICreateService = {
   duration: 0,
   price: 0,
@@ -31,7 +31,7 @@ const INITIAL_SERVICE_DATA: ICreateService = {
 };
 export function CreateServicesForm() {
   const { toast } = useToast();
-  const { createService } = useCreatingFetch();
+  const createServiceMutation = useCreateServiceMutation();
   const [loading, setLoading] = useState(false);
   const [selectedProvision, setSelectedProvision] =
     useState<Provision>("Presencial");
@@ -43,7 +43,7 @@ export function CreateServicesForm() {
   const onSubmit = async (values: ICreateService) => {
     try {
       setLoading(true);
-      await createService(values);
+      await createServiceMutation.mutateAsync(values);
       toast({
         title: "Servicio Creado!",
         description: `El servicio ${values.title} fue agregado a tu lista de servicios.`,

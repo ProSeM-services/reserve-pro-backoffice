@@ -19,7 +19,6 @@ import {
   TrashIcon,
   XIcon,
 } from "lucide-react";
-import useCreatingFetch from "@/hooks/useCreatingFetch";
 import { useToast } from "@/components/ui/use-toast";
 import { FilesServices } from "@/services/files.services";
 import { Separator } from "@/components/ui/separator";
@@ -38,6 +37,7 @@ import { getS3Url } from "@/lib/utils/s3-image";
 import { Dialog, DialogClose, DialogContent } from "@/components/ui/dialog";
 import { IUpdateUser, IUser, UpdateUserSchema } from "@/interfaces";
 import { MemberAbsences } from "./member-absences";
+import { useUpdateMemberMutation } from "@/queries/members";
 export function MemberAsideDetails({ member }: { member: IUser }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -45,7 +45,7 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
     member.permissions || []
   );
   const { toast } = useToast();
-  const { editMember } = useCreatingFetch();
+  const updateMemberMutation = useUpdateMemberMutation();
   const [loading, setLoading] = useState(false);
   const [deletingImage, setDeletingImage] = useState(false);
   const [open, setOpen] = useState(false);
@@ -72,10 +72,13 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
         const imageData = await FilesServices.upload(file);
         data = { ...values, image: imageData.fileName };
       }
-      await editMember(member.id, {
-        ...data,
-        permissions: selectedPermissions,
-        password: undefined,
+      await updateMemberMutation.mutateAsync({
+        id: member.id,
+        changes: {
+          ...data,
+          permissions: selectedPermissions,
+          password: undefined,
+        },
       });
       toast({
         title: "Miembro actualizado!",
@@ -140,7 +143,10 @@ export function MemberAsideDetails({ member }: { member: IUser }) {
       setDeletingImage(true);
       if (member.image) {
         await FilesServices.detele(member.image);
-        await editMember(member.id, { image: "" });
+        await updateMemberMutation.mutateAsync({
+          id: member.id,
+          changes: { image: "" },
+        });
       }
       setPreview(null);
       setFile(null);

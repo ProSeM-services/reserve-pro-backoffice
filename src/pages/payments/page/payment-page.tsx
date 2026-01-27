@@ -1,33 +1,17 @@
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { PaymentsTable } from "../components/payment-table/payment-table";
-import { PaymentList } from "../components/payment-list";
-import { PlanInformation } from "../components/plan-information";
-import { useEffect, useState } from "react";
-import { SubscriptionServices } from "@/services/subscription.service";
-import { setCurrentSubscription } from "@/store/feature/subscription/subscriptionSlice";
 import LoaderWrapper from "@/components/common/loader-wrapper";
+import { PaymentList } from "../components/payment-list";
+import { PaymentsTable } from "../components/payment-table/payment-table";
+import { PlanInformation } from "../components/plan-information";
+import { useSubscriptionQuery } from "@/queries/subscription";
+import { usePaymentsQuery } from "@/queries/payments";
 
 export function PaymentPage() {
-  const { payments } = useAppSelector((s) => s.payments);
-  const { fetched, currentSubscription } = useAppSelector(
-    (s) => s.subscription
-  );
-  const {
-    enterprise: { id },
-  } = useAppSelector((s) => s.enterprise);
-  const [loading, setLoading] = useState(!fetched ? true : false);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (fetched) return;
-    const fetchSubscription = async () => {
-      setLoading(true);
-      const res = await SubscriptionServices.getSubscription(id);
-      dispatch(setCurrentSubscription(res));
-      setLoading(false);
-    };
+  const enterpriseId = localStorage.getItem("enterpriseId") || "";
+  const { data: payments = [], isLoading: paymentsLoading } = usePaymentsQuery();
+  const { data: currentSubscription, isLoading: subscriptionLoading } =
+    useSubscriptionQuery(enterpriseId, { enabled: !!enterpriseId });
+  const loading = paymentsLoading || subscriptionLoading;
 
-    fetchSubscription();
-  }, []);
   return (
     <LoaderWrapper loading={loading} type="payments">
       <div className="space-y-4">
@@ -39,7 +23,7 @@ export function PaymentPage() {
         </section>
         <PlanInformation />
         <div className="max-md:hidden">
-          <PaymentsTable />
+          <PaymentsTable payments={payments} />
         </div>
         <div className="md:hidden">
           <PaymentList payments={payments} />

@@ -16,16 +16,16 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@/components/ui/tooltip";
-import { useAppSelector } from "@/store/hooks";
 import { DeleteMember } from "./delete-member";
+import { useServicesQuery } from "@/queries/services";
 
 interface MemberCardProps {
   member: IUser;
   type?: "details" | "invite" | "read";
 }
 export function MemberCard({ member, type = "details" }: MemberCardProps) {
-  const { inmutableServices } = useAppSelector((s) => s.service);
-  const memberService = inmutableServices.filter(
+  const { data: services = [] } = useServicesQuery();
+  const memberService = services.filter(
     (service) => service.Users && service.Users?.some((e) => e.id === member.id)
   );
 
