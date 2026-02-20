@@ -1,5 +1,5 @@
 import useSession from "@/hooks/useSession";
-import { AppointmentStats } from "../../components/stats/appointment-stats";
+import { UpcomingAppointments } from "../../components/stats/upcoming-appointments";
 
 import { SalesStats } from "../../components/stats/sales-stats";
 import { RevenueCard } from "../stats/revenue-card";
@@ -10,7 +10,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { AppointmentList } from "@/pages/appointments/components/appointment-list";
 export function DashboardStats() {
   const { member } = useSession();
   if (!member) return null;
@@ -39,20 +38,15 @@ export function DashboardStats() {
         </Carousel>
       </div>
       <section className="flex gap-4  h-full flex-grow  max-md:hidden">
-        {member.role !== "BASIC" ? (
-          <AppointmentStats />
-        ) : (
-          <div className="w-1/2">
-            <AppointmentList />
-          </div>
-        )}
-
+        <div className="w-1/2">
+          <UpcomingAppointments />
+        </div>
         <div className="w-[900px]  h-full">
           <SalesStats />
         </div>
       </section>
       <section className="md:hidden flex flex-col gap-2">
-        {member.role !== "BASIC" && <AppointmentStats />}
+        <UpcomingAppointments />
         <div className="w-full  h-full">
           <SalesStats />
         </div>
