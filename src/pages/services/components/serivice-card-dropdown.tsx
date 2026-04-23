@@ -9,17 +9,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DeleteService } from "./delete-service";
+import { useServiceAside } from "../context/aside.context";
 
-export function ServiceCardDropDown({
-  service,
-  onOpenAside,
-}: {
-  service: IService;
-  onOpenAside?: (
-    service: IService,
-    type: "details" | "add-member" | "edit"
-  ) => void;
-}) {
+export function ServiceCardDropDown({ service }: { service: IService }) {
+  const { openAside } = useServiceAside();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -29,14 +23,10 @@ export function ServiceCardDropDown({
         <DropdownMenuLabel>{service.title}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          onClick={() => onOpenAside?.(service, "details")}
-        >
+        <DropdownMenuItem onClick={() => openAside(service, "details")}>
           Agregar Miembro
         </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => onOpenAside?.(service, "edit")}
-        >
+        <DropdownMenuItem onClick={() => openAside(service, "edit")}>
           Editar
         </DropdownMenuItem>
         <DeleteService service={service} />

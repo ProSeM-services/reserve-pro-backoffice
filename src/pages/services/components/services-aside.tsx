@@ -1,27 +1,15 @@
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import ServiceAsideDetails from "./service-aside-details";
-import { XIcon } from "lucide-react";
 import AddMembertoServiceAside from "./add-member-aside";
 import { EditServicesForm } from "./aside/edit-service-form";
-import { IService } from "@/interfaces";
+import { useServiceAside } from "../context/aside.context";
 
-export function ServiceAside({
-  open,
-  service,
-  type,
-  onClose,
-}: {
-  open: boolean;
-  service?: IService;
-  type: "details" | "add-member" | "edit";
-  onClose: () => void;
-}) {
+export function ServiceAside() {
+  const { open, service, type, closeAside } = useServiceAside();
+
   return (
-    <Sheet open={open}>
+    <Sheet open={open} onOpenChange={(isOpen) => !isOpen && closeAside()}>
       <SheetContent>
-        <div className="absolute right-6 cursor-pointer " onClick={onClose}>
-          <XIcon className="size-4" />
-        </div>
         <SheetTitle>
           {type === "details" && "Detalles del Servicio"}
           {type === "add-member" && "Agregar Miembros"}

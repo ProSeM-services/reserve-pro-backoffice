@@ -16,17 +16,12 @@ interface ServiceCardProps {
   selectedCompany?: ICompany;
   selectable?: boolean;
   showMembers?: boolean;
-  onOpenAside?: (
-    service: IService,
-    type: "details" | "add-member" | "edit"
-  ) => void;
 }
 
 export const ServiceCard = ({
   service,
   readonly = false,
   showMembers = false,
-  onOpenAside,
 }: ServiceCardProps) => {
   const { data: companies = [] } = useCompaniesQuery();
 
@@ -53,7 +48,7 @@ export const ServiceCard = ({
           </CardTitle>
 
           {!readonly && (
-            <ServiceCardDropDown service={service} onOpenAside={onOpenAside} />
+            <ServiceCardDropDown service={service} />
           )}
         </div>
       </CardHeader>

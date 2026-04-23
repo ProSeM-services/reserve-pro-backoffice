@@ -2,14 +2,8 @@ import LoaderWrapper from "@/components/common/loader-wrapper";
 import { ServiceCard } from "./service-card";
 import { EmptyList } from "@/components/common/emty-list";
 import { useServicesQuery } from "@/queries/services";
-import { IService } from "@/interfaces";
 
-type AsideType = "details" | "add-member" | "edit";
-export function ServicesList({
-  onOpenAside,
-}: {
-  onOpenAside: (service: IService, type: AsideType) => void;
-}) {
+export function ServicesList() {
   const { data: services = [], isLoading } = useServicesQuery();
 
   return (
@@ -22,7 +16,6 @@ export function ServicesList({
                 service={service}
                 key={service.id}
                 showMembers
-                onOpenAside={onOpenAside}
               />
             </div>
           ))}

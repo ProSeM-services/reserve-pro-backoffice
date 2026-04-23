@@ -7,14 +7,18 @@ import { Button } from "@/components/ui/button";
 import { BarLoader } from "@/components/common/bar-loader";
 import { MemberCard } from "@/pages/members/components/member-card";
 import { Label } from "@/components/ui/label";
-import { useRemoveMemberFromServiceMutation } from "@/queries/services";
+import {
+  useRemoveMemberFromServiceMutation,
+  useServiceQuery,
+} from "@/queries/services";
 import { EmptyList } from "@/components/common/emty-list";
 
 export default function ServiceAsideDetails({
-  service,
+  service: initialService,
 }: {
   service: IService;
 }) {
+  const { data: service = initialService } = useServiceQuery(initialService.id);
   const [deleting, setDeleting] = useState(false);
   const removeMemberFromServiceMutation = useRemoveMemberFromServiceMutation();
   const handleDeleteMember = async (userId: string) => {
@@ -30,6 +34,7 @@ export default function ServiceAsideDetails({
       setDeleting(false);
     }
   };
+
   return (
     <div className="p-4 space-y-4">
       <ServiceCard service={service} selectable readonly />
