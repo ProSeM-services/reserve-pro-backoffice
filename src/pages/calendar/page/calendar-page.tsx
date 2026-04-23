@@ -31,25 +31,29 @@ export function CalendarPage() {
     ? appointments.filter((app) => app.UserId === selectedMember.id)
     : appointments;
   return (
-    <div className="size-full">
-      <Select onValueChange={handleSelectMember}>
-        <SelectTrigger className="w-1/3 ">
-          <SelectValue placeholder="Profesionales" />
-        </SelectTrigger>
-        <SelectContent>
-          <div>
-            {members.map((member) => (
-              <SelectItem value={member.id} key={member.id}>
-                <div className="flex items-center gap-2">
-                  <MemberAvatar member={member} size="xs" />
-                  <Label>{member.fullName}</Label>
-                </div>
-              </SelectItem>
-            ))}
-          </div>
-        </SelectContent>
-      </Select>
-      <CalendarAppointments appointments={list} />
+    <div className="flex flex-col gap-3 h-full overflow-hidden">
+      <div className="flex-shrink-0">
+        <Select onValueChange={handleSelectMember}>
+          <SelectTrigger className="w-1/3">
+            <SelectValue placeholder="Profesionales" />
+          </SelectTrigger>
+          <SelectContent>
+            <div>
+              {members.map((member) => (
+                <SelectItem value={member.id} key={member.id}>
+                  <div className="flex items-center gap-2">
+                    <MemberAvatar member={member} size="xs" />
+                    <Label>{member.fullName}</Label>
+                  </div>
+                </SelectItem>
+              ))}
+            </div>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex-1 min-h-0">
+        <CalendarAppointments appointments={list} />
+      </div>
     </div>
   );
 }
